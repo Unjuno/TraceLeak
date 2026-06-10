@@ -1,0 +1,6 @@
+TraceLeak
+Copyright 2026 Unjuno
+
+TraceLeak is a defensive research framework for source-level neural/statistical leakage assessment of cryptographic implementations.
+
+This project may include instrumentation patches or integration scripts for third-party open-source projects such as OpenSSL. Third-party projects are licensed separately.

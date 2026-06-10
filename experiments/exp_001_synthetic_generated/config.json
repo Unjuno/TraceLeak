@@ -1,0 +1,25 @@
+{
+  "experiment_id": "exp_001_synthetic_generated",
+  "experiment_type": "synthetic",
+  "target": "synthetic-leak",
+  "view": "redacted",
+  "metric": "DeltaH",
+  "inputs": {
+    "trace": "reports/local/generated_synthetic.jsonl",
+    "ablation": "examples/synthetic/ablation_sample.json",
+    "baseline": "examples/synthetic/baseline_sample.json"
+  },
+  "outputs": {
+    "report_md": "reports/local/exp_001_synthetic_generated.md",
+    "report_json": "reports/local/exp_001_synthetic_generated.json"
+  },
+  "safety": {
+    "contains_raw_trace": false,
+    "contains_secret_equivalent": false,
+    "public_safe": true
+  },
+  "notes": [
+    "Synthetic generated-trace experiment config.",
+    "Generate the trace first with examples/synthetic/target.py."
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "target": "synthetic-example",
+  "view": "redacted",
+  "metric": "DeltaH",
+  "full_score": 10.0,
+  "groups": {
+    "example_branch_event": {
+      "ablated_score": 4.0,
+      "group_type": "branch",
+      "location": "examples/synthetic/target.c:21"
+    },
+    "example_loop_event": {
+      "ablated_score": 7.5,
+      "group_type": "loop",
+      "location": "examples/synthetic/target.c:30"
+    },
+    "example_phase_event": {
+      "ablated_score": 9.0,
+      "group_type": "phase",
+      "location": "examples/synthetic/target.c:10"
+    }
+  },
+  "notes": [
+    "Synthetic sample for validating report generation.",
+    "This file does not contain raw trace data or secret-equivalent material."
+  ]
+}

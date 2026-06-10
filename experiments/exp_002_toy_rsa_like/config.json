@@ -1,0 +1,25 @@
+{
+  "experiment_id": "exp_002_toy_rsa_like",
+  "experiment_type": "toy-rsa",
+  "target": "toy-rsa-like",
+  "view": "redacted",
+  "metric": "DeltaH",
+  "inputs": {
+    "trace": "reports/local/toy_rsa_like.jsonl",
+    "ablation": "examples/toy_rsa_like/ablation_sample.json",
+    "baseline": "examples/toy_rsa_like/baseline_sample.json"
+  },
+  "outputs": {
+    "report_md": "reports/local/exp_002_toy_rsa_like.md",
+    "report_json": "reports/local/exp_002_toy_rsa_like.json"
+  },
+  "safety": {
+    "contains_raw_trace": false,
+    "contains_secret_equivalent": false,
+    "public_safe": true
+  },
+  "notes": [
+    "Toy RSA-like public-safe experiment config.",
+    "Generate the trace first with examples/toy_rsa_like/target.py."
+  ]
+}

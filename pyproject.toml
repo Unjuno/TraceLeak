@@ -44,6 +44,7 @@ traceleak-extract-features = "scripts.extract_features:main"
 traceleak-evaluate-baseline = "scripts.evaluate_baseline:main"
 traceleak-make-report = "scripts.make_report:main"
 traceleak-validate-config = "scripts.validate_config:main"
+traceleak-validate-model-result = "scripts.validate_model_result:main"
 traceleak-run-experiment = "scripts.run_experiment:main"
 
 [project.optional-dependencies]

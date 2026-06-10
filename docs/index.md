@@ -16,6 +16,11 @@ This index lists the main public-safe documentation files.
 - [Baseline Evaluation](baselines.md)
 - [Reporting Workflow](reporting.md)
 - [Experiment Configuration](experiments.md)
+- [Public API Overview](api.md)
+
+## Targets
+
+- [Toy RSA-Like Target Design](toy_rsa_like_target.md)
 
 ## Repository-Level Files
 

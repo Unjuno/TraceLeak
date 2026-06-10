@@ -16,6 +16,7 @@ This index lists the main public-safe documentation files.
 - [Baseline Evaluation](baselines.md)
 - [Reporting Workflow](reporting.md)
 - [Experiment Configuration](experiments.md)
+- [Model Result Files](model_results.md)
 - [Public API Overview](api.md)
 
 ## Targets
@@ -39,6 +40,7 @@ trace JSONL
   -> extract_features.py
   -> evaluate_baseline.py
   -> make_report.py
+  -> validate_model_result.py
   -> run_experiment.py
 ```
 

@@ -1,0 +1,43 @@
+{
+  "target": "synthetic-example",
+  "view": "redacted",
+  "label_name": "synthetic_bucket",
+  "examples": [
+    {
+      "run_id": "synthetic_000001",
+      "label": "A",
+      "features": {
+        "event_type=branch": 1.0,
+        "phase=alpha": 1.0,
+        "location=target.c:21": 1.0
+      }
+    },
+    {
+      "run_id": "synthetic_000002",
+      "label": "A",
+      "features": {
+        "event_type=branch": 1.0,
+        "phase=alpha": 1.0,
+        "location=target.c:22": 1.0
+      }
+    },
+    {
+      "run_id": "synthetic_000003",
+      "label": "B",
+      "features": {
+        "event_type=loop": 1.0,
+        "phase=beta": 1.0,
+        "location=target.c:30": 1.0
+      }
+    },
+    {
+      "run_id": "synthetic_000004",
+      "label": "B",
+      "features": {
+        "event_type=loop": 1.0,
+        "phase=beta": 1.0,
+        "location=target.c:31": 1.0
+      }
+    }
+  ]
+}

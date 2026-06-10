@@ -37,6 +37,13 @@ results/
 *.mem
 *.bin
 
+# Local generated reports
+/report.md
+/report.json
+reports/local/
+*.local.md
+*.local.json
+
 # Keys and cryptographic material
 *.key
 *.pem
@@ -53,6 +60,7 @@ results/
 !examples/**/
 !examples/**/*.jsonl
 !examples/**/*.json
+!examples/**/*.md
 
 # Third-party build artifacts
 third_party/**/build/

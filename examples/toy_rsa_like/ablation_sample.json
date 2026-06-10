@@ -1,0 +1,32 @@
+{
+  "target": "toy-rsa-like",
+  "view": "redacted",
+  "metric": "DeltaH",
+  "full_score": 6.0,
+  "groups": {
+    "candidate_result": {
+      "ablated_score": 2.0,
+      "group_type": "branch",
+      "location": "examples/toy_rsa_like/target.py:35"
+    },
+    "small_divisor_check": {
+      "ablated_score": 4.0,
+      "group_type": "loop",
+      "location": "examples/toy_rsa_like/target.py:29"
+    },
+    "oddness_check": {
+      "ablated_score": 5.0,
+      "group_type": "branch",
+      "location": "examples/toy_rsa_like/target.py:25"
+    },
+    "candidate_generated": {
+      "ablated_score": 5.5,
+      "group_type": "phase",
+      "location": "examples/toy_rsa_like/target.py:21"
+    }
+  },
+  "notes": [
+    "Toy RSA-like synthetic ablation sample.",
+    "No raw candidate values are included."
+  ]
+}

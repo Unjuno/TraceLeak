@@ -62,7 +62,7 @@ def test_public_api_core_functions() -> None:
     assert ablation_drop(5.0, 2.0) == 3.0
     assert isinstance(AttributionScore(1.0, "g", "branch"), AttributionScore)
     assert isinstance(TraceEvent(step=1, phase="p", function="f", event_type="phase", name="n"), TraceEvent)
-    assert isinstance(TraceRun(run_id="r", target="t", target_version="v", view="meta"), TraceRun)
+    assert isinstance(TraceRun(run_id="r", target="t", target_version="v", view="meta", events=[]), TraceRun)
 
     path_view = to_view(run, "path")
     assert path_view["view"] == "path"

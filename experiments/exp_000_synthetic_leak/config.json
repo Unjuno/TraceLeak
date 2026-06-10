@@ -1,0 +1,25 @@
+{
+  "experiment_id": "exp_000_synthetic_leak",
+  "experiment_type": "synthetic",
+  "target": "synthetic-example",
+  "view": "redacted",
+  "metric": "DeltaH",
+  "inputs": {
+    "trace": "examples/synthetic/synthetic_trace_sample.jsonl",
+    "ablation": "examples/synthetic/ablation_sample.json",
+    "baseline": "examples/synthetic/baseline_sample.json"
+  },
+  "outputs": {
+    "report_md": "reports/local/exp_000_synthetic_leak.md",
+    "report_json": "reports/local/exp_000_synthetic_leak.json"
+  },
+  "safety": {
+    "contains_raw_trace": false,
+    "contains_secret_equivalent": false,
+    "public_safe": true
+  },
+  "notes": [
+    "Synthetic config for validating the public-safe TraceLeak workflow.",
+    "This config must not reference raw traces or secret-equivalent material."
+  ]
+}

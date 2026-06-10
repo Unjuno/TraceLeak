@@ -1,0 +1,43 @@
+{
+  "target": "toy-rsa-like",
+  "view": "redacted",
+  "label_name": "toy_result_bucket",
+  "examples": [
+    {
+      "run_id": "toy_rsa_like_000001",
+      "label": "accepted",
+      "features": {
+        "event_type=branch": 1.0,
+        "phase=candidate_result": 1.0,
+        "event_value:branch:candidate_result:toy_rsa_like_keygen:candidate_result:value_redacted.result_bucket=accepted": 1.0
+      }
+    },
+    {
+      "run_id": "toy_rsa_like_000002",
+      "label": "accepted",
+      "features": {
+        "event_type=branch": 1.0,
+        "phase=candidate_result": 1.0,
+        "event_value:branch:candidate_result:toy_rsa_like_keygen:candidate_result:value_redacted.result_bucket=accepted": 1.0
+      }
+    },
+    {
+      "run_id": "toy_rsa_like_000003",
+      "label": "small_divisor",
+      "features": {
+        "event_type=loop": 1.0,
+        "phase=candidate_filter": 1.0,
+        "event_value:loop:candidate_filter:toy_rsa_like_keygen:small_divisor_check:value_redacted.small_divisor_bucket=small": 1.0
+      }
+    },
+    {
+      "run_id": "toy_rsa_like_000004",
+      "label": "small_divisor",
+      "features": {
+        "event_type=loop": 1.0,
+        "phase=candidate_filter": 1.0,
+        "event_value:loop:candidate_filter:toy_rsa_like_keygen:small_divisor_check:value_redacted.small_divisor_bucket=medium": 1.0
+      }
+    }
+  ]
+}

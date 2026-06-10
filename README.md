@@ -13,6 +13,92 @@ It uses execution traces, variable-assignment traces, memory/timing observations
 
 TraceLeak does **not** claim to break RSA mathematically. Its purpose is controlled implementation-level leakage assessment.
 
+## Current Status
+
+The repository currently contains the lightweight public-safe foundation:
+
+- trace schema validation;
+- trace view conversion;
+- JSONL IO;
+- candidate-space reduction metrics;
+- source-level attribution scoring;
+- report generation;
+- feature extraction;
+- baseline evaluation;
+- experiment config validation;
+- synthetic examples;
+- unit tests.
+
+Heavy local work such as neural training, instrumented OpenSSL builds, and large experiments is intentionally not part of the default workflow.
+
+## Quick Start
+
+```bash
+git clone https://github.com/Unjuno/TraceLeak.git
+cd TraceLeak
+python -m venv .venv
+source .venv/bin/activate
+pip install -e ".[dev]"
+pytest
+```
+
+Windows PowerShell:
+
+```powershell
+git clone https://github.com/Unjuno/TraceLeak.git
+cd TraceLeak
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+python -m pip install -e ".[dev]"
+pytest
+```
+
+## Lightweight Example Workflow
+
+Validate a synthetic trace:
+
+```bash
+python scripts/validate_trace.py --public examples/synthetic/synthetic_trace_sample.jsonl
+```
+
+Convert a trace view:
+
+```bash
+python scripts/convert_view.py --view path --in examples/synthetic/synthetic_trace_sample.jsonl --out path.jsonl --overwrite
+```
+
+Extract features:
+
+```bash
+python scripts/extract_features.py --in examples/synthetic/synthetic_trace_sample.jsonl --out features.json
+python scripts/extract_features.py --in examples/synthetic/synthetic_trace_sample.jsonl --out features.csv --format csv
+```
+
+Evaluate simple baselines:
+
+```bash
+python scripts/evaluate_baseline.py --in examples/synthetic/baseline_sample.json
+```
+
+Generate an attribution report:
+
+```bash
+python scripts/make_report.py --in examples/synthetic/ablation_sample.json --out report.md
+python scripts/make_report.py --in examples/synthetic/ablation_sample.json --out report.json --format json
+```
+
+Validate an experiment config:
+
+```bash
+python scripts/validate_config.py experiments/exp_000_synthetic_leak/config.json
+```
+
+Run the lightweight config-driven workflow:
+
+```bash
+python scripts/run_experiment.py experiments/exp_000_synthetic_leak/config.json
+```
+
 ## Initial Target
 
 The initial target is OpenSSL RSA key generation in a local, controlled research environment.
@@ -104,46 +190,6 @@ Leakage source ranking:
    evidence: redacted variable signal
 ```
 
-## Initial Roadmap
-
-### Milestone 0: Project Foundation
-
-- Define threat model.
-- Define trace schema.
-- Implement redaction rules.
-- Implement DeltaH metric.
-- Add synthetic trace examples.
-
-### Milestone 1: Synthetic Leak Target
-
-Create a small controlled target with an intentionally inserted leak.
-
-Expected result:
-
-```text
-TraceLeak ranks the intentionally leaked source-level event as the top leakage source.
-```
-
-### Milestone 2: Toy RSA Target
-
-Run a simplified RSA-like key generation process with controlled instrumentation.
-
-Expected result:
-
-```text
-TraceLeak detects whether loop counts, rejection reasons, or candidate-derived features correlate with secret-related labels.
-```
-
-### Milestone 3: OpenSSL RSA Key Generation
-
-Instrument local OpenSSL RSA key generation.
-
-Expected result:
-
-```text
-TraceLeak produces stable source-level leakage rankings for toy OpenSSL RSA key generation traces.
-```
-
 ## Safety Boundary
 
 TraceLeak is for defensive research only.
@@ -167,14 +213,10 @@ Not allowed:
 
 ## Repository Layout
 
-Planned structure:
-
 ```text
 traceleak/
   docs/
   traceleak/
-  targets/
-    openssl/
   examples/
     synthetic/
   experiments/

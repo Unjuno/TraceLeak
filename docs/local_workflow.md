@@ -6,6 +6,8 @@ Heavy experiments such as OpenSSL instrumentation, raw trace generation, and NN 
 
 ## Bootstrap
 
+### macOS/Linux shell
+
 ```bash
 git clone https://github.com/Unjuno/TraceLeak.git
 cd TraceLeak
@@ -15,7 +17,18 @@ pip install -e ".[dev]"
 pytest
 ```
 
-Or use the helper script:
+### Windows PowerShell
+
+```powershell
+git clone https://github.com/Unjuno/TraceLeak.git
+cd TraceLeak
+py -m venv .venv
+.\.venv\Scripts\Activate.ps1
+python -m pip install -e ".[dev]"
+pytest
+```
+
+Or use the helper script on macOS/Linux:
 
 ```bash
 bash scripts/bootstrap_local.sh
@@ -34,6 +47,8 @@ python scripts/validate_trace.py --public examples/synthetic/synthetic_trace_sam
 ```
 
 ## Convert Trace Views
+
+### macOS/Linux shell
 
 ```bash
 python scripts/convert_view.py \
@@ -56,6 +71,32 @@ python scripts/convert_view.py \
   --out local_meta_trace.jsonl
 ```
 
+### Windows PowerShell
+
+PowerShell does not use `\` for line continuation. Use a single line or the PowerShell backtick character.
+
+Single-line example:
+
+```powershell
+python scripts/convert_view.py --view path --in examples/synthetic/synthetic_trace_sample.jsonl --out "$env:TEMP\traceleak_path.jsonl" --overwrite
+```
+
+Backtick continuation example:
+
+```powershell
+python scripts/convert_view.py `
+  --view path `
+  --in examples/synthetic/synthetic_trace_sample.jsonl `
+  --out "$env:TEMP\traceleak_path.jsonl" `
+  --overwrite
+```
+
+Validate the converted trace:
+
+```powershell
+python scripts/validate_trace.py --public "$env:TEMP\traceleak_path.jsonl"
+```
+
 ## Do Not Commit Local Experiment Outputs
 
 The following should remain local:
@@ -74,6 +115,13 @@ The repository `.gitignore` is configured to reject common experiment outputs, b
 ## Lightweight Commands
 
 ```bash
+pytest
+python scripts/validate_trace.py --public examples/synthetic/synthetic_trace_sample.jsonl
+```
+
+PowerShell equivalent:
+
+```powershell
 pytest
 python scripts/validate_trace.py --public examples/synthetic/synthetic_trace_sample.jsonl
 ```

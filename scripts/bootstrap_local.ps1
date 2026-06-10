@@ -7,13 +7,14 @@ It does not run OpenSSL instrumentation, heavy trace generation, or NN training.
 Usage:
   powershell -ExecutionPolicy Bypass -File scripts/bootstrap_local.ps1
   powershell -ExecutionPolicy Bypass -File scripts/bootstrap_local.ps1 -Dir C:\Users\junny\Desktop\TraceLeak
+  powershell -ExecutionPolicy Bypass -File scripts/bootstrap_local.ps1 -Python python
   powershell -ExecutionPolicy Bypass -File scripts/bootstrap_local.ps1 -SkipTests
 #>
 
 param(
     [string]$RepoUrl = "https://github.com/Unjuno/TraceLeak.git",
     [string]$Dir = "TraceLeak",
-    [string]$Python = "py",
+    [string]$Python = "python",
     [switch]$SkipTests
 )
 

@@ -32,6 +32,20 @@ classifiers = [
 ]
 dependencies = []
 
+[project.urls]
+Homepage = "https://github.com/Unjuno/TraceLeak"
+Repository = "https://github.com/Unjuno/TraceLeak"
+Issues = "https://github.com/Unjuno/TraceLeak/issues"
+
+[project.scripts]
+traceleak-validate-trace = "scripts.validate_trace:main"
+traceleak-convert-view = "scripts.convert_view:main"
+traceleak-extract-features = "scripts.extract_features:main"
+traceleak-evaluate-baseline = "scripts.evaluate_baseline:main"
+traceleak-make-report = "scripts.make_report:main"
+traceleak-validate-config = "scripts.validate_config:main"
+traceleak-run-experiment = "scripts.run_experiment:main"
+
 [project.optional-dependencies]
 dev = [
   "pytest>=8",
@@ -40,7 +54,7 @@ dev = [
 
 [tool.setuptools.packages.find]
 where = ["."]
-include = ["traceleak*"]
+include = ["traceleak*", "scripts"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

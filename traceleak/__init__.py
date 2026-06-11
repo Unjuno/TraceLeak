@@ -11,6 +11,7 @@ from traceleak.patch_verification import (
     verification_delta,
 )
 from traceleak.schema import TraceEvent, TraceRun, validate_run
+from traceleak.stability import stability_result, stability_summary
 from traceleak.views import to_view
 from traceleak.workflow import WorkflowResult, run_lightweight_experiment
 
@@ -26,6 +27,8 @@ __all__ = [
     "extract_feature_vector",
     "patch_verification_report_dict",
     "run_lightweight_experiment",
+    "stability_result",
+    "stability_summary",
     "to_view",
     "top_k_recall",
     "validate_config",

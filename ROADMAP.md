@@ -7,7 +7,8 @@ This roadmap tracks the public-safe foundation first, then local-only heavy expe
 Latest known Windows/Python 3.12 local checkpoint:
 
 ```text
-86 passed
+103 passed
+ruff check .: passed
 ```
 
 This confirms the current public-safe lightweight workflow on the local test environment.
@@ -32,6 +33,7 @@ Completed:
 - model result validation;
 - model result to report conversion;
 - patch verification validation;
+- patch verification to report conversion;
 - synthetic examples;
 - toy RSA-like examples;
 - lightweight runner;
@@ -139,20 +141,21 @@ NN results are compared against metadata, majority, and nearest-neighbor baselin
 
 ## Milestone 5: Patch Verification
 
-Status: schema and validation implemented.
+Status: schema, validation, and report rendering implemented.
 
 Completed:
 
 - before/after result schema;
 - patch verification validator;
 - validation CLI;
+- Markdown/JSON report renderer;
+- report renderer CLI;
 - synthetic patch verification sample;
 - patch verification docs;
-- CLI tests.
+- unit and CLI tests.
 
 Remaining:
 
-- before/after report renderer;
 - repeated-run stability checks;
 - claim level L5 support.
 

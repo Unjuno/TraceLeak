@@ -18,6 +18,7 @@ This index lists the main public-safe documentation files.
 - [Reporting Workflow](reporting.md)
 - [Experiment Configuration](experiments.md)
 - [Model Result Files](model_results.md)
+- [Patch Verification](patch_verification.md)
 - [Public API Overview](api.md)
 
 ## Targets
@@ -43,6 +44,7 @@ trace JSONL
   -> make_report.py
   -> validate_model_result.py
   -> model_result_to_report.py
+  -> validate_patch_verification.py
   -> run_experiment.py
 ```
 

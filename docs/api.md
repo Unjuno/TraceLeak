@@ -85,6 +85,14 @@ from traceleak import claim_report_dict, claim_summary, validate_claim
 
 Validates public-safe claim-level files and constrains report language to evidence-backed L0-L5 claims.
 
+## Comparison Reports
+
+```python
+from traceleak import classify_comparison, comparison_delta, comparison_report_dict
+```
+
+Validates and normalizes public-safe two-sided comparisons such as leak/control or model/baseline reports.
+
 ## Workflow
 
 ```python

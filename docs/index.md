@@ -15,6 +15,7 @@ This index lists the main public-safe documentation files.
 ## Lightweight Workflow
 
 - [Feature Extraction](features.md)
+- [Variable and Control-Flow Dynamics Modeling](modeling.md)
 - [Baseline Evaluation](baselines.md)
 - [Reporting Workflow](reporting.md)
 - [Experiment Configuration](experiments.md)
@@ -45,6 +46,7 @@ trace JSONL
   -> validate_trace.py
   -> convert_view.py
   -> extract_features.py
+  -> model_features.py
   -> evaluate_baseline.py
   -> make_report.py
   -> validate_model_result.py

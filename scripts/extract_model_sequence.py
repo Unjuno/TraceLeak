@@ -4,6 +4,7 @@
 Usage:
   python scripts/extract_model_sequence.py --in examples/synthetic/synthetic_trace_sample.jsonl --out model_sequences.json
   python scripts/extract_model_sequence.py --in examples/synthetic/synthetic_trace_sample.jsonl --out model_sequences.json --counts
+  python scripts/extract_model_sequence.py --in examples/synthetic/synthetic_trace_sample.jsonl --out model_sequences.json --counts --label-key secret_bucket
 """
 
 from __future__ import annotations
@@ -41,6 +42,10 @@ def parse_args() -> argparse.Namespace:
         "--counts",
         action="store_true",
         help="Include collapsed token counts for lightweight baselines.",
+    )
+    parser.add_argument(
+        "--label-key",
+        help="Optional labels_lab_only key to copy into each output record as label.",
     )
     parser.add_argument(
         "--no-redacted-values",
@@ -81,6 +86,7 @@ def extract_model_sequences(
     allow_raw: bool = False,
     include_counts: bool = False,
     include_redacted_values: bool = True,
+    label_key: str | None = None,
 ) -> list[dict[str, Any]]:
     """Extract model sequence records from run dictionaries."""
 
@@ -106,6 +112,8 @@ def extract_model_sequences(
         }
         if include_counts:
             record["token_counts"] = sequence_token_counts(sequence)
+        if label_key is not None:
+            record["label"] = _label_from_run(run, label_key)
         records.append(record)
     return records
 
@@ -117,10 +125,11 @@ def build_output(
     allow_raw: bool,
     include_counts: bool,
     include_redacted_values: bool,
+    label_key: str | None = None,
 ) -> dict[str, Any]:
     """Build the output JSON payload."""
 
-    return {
+    payload: dict[str, Any] = {
         "format": "traceleak.model_sequence.v1",
         "input": str(input_path),
         "run_count": len(records),
@@ -129,6 +138,10 @@ def build_output(
         "include_redacted_values": include_redacted_values,
         "records": records,
     }
+    if label_key is not None:
+        payload["label_name"] = label_key
+        payload["contains_lab_only_labels"] = True
+    return payload
 
 
 def write_output(path: Path, payload: dict[str, Any]) -> None:
@@ -136,6 +149,15 @@ def write_output(path: Path, payload: dict[str, Any]) -> None:
 
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+
+
+def _label_from_run(run: dict[str, Any], label_key: str) -> str:
+    labels = run.get("labels_lab_only")
+    if not isinstance(labels, dict):
+        raise ModelSequenceCliError(f"run {run['run_id']!r} has no labels_lab_only object")
+    if label_key not in labels:
+        raise ModelSequenceCliError(f"run {run['run_id']!r} is missing labels_lab_only.{label_key}")
+    return str(labels[label_key])
 
 
 def main() -> int:
@@ -147,6 +169,7 @@ def main() -> int:
             allow_raw=args.allow_raw,
             include_counts=args.counts,
             include_redacted_values=not args.no_redacted_values,
+            label_key=args.label_key,
         )
         payload = build_output(
             input_path=args.input_path,
@@ -154,6 +177,7 @@ def main() -> int:
             allow_raw=args.allow_raw,
             include_counts=args.counts,
             include_redacted_values=not args.no_redacted_values,
+            label_key=args.label_key,
         )
         write_output(args.output_path, payload)
     except ModelSequenceCliError as exc:

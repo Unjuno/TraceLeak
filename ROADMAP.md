@@ -7,7 +7,7 @@ This roadmap tracks the public-safe foundation first, then local-only heavy expe
 Latest known Windows/Python 3.12 local checkpoint:
 
 ```text
-103 passed
+104 passed
 ruff check .: passed
 ```
 
@@ -34,6 +34,7 @@ Completed:
 - model result to report conversion;
 - patch verification validation;
 - patch verification to report conversion;
+- repeated-run stability checks;
 - synthetic examples;
 - toy RSA-like examples;
 - lightweight runner;
@@ -59,7 +60,8 @@ Completed:
 - attribution sample;
 - baseline sample;
 - end-to-end tests;
-- patch verification sample.
+- patch verification sample;
+- repeated-run stability sample.
 
 Remaining:
 
@@ -141,7 +143,7 @@ NN results are compared against metadata, majority, and nearest-neighbor baselin
 
 ## Milestone 5: Patch Verification
 
-Status: schema, validation, and report rendering implemented.
+Status: schema, validation, report rendering, and repeated-run stability implemented.
 
 Completed:
 
@@ -150,13 +152,16 @@ Completed:
 - validation CLI;
 - Markdown/JSON report renderer;
 - report renderer CLI;
+- repeated-run stability checks;
+- stability evaluation CLI;
 - synthetic patch verification sample;
+- synthetic stability sample;
 - patch verification docs;
+- stability docs;
 - unit and CLI tests.
 
 Remaining:
 
-- repeated-run stability checks;
 - claim level L5 support.
 
 Success criterion:

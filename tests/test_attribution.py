@@ -1,6 +1,11 @@
 import pytest
 
-from traceleak.attribution import AttributionError, ablation_drop, make_ablation_scores, rank_attributions
+from traceleak.attribution import (
+    AttributionError,
+    ablation_drop,
+    make_ablation_scores,
+    rank_attributions,
+)
 
 
 def test_ablation_drop() -> None:

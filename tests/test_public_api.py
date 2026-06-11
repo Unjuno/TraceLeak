@@ -15,13 +15,19 @@ from traceleak import (
     comparison_delta,
     comparison_report_dict,
     delta_h,
+    event_token,
     extract_feature_vector,
+    model_sequence_vocabulary,
     patch_verification_report_dict,
+    redacted_value_tokens,
     run_lightweight_experiment,
+    sequence_token_counts,
+    source_token,
     stability_result,
     stability_summary,
     to_view,
     top_k_recall,
+    trace_to_model_sequence,
     validate_claim,
     validate_config,
     validate_patch_verification,
@@ -176,6 +182,21 @@ def test_public_api_comparison_functions() -> None:
     report = comparison_report_dict(sample_comparison())
     assert report["report_type"] == "comparison"
     assert report["status"] == "higher"
+
+
+def test_public_api_model_sequence_functions() -> None:
+    run = sample_run()
+    event = run["events"][0]
+    assert event_token(event) == "branch:api_phase:api_fn:api_branch_event"
+    assert source_token(event) == "<unknown>:?:api_fn:api_branch_event"
+    assert redacted_value_tokens(event) == ["value_redacted.count=1"]
+
+    sequence = trace_to_model_sequence(run)
+    assert sequence[0]["event_token"] == "branch:api_phase:api_fn:api_branch_event"
+    counts = sequence_token_counts(sequence)
+    assert counts["event_type=branch"] == 1.0
+    vocab = model_sequence_vocabulary([sequence])
+    assert "branch:api_phase:api_fn:api_branch_event" in vocab
 
 
 def test_public_api_workflow_result_type() -> None:

@@ -9,6 +9,7 @@ This index lists the main public-safe documentation files.
 - [Safety Boundary](safety_boundary.md)
 - [Trace Schema](trace_schema.md)
 - [Local Workflow](local_workflow.md)
+- [OpenSSL Local Instrumentation Plan](openssl_local_plan.md)
 
 ## Lightweight Workflow
 
@@ -41,6 +42,7 @@ trace JSONL
   -> evaluate_baseline.py
   -> make_report.py
   -> validate_model_result.py
+  -> model_result_to_report.py
   -> run_experiment.py
 ```
 

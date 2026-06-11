@@ -56,6 +56,19 @@ from traceleak import validate_config
 
 Validates experiment config dictionaries.
 
+## Patch Verification
+
+```python
+from traceleak import (
+    classify_delta,
+    patch_verification_report_dict,
+    validate_patch_verification,
+    verification_delta,
+)
+```
+
+Validates public-safe before/after patch verification results and converts them into normalized report dictionaries.
+
 ## Workflow
 
 ```python

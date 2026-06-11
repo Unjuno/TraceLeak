@@ -50,3 +50,4 @@ jobs:
           python scripts/patch_verification_to_report.py --in examples/synthetic/patch_verification_sample.json --out reports/local/patch_report.md
           python scripts/evaluate_stability.py examples/synthetic/stability_sample.json --out reports/local/stability_result.json
           python scripts/validate_claim.py examples/synthetic/claim_l5_sample.json
+          python scripts/comparison_to_report.py --in examples/synthetic/comparison_sample.json --out reports/local/comparison_report.md

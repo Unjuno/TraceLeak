@@ -31,6 +31,8 @@ The repository currently contains the lightweight public-safe foundation:
 - toy RSA-like target generation;
 - model result validation;
 - model result to report conversion;
+- patch verification validation;
+- patch verification to report conversion;
 - public Python API;
 - CLI entry points;
 - synthetic and toy examples;
@@ -39,7 +41,8 @@ The repository currently contains the lightweight public-safe foundation:
 The current Windows/Python 3.12 local check has reached:
 
 ```text
-86 passed
+103 passed
+ruff check .: passed
 ```
 
 Heavy local work such as neural training, instrumented OpenSSL builds, and large experiments is intentionally not part of the default workflow.
@@ -128,6 +131,14 @@ python scripts/validate_model_result.py examples/synthetic/model_result_sample.j
 python scripts/model_result_to_report.py --in examples/synthetic/model_result_sample.json --out model_report.md
 ```
 
+Validate patch verification output and render it as a report:
+
+```bash
+python scripts/validate_patch_verification.py examples/synthetic/patch_verification_sample.json
+python scripts/patch_verification_to_report.py --in examples/synthetic/patch_verification_sample.json --out patch_report.md
+python scripts/patch_verification_to_report.py --in examples/synthetic/patch_verification_sample.json --out patch_report.json --format json
+```
+
 ## Synthetic and Toy Targets
 
 Generate synthetic traces:
@@ -214,6 +225,7 @@ TraceLeak may also report:
 - permutation importance;
 - ablation drop;
 - source-level leakage ranking;
+- before/after patch verification;
 - cross-snapshot stability checks;
 - cross-build stability checks.
 

@@ -49,6 +49,7 @@ traceleak-model-result-to-report = "scripts.model_result_to_report:main"
 traceleak-validate-patch-verification = "scripts.validate_patch_verification:main"
 traceleak-patch-verification-to-report = "scripts.patch_verification_to_report:main"
 traceleak-evaluate-stability = "scripts.evaluate_stability:main"
+traceleak-validate-claim = "scripts.validate_claim:main"
 traceleak-run-experiment = "scripts.run_experiment:main"
 
 [project.optional-dependencies]

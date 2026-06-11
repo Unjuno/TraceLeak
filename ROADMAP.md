@@ -2,9 +2,19 @@
 
 This roadmap tracks the public-safe foundation first, then local-only heavy experiments.
 
+## Current Local Checkpoint
+
+Latest known Windows/Python 3.12 local checkpoint:
+
+```text
+86 passed
+```
+
+This confirms the current public-safe lightweight workflow on the local test environment.
+
 ## Milestone 0: Public-Safe Foundation
 
-Status: in progress.
+Status: nearly complete.
 
 Completed:
 
@@ -19,28 +29,38 @@ Completed:
 - feature extraction;
 - baseline evaluation;
 - experiment config validation;
+- model result validation;
+- model result to report conversion;
 - synthetic examples;
+- toy RSA-like examples;
 - lightweight runner;
-- contribution and issue templates.
+- public Python API;
+- CLI entry points;
+- contribution and issue templates;
+- release checklist;
+- documentation index.
 
 Remaining:
 
-- CI workflow;
-- docs link cleanup;
-- versioned release checklist;
-- API reference stub.
+- CI workflow.
 
 ## Milestone 1: Synthetic Leakage Target
 
-Goal: prove that TraceLeak can localize a controlled source-level signal.
+Status: implemented as a public-safe lightweight target.
 
-Planned:
+Completed:
 
-- minimal synthetic target source;
+- synthetic target generator;
 - generated synthetic traces;
 - config-driven run;
-- attribution report;
-- patch-style negative control.
+- attribution sample;
+- baseline sample;
+- end-to-end tests.
+
+Remaining:
+
+- leak/control comparison report;
+- patch-style negative control documentation.
 
 Success criterion:
 
@@ -50,15 +70,22 @@ The known synthetic source event is ranked above unrelated events.
 
 ## Milestone 2: Toy RSA-Like Target
 
-Goal: evaluate a simple RSA-like workflow without involving production cryptographic material.
+Status: implemented as a public-safe lightweight target.
 
-Planned:
+Completed:
 
-- toy generator;
+- toy RSA-like generator;
 - safe redacted trace output;
-- baseline comparison;
-- attribution report;
-- config templates.
+- baseline sample;
+- attribution sample;
+- config template;
+- end-to-end tests;
+- target design documentation.
+
+Remaining:
+
+- generated public sample report;
+- comparison against synthetic target output.
 
 Success criterion:
 
@@ -68,7 +95,7 @@ TraceLeak can distinguish path-level and redacted-value signal from metadata bas
 
 ## Milestone 3: Local OpenSSL RSA Key Generation
 
-Goal: run local controlled experiments on toy OpenSSL RSA key generation builds.
+Status: not started. This remains intentionally blocked on M1/M2 validation.
 
 Planned:
 
@@ -86,14 +113,21 @@ Public reports contain only safe derived data and clearly state claim level.
 
 ## Milestone 4: Neural and Statistical Modeling
 
-Goal: compare simple baselines with local neural models.
+Status: result ingestion path implemented; local training remains out of default workflow.
 
-Planned:
+Completed:
 
-- local NN interface contract;
 - model result JSON schema;
+- model result validator;
+- model result to report converter;
 - attribution import path;
-- report comparison utilities.
+- sample model result;
+- CLI tests.
+
+Remaining:
+
+- local NN training harness;
+- comparison report between model, majority baseline, and nearest-neighbor baseline.
 
 Success criterion:
 
@@ -103,7 +137,7 @@ NN results are compared against metadata, majority, and nearest-neighbor baselin
 
 ## Milestone 5: Patch Verification
 
-Goal: show whether candidate source changes reduce measured signal.
+Status: not started.
 
 Planned:
 

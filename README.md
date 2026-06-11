@@ -25,6 +25,7 @@ The repository currently contains the lightweight public-safe foundation:
 - report generation;
 - feature extraction;
 - variable/control-flow model sequence extraction;
+- model sequence baseline evaluation;
 - baseline evaluation;
 - experiment config validation;
 - config-driven workflow execution;
@@ -109,6 +110,14 @@ Extract variable/control-flow model sequences:
 ```bash
 python scripts/extract_model_sequence.py --in examples/synthetic/synthetic_trace_sample.jsonl --out model_sequences.json
 python scripts/extract_model_sequence.py --in examples/synthetic/synthetic_trace_sample.jsonl --out model_sequences.json --counts
+```
+
+Evaluate model sequence baselines:
+
+```bash
+python scripts/evaluate_model_sequence_baseline.py --in examples/synthetic/model_sequence_baseline_sample.json
+python scripts/evaluate_model_sequence_baseline.py --in examples/synthetic/model_sequence_baseline_sample.json --out model_sequence_baseline_result.json
+python scripts/comparison_to_report.py --in examples/synthetic/model_vs_sequence_baseline_comparison_sample.json --out model_vs_sequence_baseline_report.md
 ```
 
 Evaluate simple baselines:

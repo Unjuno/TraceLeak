@@ -172,6 +172,18 @@ python examples/toy_rsa_like/target.py --out reports/local/toy_rsa_like.jsonl --
 python scripts/run_experiment.py experiments/exp_002_toy_rsa_like/config.json
 ```
 
+Generate the toy RSA-like public report sample:
+
+```bash
+python scripts/make_report.py --in examples/toy_rsa_like/ablation_sample.json --out toy_rsa_like_report.md
+```
+
+Compare synthetic and toy report-level scores:
+
+```bash
+python scripts/comparison_to_report.py --in examples/toy_rsa_like/synthetic_vs_toy_comparison_sample.json --out synthetic_vs_toy_report.md
+```
+
 ## Initial Target
 
 The initial target is OpenSSL RSA key generation in a local, controlled research environment.

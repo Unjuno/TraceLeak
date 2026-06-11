@@ -1,0 +1,112 @@
+{
+  "format": "traceleak.model_sequence.v1",
+  "input": "examples/synthetic/synthetic_trace_sample.jsonl",
+  "run_count": 4,
+  "public_safe": true,
+  "include_counts": true,
+  "include_redacted_values": true,
+  "label_name": "secret_bucket",
+  "contains_lab_only_labels": true,
+  "records": [
+    {
+      "run_id": "synthetic_seq_000001",
+      "target": "synthetic-leak",
+      "target_version": "v0",
+      "view": "redacted",
+      "label": "1",
+      "token_counts": {
+        "event_token=phase:keygen_start:synthetic_keygen:keygen_start": 1.0,
+        "source_token=examples/synthetic/target.c:10:synthetic_keygen:keygen_start": 1.0,
+        "context_token=keygen_start:synthetic_keygen": 1.0,
+        "event_type=phase": 1.0,
+        "phase=keygen_start": 1.0,
+        "event_token=branch:synthetic_leak:synthetic_keygen:secret_dependent_branch": 1.0,
+        "source_token=examples/synthetic/target.c:21:synthetic_keygen:secret_dependent_branch": 1.0,
+        "context_token=synthetic_leak:synthetic_keygen": 2.0,
+        "event_type=branch": 1.0,
+        "phase=synthetic_leak": 2.0,
+        "redacted_value=value_redacted.branch_taken=true": 1.0,
+        "event_token=loop:synthetic_leak:synthetic_keygen:dummy_loop_count": 1.0,
+        "source_token=examples/synthetic/target.c:22:synthetic_keygen:dummy_loop_count": 1.0,
+        "event_type=loop": 1.0,
+        "redacted_value=value_redacted.bucket=64-127": 1.0,
+        "redacted_value=value_redacted.bit_length=7": 1.0
+      }
+    },
+    {
+      "run_id": "synthetic_seq_000002",
+      "target": "synthetic-leak",
+      "target_version": "v0",
+      "view": "redacted",
+      "label": "1",
+      "token_counts": {
+        "event_token=phase:keygen_start:synthetic_keygen:keygen_start": 1.0,
+        "source_token=examples/synthetic/target.c:10:synthetic_keygen:keygen_start": 1.0,
+        "context_token=keygen_start:synthetic_keygen": 1.0,
+        "event_type=phase": 1.0,
+        "phase=keygen_start": 1.0,
+        "event_token=branch:synthetic_leak:synthetic_keygen:secret_dependent_branch": 1.0,
+        "source_token=examples/synthetic/target.c:21:synthetic_keygen:secret_dependent_branch": 1.0,
+        "context_token=synthetic_leak:synthetic_keygen": 2.0,
+        "event_type=branch": 1.0,
+        "phase=synthetic_leak": 2.0,
+        "redacted_value=value_redacted.branch_taken=true": 1.0,
+        "event_token=loop:synthetic_leak:synthetic_keygen:dummy_loop_count": 1.0,
+        "source_token=examples/synthetic/target.c:22:synthetic_keygen:dummy_loop_count": 1.0,
+        "event_type=loop": 1.0,
+        "redacted_value=value_redacted.bucket=64-127": 1.0,
+        "redacted_value=value_redacted.bit_length=7": 1.0
+      }
+    },
+    {
+      "run_id": "synthetic_seq_000003",
+      "target": "synthetic-leak",
+      "target_version": "v0",
+      "view": "redacted",
+      "label": "0",
+      "token_counts": {
+        "event_token=phase:keygen_start:synthetic_keygen:keygen_start": 1.0,
+        "source_token=examples/synthetic/target.c:10:synthetic_keygen:keygen_start": 1.0,
+        "context_token=keygen_start:synthetic_keygen": 1.0,
+        "event_type=phase": 1.0,
+        "phase=keygen_start": 1.0,
+        "event_token=branch:synthetic_control:synthetic_keygen:control_branch": 1.0,
+        "source_token=examples/synthetic/target.c:25:synthetic_keygen:control_branch": 1.0,
+        "context_token=synthetic_control:synthetic_keygen": 2.0,
+        "event_type=branch": 1.0,
+        "phase=synthetic_control": 2.0,
+        "redacted_value=value_redacted.branch_taken=false": 1.0,
+        "event_token=loop:synthetic_control:synthetic_keygen:control_loop_count": 1.0,
+        "source_token=examples/synthetic/target.c:26:synthetic_keygen:control_loop_count": 1.0,
+        "event_type=loop": 1.0,
+        "redacted_value=value_redacted.bucket=0-1": 1.0,
+        "redacted_value=value_redacted.bit_length=1": 1.0
+      }
+    },
+    {
+      "run_id": "synthetic_seq_000004",
+      "target": "synthetic-leak",
+      "target_version": "v0",
+      "view": "redacted",
+      "label": "0",
+      "token_counts": {
+        "event_token=phase:keygen_start:synthetic_keygen:keygen_start": 1.0,
+        "source_token=examples/synthetic/target.c:10:synthetic_keygen:keygen_start": 1.0,
+        "context_token=keygen_start:synthetic_keygen": 1.0,
+        "event_type=phase": 1.0,
+        "phase=keygen_start": 1.0,
+        "event_token=branch:synthetic_control:synthetic_keygen:control_branch": 1.0,
+        "source_token=examples/synthetic/target.c:25:synthetic_keygen:control_branch": 1.0,
+        "context_token=synthetic_control:synthetic_keygen": 2.0,
+        "event_type=branch": 1.0,
+        "phase=synthetic_control": 2.0,
+        "redacted_value=value_redacted.branch_taken=false": 1.0,
+        "event_token=loop:synthetic_control:synthetic_keygen:control_loop_count": 1.0,
+        "source_token=examples/synthetic/target.c:26:synthetic_keygen:control_loop_count": 1.0,
+        "event_type=loop": 1.0,
+        "redacted_value=value_redacted.bucket=0-1": 1.0,
+        "redacted_value=value_redacted.bit_length=1": 1.0
+      }
+    }
+  ]
+}

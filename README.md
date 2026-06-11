@@ -52,6 +52,7 @@ Heavy local work such as neural training, instrumented OpenSSL builds, and large
 
 ## Documentation
 
+- [Concept Overview](docs/concept.md)
 - [Documentation Index](docs/index.md)
 - [Public API Overview](docs/api.md)
 - [Roadmap](ROADMAP.md)

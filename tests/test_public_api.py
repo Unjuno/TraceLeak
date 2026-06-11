@@ -10,7 +10,10 @@ from traceleak import (
     accuracy,
     claim_report_dict,
     claim_summary,
+    classify_comparison,
     classify_delta,
+    comparison_delta,
+    comparison_report_dict,
     delta_h,
     extract_feature_vector,
     patch_verification_report_dict,
@@ -95,6 +98,18 @@ def sample_claim() -> dict:
     }
 
 
+def sample_comparison() -> dict:
+    return {
+        "comparison_id": "api_comparison_0001",
+        "comparison_type": "leak_vs_control",
+        "target": "synthetic-example",
+        "view": "redacted",
+        "metric": "DeltaH",
+        "left": {"label": "leak", "score": 4.0},
+        "right": {"label": "control", "score": 0.2},
+    }
+
+
 def test_public_api_exports_expected_names() -> None:
     for name in traceleak.__all__:
         assert hasattr(traceleak, name)
@@ -153,6 +168,14 @@ def test_public_api_claim_level_functions() -> None:
     report = claim_report_dict(claim)
     assert report["report_type"] == "claim_level"
     assert report["level"] == "L5"
+
+
+def test_public_api_comparison_functions() -> None:
+    assert comparison_delta(4.0, 0.2) == 3.8
+    assert classify_comparison(3.8) == "higher"
+    report = comparison_report_dict(sample_comparison())
+    assert report["report_type"] == "comparison"
+    assert report["status"] == "higher"
 
 
 def test_public_api_workflow_result_type() -> None:

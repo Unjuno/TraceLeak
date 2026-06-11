@@ -1,0 +1,64 @@
+{
+  "attributions": [
+    {
+      "contribution": 4.0,
+      "evidence": [
+        "ablation"
+      ],
+      "group_id": "candidate_result",
+      "group_type": "mixed",
+      "location": "examples/toy_rsa_like/target.py:35",
+      "metadata": {
+        "ablated_score": 2.0,
+        "full_score": 6.0
+      }
+    },
+    {
+      "contribution": 2.0,
+      "evidence": [
+        "ablation"
+      ],
+      "group_id": "small_divisor_check",
+      "group_type": "mixed",
+      "location": "examples/toy_rsa_like/target.py:29",
+      "metadata": {
+        "ablated_score": 4.0,
+        "full_score": 6.0
+      }
+    },
+    {
+      "contribution": 1.0,
+      "evidence": [
+        "ablation"
+      ],
+      "group_id": "oddness_check",
+      "group_type": "mixed",
+      "location": "examples/toy_rsa_like/target.py:25",
+      "metadata": {
+        "ablated_score": 5.0,
+        "full_score": 6.0
+      }
+    },
+    {
+      "contribution": 0.5,
+      "evidence": [
+        "ablation"
+      ],
+      "group_id": "candidate_generated",
+      "group_type": "mixed",
+      "location": "examples/toy_rsa_like/target.py:21",
+      "metadata": {
+        "ablated_score": 5.5,
+        "full_score": 6.0
+      }
+    }
+  ],
+  "metric": "DeltaH",
+  "notes": [
+    "Toy RSA-like synthetic ablation sample.",
+    "No raw candidate values are included."
+  ],
+  "score": 6.0,
+  "target": "toy-rsa-like",
+  "view": "redacted"
+}

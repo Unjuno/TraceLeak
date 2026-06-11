@@ -30,6 +30,7 @@ Completed:
 - attribution scoring;
 - report generation;
 - feature extraction;
+- variable/control-flow sequence feature encoding;
 - baseline evaluation;
 - experiment config validation;
 - model result validation;
@@ -70,7 +71,8 @@ Completed:
 - L5 claim sample;
 - leak/control comparison sample;
 - patch-style negative control documentation;
-- negative control comparison sample.
+- negative control comparison sample;
+- variable/control-flow model sequence sample.
 
 Remaining:
 
@@ -129,15 +131,19 @@ Public reports contain only safe derived data and clearly state claim level.
 
 ## Milestone 4: Neural and Statistical Modeling
 
-Status: result ingestion path implemented; local training remains out of default workflow.
+Status: public-safe model sequence representation implemented; local training remains out of default workflow.
 
 Completed:
 
 - model result JSON schema;
 - model result validator;
 - model result to report converter;
+- variable/control-flow dynamics modeling design;
+- public-safe model sequence feature encoder;
+- source-level token helpers;
 - attribution import path;
 - sample model result;
+- synthetic model sequence sample;
 - CLI tests.
 
 Remaining:

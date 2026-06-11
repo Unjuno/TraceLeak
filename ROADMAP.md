@@ -67,11 +67,13 @@ Completed:
 - patch verification sample;
 - repeated-run stability sample;
 - L5 claim sample;
-- leak/control comparison sample.
+- leak/control comparison sample;
+- patch-style negative control documentation;
+- negative control comparison sample.
 
 Remaining:
 
-- patch-style negative control documentation.
+- generated public comparison artifacts are local-only outputs.
 
 Success criterion:
 

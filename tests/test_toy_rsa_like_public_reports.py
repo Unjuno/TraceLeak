@@ -1,12 +1,13 @@
 import json
 import subprocess
 import sys
+from pathlib import Path
 
 from traceleak.comparison import comparison_report_dict, load_comparison
 
 
 def test_toy_rsa_like_report_sample_json() -> None:
-    payload = json.loads(open("examples/toy_rsa_like/report_sample.json", encoding="utf-8").read())
+    payload = json.loads(Path("examples/toy_rsa_like/report_sample.json").read_text(encoding="utf-8"))
     assert payload["target"] == "toy-rsa-like"
     assert payload["view"] == "redacted"
     assert payload["score"] == 6.0
@@ -15,7 +16,7 @@ def test_toy_rsa_like_report_sample_json() -> None:
 
 
 def test_toy_rsa_like_report_sample_markdown() -> None:
-    text = open("examples/toy_rsa_like/report_sample.md", encoding="utf-8").read()
+    text = Path("examples/toy_rsa_like/report_sample.md").read_text(encoding="utf-8")
     assert "TraceLeak Attribution Report" in text
     assert "toy-rsa-like" in text
     assert "candidate_result" in text

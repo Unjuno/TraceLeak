@@ -1,0 +1,24 @@
+{
+  "comparison_id": "synthetic_model_vs_sequence_baseline_0001",
+  "comparison_type": "model_vs_sequence_baseline",
+  "target": "synthetic-leak",
+  "view": "redacted",
+  "metric": "accuracy",
+  "left": {
+    "label": "local-neural-placeholder",
+    "score": 0.875,
+    "report": "examples/synthetic/model_result_sample.json"
+  },
+  "right": {
+    "label": "sequence_nearest_neighbor_baseline",
+    "score": 1.0,
+    "report": "examples/synthetic/model_sequence_baseline_result_sample.json"
+  },
+  "delta": -0.125,
+  "status": "lower",
+  "interpretation": "The placeholder model result is lower than the sequence nearest-neighbor baseline in this synthetic public-safe sample. This is a sanity check showing that variable/control-flow sequence baselines must be compared before making neural-model claims.",
+  "notes": [
+    "Public-safe comparison between a model result sample and a model-sequence baseline sample.",
+    "This is not a neural training result; the model side is a placeholder imported result."
+  ]
+}

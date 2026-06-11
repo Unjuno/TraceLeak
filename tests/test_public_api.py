@@ -8,6 +8,8 @@ from traceleak import (
     WorkflowResult,
     ablation_drop,
     accuracy,
+    claim_report_dict,
+    claim_summary,
     classify_delta,
     delta_h,
     extract_feature_vector,
@@ -17,6 +19,7 @@ from traceleak import (
     stability_summary,
     to_view,
     top_k_recall,
+    validate_claim,
     validate_config,
     validate_patch_verification,
     validate_run,
@@ -64,6 +67,31 @@ def sample_stability_input() -> dict:
         "metric": "DeltaH",
         "before_scores": [4.0, 4.1, 3.9],
         "after_scores": [1.0, 1.1, 0.9],
+    }
+
+
+def sample_claim() -> dict:
+    return {
+        "claim_id": "api_claim_l5_0001",
+        "level": "L5",
+        "target": "synthetic-example",
+        "view": "redacted",
+        "metric": "DeltaH",
+        "evidence": {
+            "patch_verification": {
+                "verification_id": "api_patch_0001",
+                "status": "reduced",
+            },
+            "stability": {
+                "stability_id": "api_stability_0001",
+                "status": "reduced",
+            },
+        },
+        "safety": {
+            "public_safe": True,
+            "contains_raw_trace": False,
+            "contains_secret_equivalent": False,
+        },
     }
 
 
@@ -115,6 +143,16 @@ def test_public_api_stability_functions() -> None:
     result = stability_result(sample_stability_input())
     assert result["result_type"] == "repeated_run_stability"
     assert result["summary"]["status"] == "reduced"
+
+
+def test_public_api_claim_level_functions() -> None:
+    claim = sample_claim()
+    validate_claim(claim)
+    summary = claim_summary(claim)
+    assert summary["level"] == "L5"
+    report = claim_report_dict(claim)
+    assert report["report_type"] == "claim_level"
+    assert report["level"] == "L5"
 
 
 def test_public_api_workflow_result_type() -> None:

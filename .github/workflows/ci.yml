@@ -1,0 +1,52 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: Python ${{ matrix.python-version }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.10", "3.11", "3.12"]
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: pip
+
+      - name: Install package
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -e ".[dev]"
+
+      - name: Lint
+        run: ruff check .
+
+      - name: Test
+        run: pytest
+
+      - name: Validate sample workflows
+        run: |
+          python scripts/validate_trace.py --public examples/synthetic/synthetic_trace_sample.jsonl
+          python scripts/validate_config.py experiments/exp_000_synthetic_leak/config.json
+          python scripts/validate_model_result.py examples/synthetic/model_result_sample.json
+          python scripts/model_result_to_report.py --in examples/synthetic/model_result_sample.json --out reports/local/model_report.md
+          python scripts/validate_patch_verification.py examples/synthetic/patch_verification_sample.json
+          python scripts/patch_verification_to_report.py --in examples/synthetic/patch_verification_sample.json --out reports/local/patch_report.md
+          python scripts/evaluate_stability.py examples/synthetic/stability_sample.json --out reports/local/stability_result.json
+          python scripts/validate_claim.py examples/synthetic/claim_l5_sample.json

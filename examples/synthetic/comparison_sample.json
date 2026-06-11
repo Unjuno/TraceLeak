@@ -1,0 +1,24 @@
+{
+  "comparison_id": "synthetic_leak_control_0001",
+  "comparison_type": "leak_vs_control",
+  "target": "synthetic-leak",
+  "view": "redacted",
+  "metric": "DeltaH",
+  "left": {
+    "label": "leak",
+    "score": 4.0,
+    "report": "reports/local/synthetic_leak.md"
+  },
+  "right": {
+    "label": "control",
+    "score": 0.2,
+    "report": "reports/local/synthetic_control.md"
+  },
+  "delta": 3.8,
+  "status": "higher",
+  "interpretation": "The leak condition has a higher public-safe DeltaH score than the control condition in this synthetic sample.",
+  "notes": [
+    "Public-safe synthetic comparison sample.",
+    "Scores are derived summaries, not raw traces."
+  ]
+}

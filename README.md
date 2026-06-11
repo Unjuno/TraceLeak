@@ -34,6 +34,7 @@ The repository currently contains the lightweight public-safe foundation:
 - patch verification validation;
 - patch verification to report conversion;
 - repeated-run stability checks;
+- claim level validation;
 - public Python API;
 - CLI entry points;
 - synthetic and toy examples;
@@ -42,7 +43,7 @@ The repository currently contains the lightweight public-safe foundation:
 The current Windows/Python 3.12 local check has reached:
 
 ```text
-104 passed
+116 passed
 ruff check .: passed
 ```
 
@@ -147,6 +148,13 @@ python scripts/evaluate_stability.py examples/synthetic/stability_sample.json
 python scripts/evaluate_stability.py examples/synthetic/stability_sample.json --out stability_result.json
 ```
 
+Validate a claim level:
+
+```bash
+python scripts/validate_claim.py examples/synthetic/claim_l5_sample.json
+python scripts/validate_claim.py --json examples/synthetic/claim_l5_sample.json
+```
+
 ## Synthetic and Toy Targets
 
 Generate synthetic traces:
@@ -235,6 +243,7 @@ TraceLeak may also report:
 - source-level leakage ranking;
 - before/after patch verification;
 - repeated-run stability;
+- claim levels;
 - cross-snapshot stability checks;
 - cross-build stability checks.
 

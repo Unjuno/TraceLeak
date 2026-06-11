@@ -24,6 +24,7 @@ The repository currently contains the lightweight public-safe foundation:
 - source-level attribution scoring;
 - report generation;
 - feature extraction;
+- variable/control-flow model sequence extraction;
 - baseline evaluation;
 - experiment config validation;
 - config-driven workflow execution;
@@ -101,6 +102,13 @@ Extract features:
 ```bash
 python scripts/extract_features.py --in examples/synthetic/synthetic_trace_sample.jsonl --out features.json
 python scripts/extract_features.py --in examples/synthetic/synthetic_trace_sample.jsonl --out features.csv --format csv
+```
+
+Extract variable/control-flow model sequences:
+
+```bash
+python scripts/extract_model_sequence.py --in examples/synthetic/synthetic_trace_sample.jsonl --out model_sequences.json
+python scripts/extract_model_sequence.py --in examples/synthetic/synthetic_trace_sample.jsonl --out model_sequences.json --counts
 ```
 
 Evaluate simple baselines:

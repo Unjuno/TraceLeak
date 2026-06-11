@@ -40,6 +40,21 @@ from traceleak import extract_feature_vector
 
 Extracts a sparse numeric feature dictionary from one public-safe run.
 
+## Model Sequence Features
+
+```python
+from traceleak import (
+    event_token,
+    model_sequence_vocabulary,
+    redacted_value_tokens,
+    sequence_token_counts,
+    source_token,
+    trace_to_model_sequence,
+)
+```
+
+Converts validated trace runs into ordered variable/control-flow sequence records for future local model training. These helpers do not train a neural network. They encode public-safe source-level execution dynamics such as event order, event type, phase, function, source identity, and redacted value-derived tokens.
+
 ## Attribution
 
 ```python

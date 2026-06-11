@@ -22,6 +22,7 @@ This index lists the main public-safe documentation files.
 - [Repeated-Run Stability](stability.md)
 - [Claim Levels](claim_levels.md)
 - [Comparison Reports](comparisons.md)
+- [Negative Controls](negative_controls.md)
 - [Public API Overview](api.md)
 
 ## Targets

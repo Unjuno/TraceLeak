@@ -1,0 +1,30 @@
+{
+  "verification_id": "synthetic_patch_0001",
+  "target": "synthetic-leak",
+  "view": "redacted",
+  "metric": "DeltaH",
+  "before": {
+    "run_id": "exp_001_synthetic_generated_before",
+    "score": 4.0,
+    "report": "reports/local/exp_001_synthetic_generated_before.md"
+  },
+  "after": {
+    "run_id": "exp_001_synthetic_generated_after",
+    "score": 1.0,
+    "report": "reports/local/exp_001_synthetic_generated_after.md"
+  },
+  "delta": 3.0,
+  "status": "reduced",
+  "changed_groups": [
+    {
+      "group_id": "synthetic_branch_event",
+      "location": "examples/synthetic/target.py:19",
+      "before_contribution": 3.0,
+      "after_contribution": 0.5
+    }
+  ],
+  "notes": [
+    "Public-safe synthetic patch verification sample.",
+    "No raw traces or secret-equivalent values are included."
+  ]
+}

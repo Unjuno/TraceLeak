@@ -4,6 +4,7 @@ This index lists the main public-safe documentation files.
 
 ## Project and Safety
 
+- [Concept Overview](concept.md)
 - [Design](design.md)
 - [Threat Model](threat_model.md)
 - [Safety Boundary](safety_boundary.md)

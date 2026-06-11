@@ -1,0 +1,60 @@
+{
+  "run_id": "synthetic_000001",
+  "target": "synthetic-leak",
+  "view": "redacted",
+  "sequence": [
+    {
+      "position": 1,
+      "step": 1,
+      "target": "synthetic-leak",
+      "view": "redacted",
+      "event_type": "phase",
+      "phase": "keygen_start",
+      "function": "synthetic_keygen",
+      "name": "keygen_start",
+      "event_token": "phase:keygen_start:synthetic_keygen:keygen_start",
+      "source_token": "examples/synthetic/target.c:10:synthetic_keygen:keygen_start",
+      "context_token": "keygen_start:synthetic_keygen",
+      "file": "examples/synthetic/target.c",
+      "line": 10,
+      "redacted_value_tokens": []
+    },
+    {
+      "position": 2,
+      "step": 2,
+      "target": "synthetic-leak",
+      "view": "redacted",
+      "event_type": "branch",
+      "phase": "synthetic_leak",
+      "function": "synthetic_keygen",
+      "name": "secret_dependent_branch",
+      "event_token": "branch:synthetic_leak:synthetic_keygen:secret_dependent_branch",
+      "source_token": "examples/synthetic/target.c:21:synthetic_keygen:secret_dependent_branch",
+      "context_token": "synthetic_leak:synthetic_keygen",
+      "file": "examples/synthetic/target.c",
+      "line": 21,
+      "redacted_value_tokens": [
+        "value_redacted.branch_taken=true"
+      ]
+    },
+    {
+      "position": 3,
+      "step": 3,
+      "target": "synthetic-leak",
+      "view": "redacted",
+      "event_type": "loop",
+      "phase": "synthetic_leak",
+      "function": "synthetic_keygen",
+      "name": "dummy_loop_count",
+      "event_token": "loop:synthetic_leak:synthetic_keygen:dummy_loop_count",
+      "source_token": "examples/synthetic/target.c:22:synthetic_keygen:dummy_loop_count",
+      "context_token": "synthetic_leak:synthetic_keygen",
+      "file": "examples/synthetic/target.c",
+      "line": 22,
+      "redacted_value_tokens": [
+        "value_redacted.bucket=64-127",
+        "value_redacted.bit_length=7"
+      ]
+    }
+  ]
+}

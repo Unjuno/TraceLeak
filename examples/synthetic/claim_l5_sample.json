@@ -1,0 +1,33 @@
+{
+  "claim_id": "synthetic_claim_l5_0001",
+  "level": "L5",
+  "target": "synthetic-leak",
+  "view": "redacted",
+  "metric": "DeltaH",
+  "evidence": {
+    "attribution_report": {
+      "path": "reports/local/exp_001_synthetic_generated.md",
+      "top_group_id": "synthetic_branch_event"
+    },
+    "patch_verification": {
+      "verification_id": "synthetic_patch_0001",
+      "status": "reduced",
+      "delta": 3.0
+    },
+    "stability": {
+      "stability_id": "synthetic_stability_0001",
+      "status": "reduced",
+      "mean_delta": 2.99,
+      "margin": 28.67
+    }
+  },
+  "safety": {
+    "public_safe": true,
+    "contains_raw_trace": false,
+    "contains_secret_equivalent": false
+  },
+  "notes": [
+    "Synthetic public-safe L5 claim sample.",
+    "This is a framework validation artifact, not a production cryptographic claim."
+  ]
+}

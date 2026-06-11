@@ -2,6 +2,11 @@
 
 from traceleak.attribution import AttributionScore, ablation_drop
 from traceleak.claim_levels import claim_report_dict, claim_summary, validate_claim
+from traceleak.comparison import (
+    classify_comparison,
+    comparison_delta,
+    comparison_report_dict,
+)
 from traceleak.config import validate_config
 from traceleak.features import extract_feature_vector
 from traceleak.metrics import accuracy, delta_h, top_k_recall
@@ -25,7 +30,10 @@ __all__ = [
     "accuracy",
     "claim_report_dict",
     "claim_summary",
+    "classify_comparison",
     "classify_delta",
+    "comparison_delta",
+    "comparison_report_dict",
     "delta_h",
     "extract_feature_vector",
     "patch_verification_report_dict",

@@ -37,6 +37,7 @@ Completed:
 - patch verification to report conversion;
 - repeated-run stability checks;
 - claim level validation;
+- comparison report rendering;
 - synthetic examples;
 - toy RSA-like examples;
 - lightweight runner;
@@ -65,11 +66,11 @@ Completed:
 - end-to-end tests;
 - patch verification sample;
 - repeated-run stability sample;
-- L5 claim sample.
+- L5 claim sample;
+- leak/control comparison sample.
 
 Remaining:
 
-- leak/control comparison report;
 - patch-style negative control documentation.
 
 Success criterion:

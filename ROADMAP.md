@@ -31,6 +31,7 @@ Completed:
 - report generation;
 - feature extraction;
 - variable/control-flow sequence feature encoding;
+- variable/control-flow model sequence extraction CLI;
 - baseline evaluation;
 - experiment config validation;
 - model result validation;
@@ -140,6 +141,7 @@ Completed:
 - model result to report converter;
 - variable/control-flow dynamics modeling design;
 - public-safe model sequence feature encoder;
+- model sequence extraction CLI;
 - source-level token helpers;
 - attribution import path;
 - sample model result;

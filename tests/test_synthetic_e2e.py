@@ -1,5 +1,3 @@
-from pathlib import Path
-
 from examples.synthetic.target import make_run, write_jsonl
 from traceleak.workflow import run_lightweight_experiment
 

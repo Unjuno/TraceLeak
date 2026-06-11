@@ -8,13 +8,17 @@ from traceleak import (
     WorkflowResult,
     ablation_drop,
     accuracy,
+    classify_delta,
     delta_h,
     extract_feature_vector,
+    patch_verification_report_dict,
     run_lightweight_experiment,
     to_view,
     top_k_recall,
     validate_config,
+    validate_patch_verification,
     validate_run,
+    verification_delta,
 )
 
 
@@ -34,6 +38,19 @@ def sample_run() -> dict:
                 "value_redacted": {"count": 1},
             }
         ],
+    }
+
+
+def sample_patch_verification() -> dict:
+    return {
+        "verification_id": "api_patch_0001",
+        "target": "synthetic-example",
+        "view": "redacted",
+        "metric": "DeltaH",
+        "before": {"run_id": "before", "score": 4.0},
+        "after": {"run_id": "after", "score": 1.0},
+        "delta": 3.0,
+        "status": "reduced",
     }
 
 
@@ -67,6 +84,16 @@ def test_public_api_core_functions() -> None:
     path_view = to_view(run, "path")
     assert path_view["view"] == "path"
     assert extract_feature_vector(run)["run.view=redacted"] == 1.0
+
+
+def test_public_api_patch_verification_functions() -> None:
+    result = sample_patch_verification()
+    validate_patch_verification(result)
+    assert verification_delta(4.0, 1.0) == 3.0
+    assert classify_delta(3.0) == "reduced"
+    report = patch_verification_report_dict(result)
+    assert report["report_type"] == "patch_verification"
+    assert report["status"] == "reduced"
 
 
 def test_public_api_workflow_result_type() -> None:

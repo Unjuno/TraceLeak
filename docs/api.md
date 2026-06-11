@@ -69,6 +69,14 @@ from traceleak import (
 
 Validates public-safe before/after patch verification results and converts them into normalized report dictionaries.
 
+## Repeated-Run Stability
+
+```python
+from traceleak import stability_result, stability_summary
+```
+
+Summarizes repeated before/after score lists and returns directional stability evidence.
+
 ## Workflow
 
 ```python

@@ -2,19 +2,42 @@
 
 TraceLeak is a defensive research framework for implementation-level leakage assessment.
 
-It is not a cryptanalytic attack framework. It does not claim to break RSA or recover third-party secrets. Its purpose is to help a researcher answer whether an implementation trace contains secret-dependent signal, where that signal appears in source-level behavior, and whether the measured signal decreases after a controlled change.
+It is not a cryptanalytic attack framework. It does not claim to break RSA or recover third-party secrets. Its purpose is to help a researcher answer whether an implementation trace contains secret-dependent signal, where that signal appears in source-level program behavior, and whether the measured signal decreases after a controlled change.
 
 ## Core Concept
+
+TraceLeak is not just a classifier over finished outputs. Its core idea is to learn from the movement of a program while it runs.
+
+A TraceLeak model should receive public-safe representations of:
+
+- which source file, function, line, phase, branch, loop, or variable event occurred;
+- when it occurred in the execution sequence;
+- how often it occurred;
+- how a redacted value-derived feature changed;
+- which path or phase transitions happened before and after it;
+- which observable timing or memory-adjacent features co-occurred with it.
+
+In other words, the learning target is not only:
+
+```text
+trace -> label
+```
+
+The intended learning problem is closer to:
+
+```text
+program variable/control-flow dynamics -> secret-dependent signal estimate -> source-level attribution
+```
 
 TraceLeak treats leakage assessment as a public-safe evidence pipeline:
 
 ```text
 implementation behavior
-  -> trace collection
+  -> variable/control-flow trace collection
   -> public-safe trace views
-  -> feature extraction
+  -> sequence/feature representation
   -> baseline/model measurement
-  -> attribution
+  -> source-level attribution
   -> comparison
   -> patch/stability verification
   -> claim level
@@ -29,9 +52,27 @@ Does it leak?
 The stronger TraceLeak question is:
 
 ```text
-What source-level behavior explains the measured signal,
+Which variable, branch, loop, phase, or source-level behavior explains the measured signal,
 and does the signal decrease after a controlled modification?
 ```
+
+## Neural Learning Direction
+
+The neural direction is to model traces as structured execution evidence, not as flat black-box samples.
+
+A future TraceLeak NN can use:
+
+- sequence models over ordered trace events;
+- attention over source-level event tokens;
+- embeddings for `file:function:line:name` identities;
+- embeddings for event types such as branch, loop, phase, assign, memory, and timing;
+- redacted value-feature buckets, counts, bit-lengths, Hamming-weight buckets, or modular summaries;
+- temporal/context windows around candidate events;
+- graph or hierarchy structure from file -> function -> phase -> event.
+
+The model output may be a leakage score, class probability, candidate-space reduction estimate, or ranking. But the important TraceLeak output is the attribution back to source-level behavior.
+
+Attention is useful only as one signal. It should be checked against ablation, baselines, negative controls, repeated-run stability, and patch verification before making a strong claim.
 
 ## What TraceLeak Measures
 
@@ -47,6 +88,7 @@ TraceLeak may also report accuracy, top-k recall, ablation drop, repeated-run st
 
 TraceLeak attempts to localize measured signal to source-level groups, such as:
 
+- variables;
 - branches;
 - loops;
 - phases;
@@ -111,7 +153,7 @@ The repository is intentionally staged from safe to sensitive:
 2. synthetic and toy targets;
 3. comparison, negative-control, stability, and claim-level discipline;
 4. future local-only OpenSSL instrumentation;
-5. future local-only model training and heavier experiments.
+5. future variable-dynamics model training and heavier local experiments.
 
 This means the public repository should contain reproducible examples and report artifacts, but not raw key-generation traces, private keys, memory dumps, or secret-equivalent material.
 
@@ -125,10 +167,10 @@ A useful TraceLeak result should identify:
 - the trace view;
 - the metric;
 - the measured score;
-- the source-level attribution;
+- the source-level variable/control-flow attribution;
 - the comparison or control condition;
 - the stability evidence;
 - the claim level;
 - the safety boundary.
 
-In short: TraceLeak turns implementation-level leakage research into an evidence chain rather than a one-off score.
+In short: TraceLeak turns implementation-level leakage research into an evidence chain over program behavior rather than a one-off score over finished outputs.

@@ -52,3 +52,5 @@ jobs:
           python scripts/validate_claim.py examples/synthetic/claim_l5_sample.json
           python scripts/comparison_to_report.py --in examples/synthetic/comparison_sample.json --out reports/local/comparison_report.md
           python scripts/comparison_to_report.py --in examples/synthetic/negative_control_sample.json --out reports/local/negative_control_report.md
+          python scripts/make_report.py --in examples/toy_rsa_like/ablation_sample.json --out reports/local/toy_rsa_like_report.md
+          python scripts/comparison_to_report.py --in examples/toy_rsa_like/synthetic_vs_toy_comparison_sample.json --out reports/local/synthetic_vs_toy_report.md

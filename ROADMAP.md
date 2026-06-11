@@ -31,6 +31,7 @@ Completed:
 - experiment config validation;
 - model result validation;
 - model result to report conversion;
+- patch verification validation;
 - synthetic examples;
 - toy RSA-like examples;
 - lightweight runner;
@@ -55,7 +56,8 @@ Completed:
 - config-driven run;
 - attribution sample;
 - baseline sample;
-- end-to-end tests.
+- end-to-end tests;
+- patch verification sample.
 
 Remaining:
 
@@ -137,13 +139,21 @@ NN results are compared against metadata, majority, and nearest-neighbor baselin
 
 ## Milestone 5: Patch Verification
 
-Status: not started.
+Status: schema and validation implemented.
 
-Planned:
+Completed:
 
-- before/after report format;
-- stability checks;
+- before/after result schema;
+- patch verification validator;
+- validation CLI;
+- synthetic patch verification sample;
 - patch verification docs;
+- CLI tests.
+
+Remaining:
+
+- before/after report renderer;
+- repeated-run stability checks;
 - claim level L5 support.
 
 Success criterion:

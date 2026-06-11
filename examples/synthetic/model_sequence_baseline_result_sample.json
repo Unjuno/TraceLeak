@@ -1,0 +1,20 @@
+{
+  "baselines": {
+    "leave_one_out_majority_accuracy": 0.0,
+    "leave_one_out_nearest_neighbor_accuracy": 1.0
+  },
+  "example_count": 4,
+  "input_format": "traceleak.model_sequence.v1",
+  "label_distribution": {
+    "0": 2,
+    "1": 2
+  },
+  "label_name": "secret_bucket",
+  "notes": [
+    "Baseline over variable/control-flow model sequence token counts.",
+    "This is not neural training; it is a lightweight sanity check before local NN work."
+  ],
+  "result_type": "model_sequence_baseline",
+  "target": "synthetic-leak",
+  "view": "redacted"
+}

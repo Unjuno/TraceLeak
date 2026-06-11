@@ -1,0 +1,25 @@
+{
+  "comparison_id": "synthetic_negative_control_0001",
+  "comparison_type": "negative_control",
+  "target": "synthetic-leak",
+  "view": "redacted",
+  "metric": "DeltaH",
+  "left": {
+    "label": "before_noop_patch",
+    "score": 4.0,
+    "report": "reports/local/synthetic_before_noop_patch.md"
+  },
+  "right": {
+    "label": "after_noop_patch",
+    "score": 4.0,
+    "report": "reports/local/synthetic_after_noop_patch.md"
+  },
+  "delta": 0.0,
+  "status": "unchanged",
+  "interpretation": "The noop patch condition is unchanged in this public-safe synthetic negative control sample.",
+  "notes": [
+    "Public-safe synthetic negative control sample.",
+    "A negative control should not create an apparent reduction claim.",
+    "Scores are derived summaries, not raw traces."
+  ]
+}

@@ -21,6 +21,7 @@ This index lists the main public-safe documentation files.
 - [Patch Verification](patch_verification.md)
 - [Repeated-Run Stability](stability.md)
 - [Claim Levels](claim_levels.md)
+- [Comparison Reports](comparisons.md)
 - [Public API Overview](api.md)
 
 ## Targets
@@ -50,6 +51,7 @@ trace JSONL
   -> patch_verification_to_report.py
   -> evaluate_stability.py
   -> validate_claim.py
+  -> comparison_to_report.py
   -> run_experiment.py
 ```
 

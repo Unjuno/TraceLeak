@@ -1,0 +1,24 @@
+{
+  "comparison_id": "synthetic_vs_toy_0001",
+  "comparison_type": "synthetic_vs_toy",
+  "target": "public-safe-examples",
+  "view": "redacted",
+  "metric": "DeltaH",
+  "left": {
+    "label": "synthetic-example",
+    "score": 10.0,
+    "report": "examples/synthetic/ablation_sample.json"
+  },
+  "right": {
+    "label": "toy-rsa-like",
+    "score": 6.0,
+    "report": "examples/toy_rsa_like/report_sample.json"
+  },
+  "delta": 4.0,
+  "status": "higher",
+  "interpretation": "The synthetic example has a higher public-safe DeltaH score than the toy RSA-like sample. This comparison is a scale/context check, not a cryptographic security claim.",
+  "notes": [
+    "Public-safe comparison between example targets.",
+    "Scores are derived report-level summaries, not raw traces."
+  ]
+}

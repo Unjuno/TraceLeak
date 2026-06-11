@@ -12,6 +12,7 @@ before report
   -> after report
   -> patch verification JSON
   -> validate_patch_verification.py
+  -> patch_verification_to_report.py
 ```
 
 Patch verification is the path toward stronger TraceLeak claims. A single before/after comparison is not enough for a production security claim, but it is useful evidence for local controlled experiments.
@@ -50,6 +51,29 @@ JSON summary:
 ```bash
 python scripts/validate_patch_verification.py --json examples/synthetic/patch_verification_sample.json
 ```
+
+## Render Report
+
+Markdown report:
+
+```bash
+python scripts/patch_verification_to_report.py --in examples/synthetic/patch_verification_sample.json --out patch_report.md
+```
+
+JSON report:
+
+```bash
+python scripts/patch_verification_to_report.py --in examples/synthetic/patch_verification_sample.json --out patch_report.json --format json
+```
+
+The rendered report includes:
+
+- verification metadata;
+- before/after scores;
+- computed delta;
+- status;
+- changed source groups, when present;
+- notes, when present.
 
 ## Required Fields
 

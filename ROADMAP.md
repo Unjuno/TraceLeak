@@ -7,15 +7,16 @@ This roadmap tracks the public-safe foundation first, then local-only heavy expe
 Latest known Windows/Python 3.12 local checkpoint:
 
 ```text
-116 passed
+129 passed
 ruff check .: passed
+L5 claim validation: passed
 ```
 
 This confirms the current public-safe lightweight workflow on the local test environment.
 
 ## Milestone 0: Public-Safe Foundation
 
-Status: nearly complete.
+Status: implemented; GitHub Actions result pending.
 
 Completed:
 
@@ -43,11 +44,12 @@ Completed:
 - CLI entry points;
 - contribution and issue templates;
 - release checklist;
-- documentation index.
+- documentation index;
+- GitHub Actions CI workflow.
 
 Remaining:
 
-- CI workflow.
+- confirm CI run result on GitHub Actions.
 
 ## Milestone 1: Synthetic Leakage Target
 

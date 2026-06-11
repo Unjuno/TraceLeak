@@ -26,10 +26,32 @@ The repository currently contains the lightweight public-safe foundation:
 - feature extraction;
 - baseline evaluation;
 - experiment config validation;
-- synthetic examples;
-- unit tests.
+- config-driven workflow execution;
+- synthetic target generation;
+- toy RSA-like target generation;
+- model result validation;
+- model result to report conversion;
+- public Python API;
+- CLI entry points;
+- synthetic and toy examples;
+- unit and end-to-end tests.
+
+The current Windows/Python 3.12 local check has reached:
+
+```text
+86 passed
+```
 
 Heavy local work such as neural training, instrumented OpenSSL builds, and large experiments is intentionally not part of the default workflow.
+
+## Documentation
+
+- [Documentation Index](docs/index.md)
+- [Public API Overview](docs/api.md)
+- [Roadmap](ROADMAP.md)
+- [Contributing](CONTRIBUTING.md)
+- [Security Policy](SECURITY.md)
+- [Release Checklist](docs/release_checklist.md)
 
 ## Quick Start
 
@@ -97,6 +119,29 @@ Run the lightweight config-driven workflow:
 
 ```bash
 python scripts/run_experiment.py experiments/exp_000_synthetic_leak/config.json
+```
+
+Validate model output and render it as a report:
+
+```bash
+python scripts/validate_model_result.py examples/synthetic/model_result_sample.json
+python scripts/model_result_to_report.py --in examples/synthetic/model_result_sample.json --out model_report.md
+```
+
+## Synthetic and Toy Targets
+
+Generate synthetic traces:
+
+```bash
+python examples/synthetic/target.py --out reports/local/generated_synthetic.jsonl --runs 16
+python scripts/run_experiment.py experiments/exp_001_synthetic_generated/config.json
+```
+
+Generate toy RSA-like traces:
+
+```bash
+python examples/toy_rsa_like/target.py --out reports/local/toy_rsa_like.jsonl --runs 16
+python scripts/run_experiment.py experiments/exp_002_toy_rsa_like/config.json
 ```
 
 ## Initial Target
@@ -172,24 +217,6 @@ TraceLeak may also report:
 - cross-snapshot stability checks;
 - cross-build stability checks.
 
-## Example Output
-
-```text
-Leakage source ranking:
-
-1. crypto/bn/bn_prime.c: candidate_retry_count
-   contribution: +5.2 bit DeltaH
-   evidence: ablation, permutation importance
-
-2. crypto/rsa/rsa_gen.c: prime_generation_loop
-   contribution: +3.1 bit DeltaH
-   evidence: path correlation
-
-3. crypto/bn/bn_rand.c: candidate_bitlen_bucket
-   contribution: +1.8 bit DeltaH
-   evidence: redacted variable signal
-```
-
 ## Safety Boundary
 
 TraceLeak is for defensive research only.
@@ -219,6 +246,7 @@ traceleak/
   traceleak/
   examples/
     synthetic/
+    toy_rsa_like/
   experiments/
   scripts/
   tests/
@@ -232,6 +260,6 @@ OpenSSL is not bundled unless explicitly added as a third-party dependency or su
 
 ## Status
 
-TraceLeak is experimental research software.
+TraceLeak is experimental pre-alpha research software.
 
 Instrumented cryptographic builds produced for TraceLeak experiments must not be used in production.

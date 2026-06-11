@@ -6,6 +6,7 @@ import pytest
 from traceleak.model_sequence_baseline import (
     ModelSequenceBaselineError,
     evaluate_model_sequence_baselines,
+    parse_labeled_model_sequence_counts,
     parse_labeled_model_sequences,
 )
 
@@ -16,11 +17,48 @@ def sample_input() -> dict:
     )
 
 
-def test_parse_labeled_model_sequences() -> None:
-    examples = parse_labeled_model_sequences(sample_input())
+def test_parse_labeled_model_sequence_counts() -> None:
+    examples = parse_labeled_model_sequence_counts(sample_input())
     assert len(examples) == 4
     assert examples[0].label == "1"
     assert examples[0].run_id == "synthetic_seq_000001"
+    assert examples[0].token_counts["event_type=branch"] == 1.0
+
+
+def test_parse_labeled_model_sequences_accepts_examples_format() -> None:
+    data = {
+        "examples": [
+            {
+                "run_id": "seq_1",
+                "label": "x",
+                "sequence": [
+                    {
+                        "event_token": "branch:p:f:n",
+                        "source_token": "file.c:1:f:n",
+                        "context_token": "p:f",
+                        "event_type": "branch",
+                        "phase": "p",
+                    }
+                ],
+            },
+            {
+                "run_id": "seq_2",
+                "label": "y",
+                "sequence": [
+                    {
+                        "event_token": "loop:p:f:m",
+                        "source_token": "file.c:2:f:m",
+                        "context_token": "p:f",
+                        "event_type": "loop",
+                        "phase": "p",
+                    }
+                ],
+            },
+        ]
+    }
+    examples = parse_labeled_model_sequences(data)
+    assert len(examples) == 2
+    assert examples[0].label == "x"
 
 
 def test_evaluate_model_sequence_baselines() -> None:
@@ -33,9 +71,9 @@ def test_evaluate_model_sequence_baselines() -> None:
     assert result["baselines"]["leave_one_out_nearest_neighbor_accuracy"] == 1.0
 
 
-def test_evaluate_model_sequence_baselines_rejects_missing_examples() -> None:
+def test_evaluate_model_sequence_baselines_rejects_missing_records() -> None:
     with pytest.raises(ModelSequenceBaselineError):
-        evaluate_model_sequence_baselines({"examples": []})
+        evaluate_model_sequence_baselines({"records": []})
 
 
 def test_evaluate_model_sequence_baselines_rejects_missing_step_fields() -> None:

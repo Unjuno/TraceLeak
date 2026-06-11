@@ -1,6 +1,7 @@
 """TraceLeak: source-level leakage assessment primitives."""
 
 from traceleak.attribution import AttributionScore, ablation_drop
+from traceleak.claim_levels import claim_report_dict, claim_summary, validate_claim
 from traceleak.config import validate_config
 from traceleak.features import extract_feature_vector
 from traceleak.metrics import accuracy, delta_h, top_k_recall
@@ -22,6 +23,8 @@ __all__ = [
     "WorkflowResult",
     "ablation_drop",
     "accuracy",
+    "claim_report_dict",
+    "claim_summary",
     "classify_delta",
     "delta_h",
     "extract_feature_vector",
@@ -31,6 +34,7 @@ __all__ = [
     "stability_summary",
     "to_view",
     "top_k_recall",
+    "validate_claim",
     "validate_config",
     "validate_patch_verification",
     "validate_run",

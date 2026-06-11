@@ -93,12 +93,14 @@ Completed:
 - attribution sample;
 - config template;
 - end-to-end tests;
-- target design documentation.
+- target design documentation;
+- generated public report sample;
+- synthetic-vs-toy comparison sample;
+- public report regeneration tests.
 
 Remaining:
 
-- generated public sample report;
-- comparison against synthetic target output.
+- generated comparison/report artifacts are local-only outputs.
 
 Success criterion:
 

@@ -43,8 +43,9 @@ The repository currently contains the lightweight public-safe foundation:
 The current Windows/Python 3.12 local check has reached:
 
 ```text
-116 passed
+129 passed
 ruff check .: passed
+L5 claim validation: passed
 ```
 
 Heavy local work such as neural training, instrumented OpenSSL builds, and large experiments is intentionally not part of the default workflow.

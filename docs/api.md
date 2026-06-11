@@ -77,6 +77,14 @@ from traceleak import stability_result, stability_summary
 
 Summarizes repeated before/after score lists and returns directional stability evidence.
 
+## Claim Levels
+
+```python
+from traceleak import claim_report_dict, claim_summary, validate_claim
+```
+
+Validates public-safe claim-level files and constrains report language to evidence-backed L0-L5 claims.
+
 ## Workflow
 
 ```python

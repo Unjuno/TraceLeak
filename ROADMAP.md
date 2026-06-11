@@ -20,6 +20,7 @@ Status: implemented; GitHub Actions result pending.
 
 Completed:
 
+- concept overview;
 - README and safety documentation;
 - Apache-2.0 license and notices;
 - trace schema validation;

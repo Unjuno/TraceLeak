@@ -32,6 +32,7 @@ Completed:
 - feature extraction;
 - variable/control-flow sequence feature encoding;
 - variable/control-flow model sequence extraction CLI;
+- model sequence baseline evaluation;
 - baseline evaluation;
 - experiment config validation;
 - model result validation;
@@ -73,7 +74,9 @@ Completed:
 - leak/control comparison sample;
 - patch-style negative control documentation;
 - negative control comparison sample;
-- variable/control-flow model sequence sample.
+- variable/control-flow model sequence sample;
+- model sequence baseline sample;
+- model-vs-sequence-baseline comparison sample.
 
 Remaining:
 
@@ -132,7 +135,7 @@ Public reports contain only safe derived data and clearly state claim level.
 
 ## Milestone 4: Neural and Statistical Modeling
 
-Status: public-safe model sequence representation implemented; local training remains out of default workflow.
+Status: public-safe model sequence baselines implemented; local NN training remains out of default workflow.
 
 Completed:
 
@@ -142,6 +145,8 @@ Completed:
 - variable/control-flow dynamics modeling design;
 - public-safe model sequence feature encoder;
 - model sequence extraction CLI;
+- model sequence baseline evaluator;
+- model-vs-sequence-baseline comparison sample;
 - source-level token helpers;
 - attribution import path;
 - sample model result;
@@ -151,7 +156,7 @@ Completed:
 Remaining:
 
 - local NN training harness;
-- comparison report between model, majority baseline, and nearest-neighbor baseline.
+- local model comparison against majority and nearest-neighbor sequence baselines.
 
 Success criterion:
 

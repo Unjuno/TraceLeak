@@ -13,6 +13,8 @@ from traceleak import (
     extract_feature_vector,
     patch_verification_report_dict,
     run_lightweight_experiment,
+    stability_result,
+    stability_summary,
     to_view,
     top_k_recall,
     validate_config,
@@ -51,6 +53,17 @@ def sample_patch_verification() -> dict:
         "after": {"run_id": "after", "score": 1.0},
         "delta": 3.0,
         "status": "reduced",
+    }
+
+
+def sample_stability_input() -> dict:
+    return {
+        "stability_id": "api_stability_0001",
+        "target": "synthetic-example",
+        "view": "redacted",
+        "metric": "DeltaH",
+        "before_scores": [4.0, 4.1, 3.9],
+        "after_scores": [1.0, 1.1, 0.9],
     }
 
 
@@ -94,6 +107,14 @@ def test_public_api_patch_verification_functions() -> None:
     report = patch_verification_report_dict(result)
     assert report["report_type"] == "patch_verification"
     assert report["status"] == "reduced"
+
+
+def test_public_api_stability_functions() -> None:
+    summary = stability_summary([4.0, 4.1, 3.9], [1.0, 1.1, 0.9])
+    assert summary["status"] == "reduced"
+    result = stability_result(sample_stability_input())
+    assert result["result_type"] == "repeated_run_stability"
+    assert result["summary"]["status"] == "reduced"
 
 
 def test_public_api_workflow_result_type() -> None:

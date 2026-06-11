@@ -44,6 +44,7 @@ jobs:
         run: |
           python scripts/validate_trace.py --public examples/synthetic/synthetic_trace_sample.jsonl
           python scripts/validate_config.py experiments/exp_000_synthetic_leak/config.json
+          python scripts/extract_model_sequence.py --in examples/synthetic/synthetic_trace_sample.jsonl --out reports/local/model_sequences.json --counts
           python scripts/validate_model_result.py examples/synthetic/model_result_sample.json
           python scripts/model_result_to_report.py --in examples/synthetic/model_result_sample.json --out reports/local/model_report.md
           python scripts/validate_patch_verification.py examples/synthetic/patch_verification_sample.json

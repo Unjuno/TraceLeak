@@ -24,6 +24,11 @@ from traceleak.openssl_event_emitter_self_check import (
     run_openssl_event_emitter_self_check,
     write_openssl_event_emitter_self_check_outputs,
 )
+from traceleak.openssl_instrumentation_bundle_manifest import (
+    build_openssl_instrumentation_bundle_manifest,
+    write_openssl_instrumentation_bundle_manifest_json,
+    write_openssl_instrumentation_bundle_manifest_markdown,
+)
 from traceleak.openssl_instrumentation_stub import (
     build_openssl_instrumentation_stub,
     instrumentation_stub_markdown,
@@ -119,6 +124,7 @@ def run_openssl_instrumentation_dry_run_chain(
         "record_count": sample_acceptance_report["record_count"],
         "feature_count": sample_acceptance_report["feature_count"],
         "artifacts": {
+            "trace_contract": contract,
             "instrumentation_stub": stub,
             "source_edit_proposal": source_edit,
             "event_emitter_artifact": event_emitter,
@@ -158,6 +164,8 @@ def write_openssl_instrumentation_chain_outputs(out_dir: str | Path, report: dic
         "model_sequence_sample_json": output_dir / "openssl_model_sequence_sample.json",
         "sample_acceptance_json": output_dir / "openssl_trace_sample_acceptance_report.json",
         "sample_acceptance_md": output_dir / "openssl_trace_sample_acceptance_report.md",
+        "bundle_manifest_json": output_dir / "openssl_instrumentation_bundle_manifest.json",
+        "bundle_manifest_md": output_dir / "openssl_instrumentation_bundle_manifest.md",
     }
     write_instrumentation_stub_json(paths["stub_json"], artifacts["instrumentation_stub"])
     paths["stub_md"].write_text(
@@ -208,6 +216,12 @@ def write_openssl_instrumentation_chain_outputs(out_dir: str | Path, report: dic
         encoding="utf-8",
     )
     paths["summary_md"].write_text(openssl_instrumentation_chain_markdown(report), encoding="utf-8")
+    bundle_manifest = build_openssl_instrumentation_bundle_manifest(
+        contract=artifacts["trace_contract"],
+        bundle_dir=output_dir,
+    )
+    write_openssl_instrumentation_bundle_manifest_json(paths["bundle_manifest_json"], bundle_manifest)
+    write_openssl_instrumentation_bundle_manifest_markdown(paths["bundle_manifest_md"], bundle_manifest)
     return paths | {f"event_emitter_self_check_{key}": value for key, value in self_check_paths.items()}
 
 

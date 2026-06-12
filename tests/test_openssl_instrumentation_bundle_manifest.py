@@ -5,6 +5,7 @@ from pathlib import Path
 import pytest
 
 from scripts import build_openssl_instrumentation_bundle_manifest as manifest_cli
+from scripts import validate_openssl_instrumentation_bundle_manifest as validate_manifest_cli
 from traceleak.openssl_instrumentation_bundle_manifest import (
     OpenSSLInstrumentationBundleManifestError,
     build_openssl_instrumentation_bundle_manifest,
@@ -165,3 +166,24 @@ def test_build_openssl_instrumentation_bundle_manifest_cli_writes_json(tmp_path:
     manifest = json.loads(out.read_text(encoding="utf-8"))
     assert manifest["status"] == "bundle_manifest_ready"
     assert manifest["validation_status"] == "bundle_validated"
+
+
+def test_validate_openssl_instrumentation_bundle_manifest_cli_accepts_saved_manifest(
+    tmp_path: Path,
+) -> None:
+    bundle_dir = make_bundle(tmp_path)
+    manifest_path = bundle_dir / "openssl_instrumentation_bundle_manifest.json"
+    old_parse = validate_manifest_cli.parse_args
+    validate_manifest_cli.parse_args = lambda: type(
+        "Args",
+        (),
+        {
+            "contract": CONTRACT,
+            "bundle_dir": bundle_dir,
+            "manifest": manifest_path,
+        },
+    )()
+    try:
+        assert validate_manifest_cli.main() == 0
+    finally:
+        validate_manifest_cli.parse_args = old_parse

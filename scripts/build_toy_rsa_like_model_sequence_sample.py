@@ -12,15 +12,13 @@ This connects the toy target generator to the model sequence NN pipeline:
 from __future__ import annotations
 
 import argparse
+import importlib.util
 import json
 import sys
+from collections.abc import Callable
 from pathlib import Path
+from typing import Any
 
-REPO_ROOT = Path(__file__).resolve().parents[1]
-if str(REPO_ROOT) not in sys.path:
-    sys.path.insert(0, str(REPO_ROOT))
-
-from examples.toy_rsa_like.target import make_run, write_jsonl
 from scripts.extract_model_sequence import build_output, extract_model_sequences
 
 
@@ -92,6 +90,7 @@ def build_toy_rsa_like_model_sequence_sample(
     if not label_key:
         raise ToyRsaLikeModelSequenceBuildError("--label-key must not be empty")
 
+    make_run, write_jsonl = _load_toy_target_functions()
     trace_path = trace_output_path or output_path.with_suffix(output_path.suffix + ".traces.jsonl")
     generated_runs = [make_run(index) for index in range(runs)]
     write_jsonl(trace_path, generated_runs)
@@ -122,6 +121,23 @@ def build_toy_rsa_like_model_sequence_sample(
     output_path.parent.mkdir(parents=True, exist_ok=True)
     output_path.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     return payload, trace_path
+
+
+def _load_toy_target_functions() -> tuple[Callable[[int], dict[str, Any]], Callable[[Path, list[dict[str, Any]]], None]]:
+    target_path = Path(__file__).resolve().parents[1] / "examples" / "toy_rsa_like" / "target.py"
+    spec = importlib.util.spec_from_file_location("traceleak_toy_rsa_like_target", target_path)
+    if spec is None or spec.loader is None:
+        raise ToyRsaLikeModelSequenceBuildError(f"could not load toy target: {target_path}")
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    try:
+        make_run = module.make_run
+        write_jsonl = module.write_jsonl
+    except AttributeError as exc:
+        raise ToyRsaLikeModelSequenceBuildError(
+            f"toy target is missing required function: {exc}"
+        ) from exc
+    return make_run, write_jsonl
 
 
 if __name__ == "__main__":

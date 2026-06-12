@@ -31,11 +31,13 @@ REQUIRED_STAGES = {
     "inspect_source_layout",
     "validate_event_map",
     "plan_instrumentation",
+    "define_instrumentation_stub",
 }
 REQUIRED_ARTIFACTS = {
     "reports/local/openssl_source_pin.json",
     "reports/local/openssl_layout_inspection.md",
     "reports/local/openssl_patch_plan.md",
+    "reports/local/openssl_instrumentation_stub.md",
 }
 REQUIRED_GATES = {
     "source_ref_pinned",
@@ -43,6 +45,7 @@ REQUIRED_GATES = {
     "source_layout_inspection_planned",
     "event_map_validation_planned",
     "instrumentation_patch_plan_planned",
+    "instrumentation_stub_spec_planned",
     "manual_patch_review_required",
     "redacted_view_only",
     "no_raw_secret_fields",

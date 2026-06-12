@@ -61,7 +61,10 @@
   },
   "planned_artifacts": [
     "reports/local/openssl_rsa_keygen_traces.jsonl",
+    "reports/local/openssl_source_pin.json",
     "reports/local/openssl_source_layout.md",
+    "reports/local/openssl_layout_inspection.md",
+    "reports/local/openssl_patch_plan.md",
     "reports/local/openssl_rsa_keygen_event_map.md",
     "reports/local/openssl_rsa_keygen_model_sequence.json",
     "reports/local/openssl_rsa_keygen_label_audit.md",
@@ -79,17 +82,27 @@
     {
       "name": "pin_source",
       "status": "preflight_only",
-      "command_hint": "record exact OpenSSL commit SHA before running instrumentation"
+      "command_hint": "python scripts/generate_openssl_pinned_manifest.py --template examples/openssl_preflight/openssl_source_pin_sample.json --worktree external/openssl --out reports/local/openssl_source_pin.json"
     },
     {
       "name": "validate_source_layout",
       "status": "preflight_only",
-      "command_hint": "python scripts/validate_openssl_source_pin.py examples/openssl_preflight/openssl_source_pin_sample.json"
+      "command_hint": "python scripts/validate_openssl_source_pin.py reports/local/openssl_source_pin.json"
+    },
+    {
+      "name": "inspect_source_layout",
+      "status": "preflight_only",
+      "command_hint": "python scripts/inspect_openssl_layout.py --in reports/local/openssl_source_pin.json --out reports/local/openssl_layout_inspection.md"
     },
     {
       "name": "validate_event_map",
       "status": "preflight_only",
       "command_hint": "python scripts/validate_openssl_event_map.py examples/openssl_preflight/openssl_rsa_keygen_event_map_sample.json"
+    },
+    {
+      "name": "plan_instrumentation",
+      "status": "preflight_only",
+      "command_hint": "python scripts/plan_openssl_instrumentation.py --source-pin reports/local/openssl_source_pin.json --event-map examples/openssl_preflight/openssl_rsa_keygen_event_map_sample.json --out reports/local/openssl_patch_plan.md"
     },
     {
       "name": "collect_redacted_traces",
@@ -125,7 +138,10 @@
   "gates": [
     "source_ref_pinned",
     "source_layout_validation_planned",
+    "source_layout_inspection_planned",
     "event_map_validation_planned",
+    "instrumentation_patch_plan_planned",
+    "manual_patch_review_required",
     "redacted_view_only",
     "no_raw_secret_fields",
     "lab_only_labels_only",
@@ -141,6 +157,7 @@
   "notes": [
     "This is a preflight manifest only. It must not execute OpenSSL or collect traces by itself.",
     "The first real OpenSSL experiment should start only after this manifest validates cleanly.",
+    "Any source changes must pass through a review-only patch plan before patch application is considered.",
     "Any positive NN result must be reviewed with strict label audit and ablation validation before being interpreted as leakage evidence."
   ]
 }

@@ -1,0 +1,102 @@
+{
+  "format": "traceleak.model_sequence.v1",
+  "input": "synthetic-count-pattern-control-seed-002",
+  "run_count": 4,
+  "public_safe": true,
+  "include_counts": true,
+  "include_redacted_values": false,
+  "label_name": "control_bucket_seed_002",
+  "contains_lab_only_labels": true,
+  "target": "synthetic-count-pattern-control-002",
+  "view": "redacted",
+  "notes": [
+    "Negative control seed 002 over count-pattern token counts.",
+    "Labels are deliberately not aligned to the count-ratio signal."
+  ],
+  "records": [
+    {
+      "run_id": "control_002_seq_000001",
+      "target": "synthetic-count-pattern-control-002",
+      "target_version": "v1",
+      "view": "redacted",
+      "label": "0",
+      "token_counts": {
+        "event_type=phase": 1.0,
+        "event_type=branch": 1.0,
+        "event_type=loop": 6.0,
+        "phase=keygen_start": 1.0,
+        "phase=shared_screening": 1.0,
+        "phase=candidate_balance": 6.0,
+        "context_token=shared_screening:synthetic_keygen": 1.0,
+        "event_token=branch:shared_screening:synthetic_keygen:trial_division": 1.0,
+        "event_token=branch:candidate_balance:synthetic_keygen:ratio_gate": 1.0,
+        "event_token=loop:candidate_balance:synthetic_keygen:refine_round": 1.0,
+        "event_token=loop:candidate_balance:synthetic_keygen:accept_round": 5.0,
+        "source_token=examples/synthetic/target.c:61:synthetic_keygen:ratio_gate": 1.0
+      }
+    },
+    {
+      "run_id": "control_002_seq_000002",
+      "target": "synthetic-count-pattern-control-002",
+      "target_version": "v1",
+      "view": "redacted",
+      "label": "0",
+      "token_counts": {
+        "event_type=phase": 1.0,
+        "event_type=branch": 1.0,
+        "event_type=loop": 6.0,
+        "phase=keygen_start": 1.0,
+        "phase=shared_screening": 1.0,
+        "phase=candidate_balance": 6.0,
+        "context_token=shared_screening:synthetic_keygen": 1.0,
+        "event_token=branch:shared_screening:synthetic_keygen:trial_division": 1.0,
+        "event_token=branch:candidate_balance:synthetic_keygen:ratio_gate": 1.0,
+        "event_token=loop:candidate_balance:synthetic_keygen:refine_round": 5.0,
+        "event_token=loop:candidate_balance:synthetic_keygen:accept_round": 1.0,
+        "source_token=examples/synthetic/target.c:61:synthetic_keygen:ratio_gate": 1.0
+      }
+    },
+    {
+      "run_id": "control_002_seq_000003",
+      "target": "synthetic-count-pattern-control-002",
+      "target_version": "v1",
+      "view": "redacted",
+      "label": "1",
+      "token_counts": {
+        "event_type=phase": 1.0,
+        "event_type=branch": 1.0,
+        "event_type=loop": 8.0,
+        "phase=keygen_start": 1.0,
+        "phase=shared_screening": 1.0,
+        "phase=candidate_balance": 8.0,
+        "context_token=shared_screening:synthetic_keygen": 1.0,
+        "event_token=branch:shared_screening:synthetic_keygen:trial_division": 1.0,
+        "event_token=branch:candidate_balance:synthetic_keygen:ratio_gate": 1.0,
+        "event_token=loop:candidate_balance:synthetic_keygen:refine_round": 2.0,
+        "event_token=loop:candidate_balance:synthetic_keygen:accept_round": 6.0,
+        "source_token=examples/synthetic/target.c:61:synthetic_keygen:ratio_gate": 1.0
+      }
+    },
+    {
+      "run_id": "control_002_seq_000004",
+      "target": "synthetic-count-pattern-control-002",
+      "target_version": "v1",
+      "view": "redacted",
+      "label": "1",
+      "token_counts": {
+        "event_type=phase": 1.0,
+        "event_type=branch": 1.0,
+        "event_type=loop": 8.0,
+        "phase=keygen_start": 1.0,
+        "phase=shared_screening": 1.0,
+        "phase=candidate_balance": 8.0,
+        "context_token=shared_screening:synthetic_keygen": 1.0,
+        "event_token=branch:shared_screening:synthetic_keygen:trial_division": 1.0,
+        "event_token=branch:candidate_balance:synthetic_keygen:ratio_gate": 1.0,
+        "event_token=loop:candidate_balance:synthetic_keygen:refine_round": 6.0,
+        "event_token=loop:candidate_balance:synthetic_keygen:accept_round": 2.0,
+        "source_token=examples/synthetic/target.c:61:synthetic_keygen:ratio_gate": 1.0
+      }
+    }
+  ]
+}

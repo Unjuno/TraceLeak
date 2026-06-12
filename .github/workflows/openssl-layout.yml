@@ -35,3 +35,20 @@ jobs:
 
       - name: Render layout report
         run: python scripts/openssl_layout_to_report.py --in examples/openssl_preflight/openssl_source_pin_sample.json --out reports/local/openssl_layout.md
+
+      - name: Prepare local layout worktree
+        run: |
+          mkdir -p external/openssl/crypto/rsa external/openssl/crypto/bn
+          printf 'int RSA_generate_key_ex(void);\nint rsa_builtin_keygen(void);\n' > external/openssl/crypto/rsa/rsa_gen.c
+          printf 'int BN_generate_prime_ex(void);\nint BN_check_prime(void);\nint bn_is_prime_int(void);\n' > external/openssl/crypto/bn/bn_prime.c
+          git -C external/openssl init
+          git -C external/openssl config user.email traceleak@example.invalid
+          git -C external/openssl config user.name TraceLeak
+          git -C external/openssl add .
+          git -C external/openssl commit -m initial
+
+      - name: Generate pinned manifest from local worktree
+        run: python scripts/generate_openssl_pinned_manifest.py --template examples/openssl_preflight/openssl_source_pin_sample.json --worktree external/openssl --out reports/local/openssl_source_pin.json
+
+      - name: Validate generated pinned manifest
+        run: python scripts/validate_openssl_source_pin.py reports/local/openssl_source_pin.json

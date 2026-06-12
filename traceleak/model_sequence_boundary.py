@@ -62,6 +62,13 @@ def validate_model_sequence_sample_boundary(data: dict[str, Any]) -> dict[str, A
     if not boundary["actual_trace_derived"]:
         return boundary
 
+    _require_explicit_actual_trace_field(data, "trace_collection_mode")
+    _require_explicit_actual_trace_field(data, "raw_secret_captured")
+    _require_explicit_actual_trace_field(data, "public_safe")
+    if "source_pin" not in data and "source_commit" not in data:
+        raise ModelSequenceBoundaryError(
+            "actual trace-derived samples must declare non-empty source_pin"
+        )
     if boundary["validation_scope"] != "actual_trace_derived":
         raise ModelSequenceBoundaryError(
             "actual trace-derived samples must use validation_scope=actual_trace_derived"
@@ -94,3 +101,10 @@ def _optional_bool(data: dict[str, Any], key: str, *, default: bool) -> bool:
     if not isinstance(value, bool):
         raise ModelSequenceBoundaryError(f"{key} must be a boolean")
     return value
+
+
+def _require_explicit_actual_trace_field(data: dict[str, Any], key: str) -> None:
+    if key not in data:
+        raise ModelSequenceBoundaryError(
+            f"actual trace-derived samples must explicitly declare {key}"
+        )

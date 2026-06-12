@@ -1,0 +1,67 @@
+# ruff: noqa: I001
+
+from pathlib import Path
+
+import pytest
+
+from traceleak.openssl_patch_plan import (
+    OpenSSLPatchPlanError,
+    build_openssl_patch_plan,
+    patch_plan_markdown,
+    validate_openssl_patch_plan,
+)
+from traceleak.openssl_pinned_manifest import generate_pinned_manifest, write_pinned_manifest
+from tests.test_openssl_pinned_manifest import init_worktree
+
+
+TEMPLATE = Path("examples/openssl_preflight/openssl_source_pin_sample.json")
+EVENT_MAP = Path("examples/openssl_preflight/openssl_rsa_keygen_event_map_sample.json")
+
+
+def make_source_pin(tmp_path) -> Path:
+    worktree = tmp_path / "worktree"
+    worktree.mkdir()
+    init_worktree(worktree)
+    manifest = generate_pinned_manifest(template_path=TEMPLATE, worktree_path=worktree)
+    source_pin_path = tmp_path / "openssl_source_pin.json"
+    write_pinned_manifest(source_pin_path, manifest)
+    return source_pin_path
+
+
+def test_build_openssl_patch_plan(tmp_path) -> None:
+    source_pin_path = make_source_pin(tmp_path)
+
+    plan = build_openssl_patch_plan(source_pin_path=source_pin_path, event_map_path=EVENT_MAP)
+    markdown = patch_plan_markdown(plan)
+
+    assert plan["format"] == "traceleak.openssl_patch_plan.v1"
+    assert plan["report_type"] == "openssl_patch_plan"
+    assert plan["patch_application_allowed"] is False
+    assert len(plan["planned_events"]) == 5
+    assert {event["group_id"] for event in plan["planned_events"]} == {
+        "rsa_keygen_entry",
+        "prime_candidate_generation",
+        "prime_candidate_filter",
+        "probable_prime_test",
+        "prime_candidate_result",
+    }
+    assert "TraceLeak OpenSSL Instrumentation Patch Plan" in markdown
+    assert "rsa_keygen_entry" in markdown
+
+
+def test_validate_openssl_patch_plan_rejects_patch_application_allowed(tmp_path) -> None:
+    source_pin_path = make_source_pin(tmp_path)
+    plan = build_openssl_patch_plan(source_pin_path=source_pin_path, event_map_path=EVENT_MAP)
+    plan["patch_application_allowed"] = True
+
+    with pytest.raises(OpenSSLPatchPlanError, match="patch_application_allowed"):
+        validate_openssl_patch_plan(plan)
+
+
+def test_validate_openssl_patch_plan_rejects_redacted_forbidden_overlap(tmp_path) -> None:
+    source_pin_path = make_source_pin(tmp_path)
+    plan = build_openssl_patch_plan(source_pin_path=source_pin_path, event_map_path=EVENT_MAP)
+    plan["planned_events"][0]["redacted_values"].append("private_key")
+
+    with pytest.raises(OpenSSLPatchPlanError, match="overlap forbidden_values"):
+        validate_openssl_patch_plan(plan)

@@ -66,6 +66,7 @@ traceleak-build-openssl-event-emitter-artifact = "scripts.build_openssl_event_em
 traceleak-run-openssl-event-emitter-self-check = "scripts.run_openssl_event_emitter_self_check:main"
 traceleak-validate-openssl-instrumentation-bundle = "scripts.validate_openssl_instrumentation_bundle:main"
 traceleak-build-openssl-instrumentation-bundle-manifest = "scripts.build_openssl_instrumentation_bundle_manifest:main"
+traceleak-validate-openssl-instrumentation-bundle-manifest = "scripts.validate_openssl_instrumentation_bundle_manifest:main"
 traceleak-validate-openssl-event-map = "scripts.validate_openssl_event_map:main"
 traceleak-openssl-event-map-to-report = "scripts.openssl_event_map_to_report:main"
 traceleak-validate-openssl-source-pin = "scripts.validate_openssl_source_pin:main"

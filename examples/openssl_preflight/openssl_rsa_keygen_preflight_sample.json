@@ -68,6 +68,7 @@
     "reports/local/openssl_instrumentation_stub.md",
     "reports/local/openssl_event_slots.md",
     "reports/local/openssl_human_review_checklist.md",
+    "reports/local/openssl_pending_review.md",
     "reports/local/openssl_rsa_keygen_event_map.md",
     "reports/local/openssl_rsa_keygen_model_sequence.json",
     "reports/local/openssl_rsa_keygen_label_audit.md",
@@ -123,6 +124,11 @@
       "command_hint": "python scripts/build_openssl_review_checklist.py --source-pin reports/local/openssl_source_pin.json --event-map examples/openssl_preflight/openssl_rsa_keygen_event_map_sample.json --out reports/local/openssl_human_review_checklist.md"
     },
     {
+      "name": "build_pending_review",
+      "status": "preflight_only",
+      "command_hint": "python scripts/build_openssl_pending_review.py --source-pin reports/local/openssl_source_pin.json --event-map examples/openssl_preflight/openssl_rsa_keygen_event_map_sample.json --out reports/local/openssl_pending_review.md"
+    },
+    {
       "name": "collect_redacted_traces",
       "status": "preflight_only",
       "command_hint": "collect traceleak.run.v1 JSONL with redacted value buckets only"
@@ -162,6 +168,7 @@
     "instrumentation_stub_spec_planned",
     "event_slot_review_planned",
     "human_review_checklist_planned",
+    "pending_review_template_planned",
     "manual_patch_review_required",
     "redacted_view_only",
     "no_raw_secret_fields",
@@ -181,7 +188,7 @@
     "Any source changes must pass through a review-only patch plan before patch application is considered.",
     "Any event payload must pass through the review-only instrumentation stub specification before trace collection is considered.",
     "Any event slot must pass review before source editing is considered.",
-    "Any human review approval must be recorded in a separate artifact from the checklist.",
+    "Any human review approval must be recorded in a separate artifact from the checklist and pending review template.",
     "Any positive NN result must be reviewed with strict label audit and ablation validation before being interpreted as leakage evidence."
   ]
 }

@@ -12,11 +12,7 @@ import subprocess
 from pathlib import Path
 from typing import Any
 
-from traceleak.openssl_source_pin import (
-    OpenSSLSourcePinError,
-    load_openssl_source_pin,
-    validate_openssl_source_pin,
-)
+from traceleak.openssl_source_pin import load_openssl_source_pin, validate_openssl_source_pin
 
 
 class OpenSSLPinnedManifestError(ValueError):

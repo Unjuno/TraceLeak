@@ -52,6 +52,7 @@ def compare_model_sequence_nn_to_baseline(
             "backend": neural["model"].get("backend", "unknown"),
             "leave_one_out_accuracy": neural_accuracy,
             "DeltaH": neural["metrics"]["leave_one_out"]["DeltaH"],
+            "top_attributions": list(neural.get("attributions", [])),
         },
         "delta": {
             "accuracy_vs_nearest_neighbor": delta_accuracy,

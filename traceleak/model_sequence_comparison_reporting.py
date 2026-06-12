@@ -58,16 +58,24 @@ def validate_model_sequence_comparison(result: dict[str, Any]) -> None:
     _require_number(result["delta"].get("accuracy_vs_nearest_neighbor"), "delta.accuracy")
 
 
-def model_sequence_comparison_report_dict(result: dict[str, Any]) -> dict[str, Any]:
+def model_sequence_comparison_report_dict(
+    result: dict[str, Any],
+    *,
+    controls: list[dict[str, Any]] | None = None,
+) -> dict[str, Any]:
     """Return a normalized report dictionary for a comparison result."""
 
     validate_model_sequence_comparison(result)
+    controls = controls or []
+    for control in controls:
+        validate_model_sequence_comparison(control)
+
     baseline_accuracy = float(result["baseline"]["leave_one_out_nearest_neighbor_accuracy"])
     neural_accuracy = float(result["neural"]["leave_one_out_accuracy"])
     delta_accuracy = float(result["delta"]["accuracy_vs_nearest_neighbor"])
     control_warning = _control_warning(result)
 
-    return {
+    report = {
         "report_type": "model_sequence_nn_comparison_report",
         "target": result["target"],
         "view": result["view"],
@@ -78,7 +86,37 @@ def model_sequence_comparison_report_dict(result: dict[str, Any]) -> dict[str, A
         "delta_accuracy": delta_accuracy,
         "interpretation": result["interpretation"],
         "control_warning": control_warning,
+        "top_attributions": list(result.get("neural", {}).get("top_attributions", [])),
         "notes": list(result.get("notes", [])),
+    }
+    if controls:
+        report["control_summary"] = control_summary_dict(controls)
+    return report
+
+
+def control_summary_dict(controls: list[dict[str, Any]]) -> dict[str, Any]:
+    """Summarize multiple control comparison results."""
+
+    if not controls:
+        raise ModelSequenceComparisonReportingError("at least one control comparison is required")
+    for control in controls:
+        validate_model_sequence_comparison(control)
+
+    neural_accuracies = [float(item["neural"]["leave_one_out_accuracy"]) for item in controls]
+    baseline_accuracies = [
+        float(item["baseline"]["leave_one_out_nearest_neighbor_accuracy"]) for item in controls
+    ]
+    max_neural = max(neural_accuracies)
+    mean_neural = sum(neural_accuracies) / len(neural_accuracies)
+    status = "control_pass" if max_neural <= 0.25 and mean_neural <= 0.25 else "control_attention"
+    return {
+        "control_count": len(controls),
+        "max_neural_accuracy": max_neural,
+        "mean_neural_accuracy": mean_neural,
+        "max_baseline_accuracy": max(baseline_accuracies),
+        "mean_baseline_accuracy": sum(baseline_accuracies) / len(baseline_accuracies),
+        "status": status,
+        "targets": [str(item.get("target", "unknown")) for item in controls],
     }
 
 
@@ -106,6 +144,45 @@ def model_sequence_comparison_report_markdown(report: dict[str, Any]) -> str:
         f"- Interpretation: `{report['interpretation']}`",
         f"- Control warning: `{report['control_warning']}`",
     ]
+
+    top_attributions = report.get("top_attributions") or []
+    if top_attributions:
+        lines.extend(
+            [
+                "",
+                "## Top NN Attributions",
+                "",
+                "| Rank | Token | Type | Score | Evidence |",
+                "|---:|---|---|---:|---|",
+            ]
+        )
+        for rank, item in enumerate(top_attributions[:10], start=1):
+            evidence = ", ".join(item.get("evidence") or [])
+            lines.append(
+                "| {rank} | `{token}` | `{typ}` | {score:.6g} | {evidence} |".format(
+                    rank=rank,
+                    token=item.get("group_id", "unknown"),
+                    typ=item.get("group_type", "unknown"),
+                    score=float(item.get("score", 0.0)),
+                    evidence=evidence,
+                )
+            )
+
+    control_summary = report.get("control_summary")
+    if control_summary:
+        lines.extend(
+            [
+                "",
+                "## Control Summary",
+                "",
+                f"- Control count: `{control_summary['control_count']}`",
+                f"- Max control NN accuracy: `{control_summary['max_neural_accuracy']:.6g}`",
+                f"- Mean control NN accuracy: `{control_summary['mean_neural_accuracy']:.6g}`",
+                f"- Max control baseline accuracy: `{control_summary['max_baseline_accuracy']:.6g}`",
+                f"- Mean control baseline accuracy: `{control_summary['mean_baseline_accuracy']:.6g}`",
+                f"- Status: `{control_summary['status']}`",
+            ]
+        )
 
     notes = report.get("notes") or []
     if notes:

@@ -253,10 +253,11 @@ def _safe_token(value: str, disallowed_fields: set[str]) -> str:
     safe = lowered
     for field in sorted(disallowed_fields, key=len, reverse=True):
         field_lower = field.lower()
-        if len(field_lower) <= 2:
-            safe = re.sub(rf"(^|_){re.escape(field_lower)}($|_)", "_", safe)
-        else:
-            safe = safe.replace(field_lower, "redacted")
+        safe = (
+            re.sub(rf"(^|_){re.escape(field_lower)}($|_)", "_", safe)
+            if len(field_lower) <= 2
+            else safe.replace(field_lower, "redacted")
+        )
     safe = re.sub(r"_+", "_", safe).strip("_")
     return safe or "redacted_event"
 

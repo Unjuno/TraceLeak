@@ -46,6 +46,9 @@ jobs:
           python scripts/validate_config.py experiments/exp_000_synthetic_leak/config.json
           python scripts/extract_model_sequence.py --in examples/synthetic/synthetic_trace_sample.jsonl --out reports/local/model_sequences.json --counts
           python scripts/evaluate_model_sequence_baseline.py --in examples/synthetic/model_sequence_baseline_sample.json --out reports/local/model_sequence_baseline_result.json
+          python scripts/train_model_sequence_nn.py --in examples/synthetic/model_sequence_baseline_sample.json --out reports/local/model_sequence_nn_result.json --epochs 80 --learning-rate 0.8
+          python scripts/validate_model_result.py reports/local/model_sequence_nn_result.json
+          python scripts/model_result_to_report.py --in reports/local/model_sequence_nn_result.json --out reports/local/model_sequence_nn_report.md --split leave_one_out
           python scripts/validate_model_result.py examples/synthetic/model_result_sample.json
           python scripts/model_result_to_report.py --in examples/synthetic/model_result_sample.json --out reports/local/model_report.md
           python scripts/validate_patch_verification.py examples/synthetic/patch_verification_sample.json

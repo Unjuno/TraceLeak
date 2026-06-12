@@ -33,6 +33,9 @@ REQUIRED_GATES = {
     "negative_controls_planned",
     "baseline_comparison_planned",
     "attribution_review_planned",
+    "label_leakage_audit_planned",
+    "ablation_validation_planned",
+    "split_validation_planned",
 }
 
 

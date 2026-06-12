@@ -62,6 +62,7 @@ def model_sequence_comparison_report_dict(
     result: dict[str, Any],
     *,
     controls: list[dict[str, Any]] | None = None,
+    expected_attribution_tokens: list[str] | None = None,
 ) -> dict[str, Any]:
     """Return a normalized report dictionary for a comparison result."""
 
@@ -75,6 +76,9 @@ def model_sequence_comparison_report_dict(
     delta_accuracy = float(result["delta"]["accuracy_vs_nearest_neighbor"])
     control_warning = _control_warning(result)
     control_summary = control_summary_dict(controls) if controls else None
+    top_attributions = list(result.get("neural", {}).get("top_attributions", []))
+    expected_tokens = list(expected_attribution_tokens or [])
+    attribution_matches = expected_attribution_matches(top_attributions, expected_tokens)
 
     report = {
         "report_type": "model_sequence_nn_comparison_report",
@@ -87,8 +91,11 @@ def model_sequence_comparison_report_dict(
         "delta_accuracy": delta_accuracy,
         "interpretation": result["interpretation"],
         "evidence_status": evidence_status(result["interpretation"], control_summary),
+        "attribution_status": attribution_status(top_attributions, expected_tokens),
+        "expected_attribution_tokens": expected_tokens,
+        "attribution_matches": attribution_matches,
         "control_warning": control_warning,
-        "top_attributions": list(result.get("neural", {}).get("top_attributions", [])),
+        "top_attributions": top_attributions,
         "notes": list(result.get("notes", [])),
     }
     if control_summary:
@@ -134,6 +141,31 @@ def evidence_status(interpretation: str, control_summary: dict[str, Any] | None)
     return "candidate_signal_control_checked"
 
 
+def attribution_status(
+    top_attributions: list[dict[str, Any]],
+    expected_attribution_tokens: list[str],
+) -> str:
+    """Classify whether expected source-level tokens appear in NN attributions."""
+
+    if not expected_attribution_tokens:
+        return "expected_attributions_not_declared"
+    if not top_attributions:
+        return "attributions_missing"
+    if expected_attribution_matches(top_attributions, expected_attribution_tokens):
+        return "expected_attribution_observed"
+    return "expected_attribution_missing"
+
+
+def expected_attribution_matches(
+    top_attributions: list[dict[str, Any]],
+    expected_attribution_tokens: list[str],
+) -> list[str]:
+    """Return expected attribution tokens observed in top NN attributions."""
+
+    observed = {str(item.get("group_id", "")) for item in top_attributions}
+    return [token for token in expected_attribution_tokens if token in observed]
+
+
 def model_sequence_comparison_report_markdown(report: dict[str, Any]) -> str:
     """Render a model sequence comparison report as Markdown."""
 
@@ -157,8 +189,20 @@ def model_sequence_comparison_report_markdown(report: dict[str, Any]) -> str:
         f"- Accuracy delta vs nearest-neighbor: `{report['delta_accuracy']:.6g}`",
         f"- Interpretation: `{report['interpretation']}`",
         f"- Evidence status: `{report.get('evidence_status', 'unknown')}`",
+        f"- Attribution status: `{report.get('attribution_status', 'unknown')}`",
         f"- Control warning: `{report['control_warning']}`",
     ]
+
+    expected_tokens = report.get("expected_attribution_tokens") or []
+    if expected_tokens:
+        lines.extend(["", "## Expected Attribution Tokens", ""])
+        lines.extend(f"- `{token}`" for token in expected_tokens)
+        matches = report.get("attribution_matches") or []
+        lines.extend(["", "## Attribution Matches", ""])
+        if matches:
+            lines.extend(f"- `{token}`" for token in matches)
+        else:
+            lines.append("- `none`")
 
     top_attributions = report.get("top_attributions") or []
     if top_attributions:

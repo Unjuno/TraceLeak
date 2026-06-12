@@ -42,6 +42,18 @@ def test_openssl_preflight_report() -> None:
     assert "no_raw_secret_fields" in markdown
 
 
+def test_openssl_preflight_report_includes_review_only_chain() -> None:
+    report = openssl_preflight_report_dict(sample_manifest())
+    markdown = openssl_preflight_report_markdown(report)
+
+    assert "review_event_slots" in markdown
+    assert "build_human_review_checklist" in markdown
+    assert "build_pending_review" in markdown
+    assert "event_slot_review_planned" in markdown
+    assert "human_review_checklist_planned" in markdown
+    assert "pending_review_template_planned" in markdown
+
+
 def test_openssl_preflight_rejects_execution_allowed() -> None:
     manifest = sample_manifest()
     manifest["execution_allowed"] = True

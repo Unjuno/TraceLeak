@@ -60,6 +60,7 @@ DEFAULT_ABLATIONS = (
     "drop_context_token",
     "event_type_phase_only",
 )
+TOP_ATTRIBUTION_DROP_THRESHOLD = 0.25
 
 
 class ModelSequenceAuditError(ValueError):
@@ -235,9 +236,10 @@ def model_sequence_ablation_report(
         "original": original,
         "ablations": ablations,
         "summary": _ablation_summary(original, ablations),
+        "top_attribution_ablation": top_attribution_ablation_summary(original, ablations),
         "notes": [
             "Ablation checks whether NN performance survives removing feature families.",
-            "A large drop after removing label-overlapping or attribution tokens weakens causal claims.",
+            "A large drop after removing top attribution tokens supports that those tokens carry model signal, but does not by itself prove leakage.",
             "If nearest-neighbor baseline dominates NN, do not treat the NN result as leakage evidence.",
         ],
     }
@@ -314,6 +316,7 @@ def ablation_report_markdown(report: dict[str, Any]) -> str:
     """Render a model-sequence ablation report as Markdown."""
 
     original = report["original"]
+    top_attribution = report.get("top_attribution_ablation", {})
     lines = [
         "# TraceLeak Model Sequence Ablation Report",
         "",
@@ -323,6 +326,7 @@ def ablation_report_markdown(report: dict[str, Any]) -> str:
         f"- Examples: `{report['example_count']}`",
         f"- Original NN accuracy: `{original['neural']['leave_one_out_accuracy']}`",
         f"- Original baseline NN accuracy: `{original['baseline']['leave_one_out_nearest_neighbor_accuracy']}`",
+        f"- Top attribution ablation status: `{top_attribution.get('status', 'unknown')}`",
         "",
         "## Ablations",
         "",
@@ -339,6 +343,16 @@ def ablation_report_markdown(report: dict[str, Any]) -> str:
                 interp=row["interpretation"],
             )
         )
+    lines.extend(["", "## Top Attribution Ablation", ""])
+    lines.append(f"- Status: `{top_attribution.get('status', 'unknown')}`")
+    lines.append(f"- NN accuracy drop: `{top_attribution.get('nn_accuracy_drop', 0.0)}`")
+    lines.append(f"- Ablated NN accuracy: `{top_attribution.get('neural_accuracy', 'unknown')}`")
+    dropped_tokens = top_attribution.get("dropped_tokens") or []
+    if dropped_tokens:
+        lines.extend(["- Dropped tokens:"])
+        lines.extend(f"  - `{token}`" for token in dropped_tokens)
+    else:
+        lines.append("- Dropped tokens: `none`")
     lines.extend(["", "## Summary", ""])
     for key, value in report["summary"].items():
         lines.append(f"- {key}: `{value}`")
@@ -415,7 +429,7 @@ def _ablation_summary(original: dict[str, Any], ablations: list[dict[str, Any]])
     max_drop = original_nn - min_nn
     if baseline_margin >= 0.05:
         status = "baseline_dominates"
-    elif max_drop >= 0.25:
+    elif max_drop >= TOP_ATTRIBUTION_DROP_THRESHOLD:
         status = "ablation_sensitive"
     else:
         status = "ablation_stable"
@@ -424,6 +438,42 @@ def _ablation_summary(original: dict[str, Any], ablations: list[dict[str, Any]])
         "max_drop": max_drop,
         "baseline_margin": baseline_margin,
         "status": status,
+    }
+
+
+def top_attribution_ablation_summary(
+    original: dict[str, Any],
+    ablations: list[dict[str, Any]],
+) -> dict[str, Any]:
+    """Summarize the effect of dropping the top NN attribution tokens."""
+
+    original_nn = float(original["neural"]["leave_one_out_accuracy"])
+    original_baseline = float(original["baseline"]["leave_one_out_nearest_neighbor_accuracy"])
+    baseline_margin = original_baseline - original_nn
+    row = next((item for item in ablations if item.get("name") == "drop_top_attributions"), None)
+    if row is None:
+        return {
+            "status": "not_run",
+            "nn_accuracy_drop": 0.0,
+            "neural_accuracy": original_nn,
+            "dropped_tokens": [],
+        }
+
+    neural_accuracy = float(row["neural_accuracy"])
+    drop = max(0.0, original_nn - neural_accuracy)
+    if baseline_margin >= 0.05:
+        status = "baseline_dominates"
+    elif drop >= TOP_ATTRIBUTION_DROP_THRESHOLD:
+        status = "top_attribution_sensitive"
+    else:
+        status = "top_attribution_stable"
+    return {
+        "status": status,
+        "nn_accuracy_drop": drop,
+        "neural_accuracy": neural_accuracy,
+        "baseline_accuracy": float(row["baseline_accuracy"]),
+        "delta_vs_original_neural": float(row["delta_vs_original_neural"]),
+        "dropped_tokens": list(row.get("dropped_tokens", [])),
     }
 
 

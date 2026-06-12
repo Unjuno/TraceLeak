@@ -11,6 +11,18 @@ class ModelSequenceComparisonReportingError(ValueError):
     """Raised when a comparison result cannot be rendered."""
 
 
+BOUNDARY_REPORT_KEYS = (
+    "validation_scope",
+    "actual_trace_derived",
+    "trace_collection_mode",
+    "raw_secret_captured",
+    "target_version",
+    "source_pin",
+    "build_id",
+    "public_safe",
+)
+
+
 def load_model_sequence_comparison(path: str | Path) -> dict[str, Any]:
     """Load a model sequence comparison JSON file."""
 
@@ -101,6 +113,9 @@ def model_sequence_comparison_report_dict(
         "top_attributions": top_attributions,
         "notes": list(result.get("notes", [])),
     }
+    for key in BOUNDARY_REPORT_KEYS:
+        if key in result:
+            report[key] = result[key]
     if control_summary:
         report["control_summary"] = control_summary
     return report
@@ -183,22 +198,43 @@ def model_sequence_comparison_report_markdown(report: dict[str, Any]) -> str:
         f"- Examples: `{report['example_count']}`",
         f"- Neural model: `{neural_label}`",
         f"- Neural architecture: `{neural_architecture}`",
-        "",
-        "## Scores",
-        "",
-        "| Evaluator | Leave-one-out accuracy |",
-        "|---|---:|",
-        f"| Nearest-neighbor baseline | {report['baseline_accuracy']:.6g} |",
-        f"| {neural_label} | {report['neural_accuracy']:.6g} |",
-        "",
-        "## Delta",
-        "",
-        f"- Accuracy delta vs nearest-neighbor: `{report['delta_accuracy']:.6g}`",
-        f"- Interpretation: `{report['interpretation']}`",
-        f"- Evidence status: `{report.get('evidence_status', 'unknown')}`",
-        f"- Attribution status: `{report.get('attribution_status', 'unknown')}`",
-        f"- Control warning: `{report['control_warning']}`",
     ]
+    if "validation_scope" in report:
+        lines.extend(
+            [
+                f"- Validation scope: `{report['validation_scope']}`",
+                f"- Actual trace derived: `{_markdown_bool(report.get('actual_trace_derived'))}`",
+                f"- Trace collection mode: `{report.get('trace_collection_mode', 'unknown')}`",
+                f"- Raw secret captured: `{_markdown_bool(report.get('raw_secret_captured'))}`",
+            ]
+        )
+    if report.get("actual_trace_derived"):
+        lines.extend(
+            [
+                f"- Target version: `{report.get('target_version', 'unknown')}`",
+                f"- Source pin: `{report.get('source_pin', 'unknown')}`",
+                f"- Build ID: `{report.get('build_id', 'unknown')}`",
+            ]
+        )
+    lines.extend(
+        [
+            "",
+            "## Scores",
+            "",
+            "| Evaluator | Leave-one-out accuracy |",
+            "|---|---:|",
+            f"| Nearest-neighbor baseline | {report['baseline_accuracy']:.6g} |",
+            f"| {neural_label} | {report['neural_accuracy']:.6g} |",
+            "",
+            "## Delta",
+            "",
+            f"- Accuracy delta vs nearest-neighbor: `{report['delta_accuracy']:.6g}`",
+            f"- Interpretation: `{report['interpretation']}`",
+            f"- Evidence status: `{report.get('evidence_status', 'unknown')}`",
+            f"- Attribution status: `{report.get('attribution_status', 'unknown')}`",
+            f"- Control warning: `{report['control_warning']}`",
+        ]
+    )
 
     expected_tokens = report.get("expected_attribution_tokens") or []
     if expected_tokens:
@@ -287,3 +323,9 @@ def _control_warning(result: dict[str, Any]) -> str:
 def _require_number(value: Any, name: str) -> None:
     if not isinstance(value, int | float) or isinstance(value, bool):
         raise ModelSequenceComparisonReportingError(f"{name} must be a number")
+
+
+def _markdown_bool(value: Any) -> str:
+    if isinstance(value, bool):
+        return "true" if value else "false"
+    return str(value).lower()

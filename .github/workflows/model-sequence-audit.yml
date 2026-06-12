@@ -34,7 +34,7 @@ jobs:
         run: python scripts/build_toy_rsa_like_model_sequence_sample.py --out reports/local/toy_rsa_like_trace_derived_model_sequence.json --trace-out reports/local/toy_rsa_like_trace_derived.jsonl --runs 16
 
       - name: Audit labels
-        run: python scripts/audit_model_sequence_labels.py --in reports/local/toy_rsa_like_trace_derived_model_sequence.json --out reports/local/toy_rsa_like_label_audit.md
+        run: python scripts/audit_model_sequence_labels.py --in reports/local/toy_rsa_like_trace_derived_model_sequence.json --out reports/local/toy_rsa_like_label_audit.md --strict
 
       - name: Run ablation report
         run: python scripts/model_sequence_ablation_report.py --in reports/local/toy_rsa_like_trace_derived_model_sequence.json --out reports/local/toy_rsa_like_ablation_report.md --epochs 80

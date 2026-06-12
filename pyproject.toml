@@ -58,6 +58,7 @@ traceleak-validate-openssl-trace-contract = "scripts.validate_openssl_trace_cont
 traceleak-openssl-trace-contract-to-report = "scripts.openssl_trace_contract_to_report:main"
 traceleak-validate-openssl-trace-sample = "scripts.validate_openssl_trace_sample:main"
 traceleak-openssl-trace-sample-to-report = "scripts.openssl_trace_sample_to_report:main"
+traceleak-build-openssl-trace-sample = "scripts.build_openssl_trace_sample:main"
 traceleak-validate-openssl-event-map = "scripts.validate_openssl_event_map:main"
 traceleak-openssl-event-map-to-report = "scripts.openssl_event_map_to_report:main"
 traceleak-validate-openssl-source-pin = "scripts.validate_openssl_source_pin:main"

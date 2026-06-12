@@ -36,6 +36,7 @@ def comparison_result() -> dict:
         "neural": {
             "model_name": "sparse-softmax-model-sequence-nn",
             "backend": "python-standard-library",
+            "architecture": "single-layer-softmax",
             "leave_one_out_accuracy": 1.0,
             "DeltaH": 1.0,
             "top_attributions": [
@@ -71,6 +72,8 @@ def test_model_sequence_comparison_report_dict() -> None:
     assert report["report_type"] == "model_sequence_nn_comparison_report"
     assert report["baseline_accuracy"] == 0.25
     assert report["neural_accuracy"] == 1.0
+    assert report["neural_model_name"] == "sparse-softmax-model-sequence-nn"
+    assert report["neural_architecture"] == "single-layer-softmax"
     assert report["evidence_status"] == "controls_missing"
     assert report["attribution_status"] == "expected_attributions_not_declared"
     assert report["control_warning"] == "not_a_control_result"
@@ -138,7 +141,8 @@ def test_model_sequence_comparison_report_markdown() -> None:
 
     assert "TraceLeak Model Sequence NN Comparison Report" in markdown
     assert "Nearest-neighbor baseline" in markdown
-    assert "Sparse-softmax NN" in markdown
+    assert "sparse-softmax-model-sequence-nn" in markdown
+    assert "single-layer-softmax" in markdown
     assert "Top NN Attributions" in markdown
     assert "Control Summary" in markdown
     assert "Expected Attribution Tokens" in markdown

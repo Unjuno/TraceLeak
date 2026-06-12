@@ -13,6 +13,7 @@ from traceleak.openssl_layout_inspection import (
     write_layout_inspection_json,
     write_layout_inspection_markdown,
 )
+from traceleak.openssl_source_pin import OpenSSLSourcePinError
 
 
 def parse_args() -> argparse.Namespace:
@@ -27,7 +28,7 @@ def main() -> int:
     args = parse_args()
     try:
         report = inspect_openssl_layout_manifest(args.input_path)
-    except OpenSSLLayoutInspectionError as exc:
+    except (OpenSSLLayoutInspectionError, OpenSSLSourcePinError) as exc:
         print(f"error: {exc}", file=sys.stderr)
         return 1
     if args.format == "json":

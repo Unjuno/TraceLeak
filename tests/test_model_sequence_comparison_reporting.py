@@ -117,4 +117,4 @@ def test_count_pattern_sample_favors_count_learning_over_jaccard_presence() -> N
         "leave_one_out_accuracy"
     ]
     assert result["interpretation"] == "neural_better"
-    assert RATIO_TOKENS <= attribution_tokens
+    assert attribution_tokens >= RATIO_TOKENS

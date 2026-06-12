@@ -5,6 +5,7 @@ from __future__ import annotations
 from typing import Any
 
 from traceleak.model_sequence_baseline import evaluate_model_sequence_baselines
+from traceleak.model_sequence_boundary import attach_model_sequence_boundary
 from traceleak.model_sequence_comparison import classify_nn_baseline_delta
 from traceleak.model_sequence_mlp import train_model_sequence_mlp_result
 
@@ -33,7 +34,7 @@ def compare_model_sequence_mlp_to_baseline(
     baseline_accuracy = float(baseline["baselines"]["leave_one_out_nearest_neighbor_accuracy"])
     neural_accuracy = float(neural["metrics"]["leave_one_out"]["accuracy"])
     delta_accuracy = neural_accuracy - baseline_accuracy
-    return {
+    result = {
         "result_type": "model_sequence_nn_vs_baseline",
         "input_format": data.get("format", "unknown"),
         "target": neural["target"],
@@ -63,3 +64,4 @@ def compare_model_sequence_mlp_to_baseline(
             "Neural evaluator architecture: one-hidden-layer-tanh-softmax.",
         ],
     }
+    return attach_model_sequence_boundary(result, data)

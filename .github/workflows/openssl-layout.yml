@@ -12,7 +12,7 @@ permissions:
 
 jobs:
   layout:
-    name: Validate OpenSSL layout manifest
+    name: Validate layout manifest
     runs-on: ubuntu-latest
 
     steps:
@@ -47,13 +47,16 @@ jobs:
           git -C external/upstream add .
           git -C external/upstream commit -m initial
 
-      - name: Prepare detached worktree
+      - name: Prepare local worktree
         run: |
           SHA=$(git -C external/upstream rev-parse HEAD)
           python scripts/prepare_openssl_worktree.py --repo external/upstream --ref "$SHA" --worktree external/openssl --out reports/local/openssl_worktree.json
 
-      - name: Generate pinned manifest from local worktree
+      - name: Generate pinned manifest
         run: python scripts/generate_openssl_pinned_manifest.py --template examples/openssl_preflight/openssl_source_pin_sample.json --worktree external/openssl --out reports/local/openssl_source_pin.json
 
-      - name: Validate generated pinned manifest
+      - name: Validate pinned manifest
         run: python scripts/validate_openssl_source_pin.py reports/local/openssl_source_pin.json
+
+      - name: Inspect layout
+        run: python scripts/inspect_openssl_layout.py --in reports/local/openssl_source_pin.json --out reports/local/openssl_layout_inspection.md

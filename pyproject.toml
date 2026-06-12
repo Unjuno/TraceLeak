@@ -115,3 +115,6 @@ extend-exclude = ["external"]
 [tool.ruff.lint]
 select = ["E", "F", "I", "UP", "B", "SIM"]
 ignore = ["E501", "I001"]
+
+[tool.ruff.lint.per-file-ignores]
+"traceleak/openssl_patch_materialization_approval_template.py" = ["F401"]

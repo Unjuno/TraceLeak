@@ -65,6 +65,14 @@ def test_actual_trace_boundary_requires_redacted_public_safe_metadata() -> None:
     assert boundary["build_id"] == "openssl-local-redacted-build-001"
 
 
+def test_actual_trace_boundary_rejects_missing_explicit_trace_mode() -> None:
+    data = actual_trace_sample()
+    data.pop("trace_collection_mode")
+
+    with pytest.raises(ModelSequenceBoundaryError, match="trace_collection_mode"):
+        validate_model_sequence_sample_boundary(data)
+
+
 def test_actual_trace_boundary_rejects_raw_secret_capture() -> None:
     data = actual_trace_sample()
     data["raw_secret_captured"] = True

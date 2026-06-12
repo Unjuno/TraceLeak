@@ -74,7 +74,7 @@ def validate_openssl_preflight(manifest: dict[str, Any]) -> None:
     _validate_labels(_require_object(manifest.get("labels"), "labels"))
     _validate_string_list(manifest.get("planned_artifacts"), "planned_artifacts", min_items=1)
 
-    controls = set(_validate_string_list(manifest.get("required_controls"), "required_controls", min_items=2))
+    controls = set(_validate_string_list(manifest.get("required_controls"), "required_controls", min_items=1))
     missing_controls = sorted(REQUIRED_CONTROLS - controls)
     if missing_controls:
         raise OpenSSLPreflightError(f"required_controls missing: {', '.join(missing_controls)}")

@@ -26,6 +26,34 @@ SENSITIVE_TERMS = {
     "q",
     "d",
 }
+DEFAULT_IGNORED_LABEL_TERMS = {
+    "0",
+    "1",
+    "2",
+    "3",
+    "4",
+    "5",
+    "6",
+    "7",
+    "8",
+    "9",
+    "bucket",
+    "context",
+    "event",
+    "examples",
+    "label",
+    "like",
+    "phase",
+    "py",
+    "redacted",
+    "rsa",
+    "source",
+    "target",
+    "token",
+    "toy",
+    "type",
+    "value",
+}
 DEFAULT_ABLATIONS = (
     "drop_redacted_value",
     "drop_source_token",
@@ -54,21 +82,23 @@ def load_model_sequence_sample(path: str | Path) -> dict[str, Any]:
     return payload
 
 
-def label_leakage_audit(data: dict[str, Any]) -> dict[str, Any]:
+def label_leakage_audit(
+    data: dict[str, Any],
+    *,
+    ignored_label_terms: set[str] | None = None,
+) -> dict[str, Any]:
     """Flag feature tokens that appear dangerously close to label semantics."""
 
     records = _require_records(data)
+    ignored_terms = _ignored_terms(ignored_label_terms)
     label_name = str(data.get("label_name", "label"))
-    label_terms = _token_terms(label_name)
-    labels = {str(record.get("label", "")) for record in records}
-    for label in labels:
-        label_terms.update(_token_terms(label))
+    label_terms = _label_terms(data, ignored_terms=ignored_terms)
 
     token_counts = _aggregate_token_counts(records)
     risky_tokens: list[dict[str, Any]] = []
     sensitive_tokens: list[dict[str, Any]] = []
     for token, count in sorted(token_counts.items()):
-        token_terms = _token_terms(token)
+        token_terms = _token_terms(token) - ignored_terms
         overlap = sorted(label_terms & token_terms)
         sensitive_overlap = sorted(SENSITIVE_TERMS & token_terms)
         if overlap:
@@ -94,14 +124,62 @@ def label_leakage_audit(data: dict[str, Any]) -> dict[str, Any]:
         "risk_level": risk_level,
         "risky_token_count": len(risky_tokens),
         "sensitive_token_count": len(sensitive_tokens),
+        "ignored_label_terms": sorted(ignored_terms),
+        "effective_label_terms": sorted(label_terms),
         "risky_tokens": risky_tokens[:25],
         "sensitive_tokens": sensitive_tokens[:25],
         "notes": [
-            "High risk means feature tokens share terms with label names or label values.",
+            "High risk means feature tokens share non-generic terms with label names or label values.",
             "Medium risk means feature tokens include sensitive cryptographic terms even without direct label overlap.",
-            "This audit is conservative and should be reviewed before real OpenSSL experiments.",
+            "Strict audit should block high-risk label-proxy features before real OpenSSL experiments.",
         ],
     }
+
+
+def label_proxy_filtered_sample(
+    data: dict[str, Any],
+    *,
+    token_prefixes: tuple[str, ...] = ("redacted_value=",),
+    ignored_label_terms: set[str] | None = None,
+) -> dict[str, Any]:
+    """Drop feature tokens that directly encode non-generic label terms.
+
+    By default this only removes redacted-value tokens, because source/context/event
+    tokens often legitimately contain target names or cryptographic phase names.
+    """
+
+    filtered = copy.deepcopy(data)
+    records = _require_records(filtered)
+    ignored_terms = _ignored_terms(ignored_label_terms)
+    label_terms = _label_terms(filtered, ignored_terms=ignored_terms)
+    dropped: dict[str, float] = {}
+    for record in records:
+        token_counts = record.get("token_counts")
+        if not isinstance(token_counts, dict):
+            raise ModelSequenceAuditError("all records must include token_counts for label-proxy filtering")
+        kept: dict[str, float] = {}
+        for token, value in token_counts.items():
+            token = str(token)
+            numeric_value = float(value)
+            token_terms = _token_terms(token) - ignored_terms
+            is_candidate = any(token.startswith(prefix) for prefix in token_prefixes)
+            if is_candidate and label_terms & token_terms:
+                dropped[token] = dropped.get(token, 0.0) + numeric_value
+                continue
+            kept[token] = numeric_value
+        if not kept:
+            raise ModelSequenceAuditError("label-proxy filtering removed all tokens from a record")
+        record["token_counts"] = kept
+    filtered["label_proxy_filter"] = {
+        "enabled": True,
+        "token_prefixes": list(token_prefixes),
+        "dropped_token_count": len(dropped),
+        "dropped_tokens": sorted(dropped)[:25],
+    }
+    notes = list(filtered.get("notes", []))
+    notes.append("Label-proxy redacted_value tokens were removed before model-sequence evaluation.")
+    filtered["notes"] = notes
+    return filtered
 
 
 def model_sequence_ablation_report(
@@ -160,6 +238,7 @@ def model_sequence_ablation_report(
         "notes": [
             "Ablation checks whether NN performance survives removing feature families.",
             "A large drop after removing label-overlapping or attribution tokens weakens causal claims.",
+            "If nearest-neighbor baseline dominates NN, do not treat the NN result as leakage evidence.",
         ],
     }
 
@@ -201,6 +280,7 @@ def audit_report_markdown(report: dict[str, Any]) -> str:
         f"- Risk level: `{report['risk_level']}`",
         f"- Risky token count: `{report['risky_token_count']}`",
         f"- Sensitive token count: `{report['sensitive_token_count']}`",
+        f"- Effective label terms: `{','.join(report.get('effective_label_terms', []))}`",
         "",
         "## Risky Tokens",
         "",
@@ -322,14 +402,27 @@ def _ablation_row(name: str, original: dict[str, Any], comparison: dict[str, Any
 
 def _ablation_summary(original: dict[str, Any], ablations: list[dict[str, Any]]) -> dict[str, Any]:
     original_nn = float(original["neural"]["leave_one_out_accuracy"])
+    original_baseline = float(original["baseline"]["leave_one_out_nearest_neighbor_accuracy"])
+    baseline_margin = original_baseline - original_nn
     if not ablations:
-        return {"min_neural_accuracy": original_nn, "max_drop": 0.0, "status": "no_ablations"}
+        return {
+            "min_neural_accuracy": original_nn,
+            "max_drop": 0.0,
+            "baseline_margin": baseline_margin,
+            "status": "baseline_dominates" if baseline_margin >= 0.05 else "no_ablations",
+        }
     min_nn = min(float(row["neural_accuracy"]) for row in ablations)
     max_drop = original_nn - min_nn
-    status = "ablation_sensitive" if max_drop >= 0.25 else "ablation_stable"
+    if baseline_margin >= 0.05:
+        status = "baseline_dominates"
+    elif max_drop >= 0.25:
+        status = "ablation_sensitive"
+    else:
+        status = "ablation_stable"
     return {
         "min_neural_accuracy": min_nn,
         "max_drop": max_drop,
+        "baseline_margin": baseline_margin,
         "status": status,
     }
 
@@ -360,6 +453,22 @@ def _target_from_records(records: list[dict[str, Any]]) -> str:
 
 def _view_from_records(records: list[dict[str, Any]]) -> str:
     return str(records[0].get("view", "unknown"))
+
+
+def _label_terms(data: dict[str, Any], *, ignored_terms: set[str]) -> set[str]:
+    records = _require_records(data)
+    terms = _token_terms(str(data.get("label_name", "label")))
+    labels = {str(record.get("label", "")) for record in records}
+    for label in labels:
+        terms.update(_token_terms(label))
+    return terms - ignored_terms
+
+
+def _ignored_terms(extra_terms: set[str] | None) -> set[str]:
+    terms = set(DEFAULT_IGNORED_LABEL_TERMS)
+    if extra_terms:
+        terms.update(extra_terms)
+    return terms
 
 
 def _token_terms(value: str) -> set[str]:

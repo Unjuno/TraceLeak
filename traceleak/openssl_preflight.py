@@ -36,6 +36,8 @@ REQUIRED_GATES = {
     "label_leakage_audit_planned",
     "ablation_validation_planned",
     "split_validation_planned",
+    "label_overlap_features_blocked",
+    "strict_label_audit_required",
 }
 
 

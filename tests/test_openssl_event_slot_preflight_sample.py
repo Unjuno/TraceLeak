@@ -12,3 +12,6 @@ def test_event_slot_review_is_declared_in_preflight_sample() -> None:
     assert "review_event_slots" in stage_names
     assert "reports/local/openssl_event_slots.md" in manifest["planned_artifacts"]
     assert "event_slot_review_planned" in manifest["gates"]
+    assert "build_human_review_checklist" in stage_names
+    assert "reports/local/openssl_human_review_checklist.md" in manifest["planned_artifacts"]
+    assert "human_review_checklist_planned" in manifest["gates"]

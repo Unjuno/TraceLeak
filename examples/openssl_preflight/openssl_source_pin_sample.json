@@ -24,7 +24,8 @@
       "target_path": "crypto/rsa/rsa_gen.c",
       "required_symbols": [
         "RSA_generate_key_ex",
-        "rsa_builtin_keygen"
+        "ossl_rsa_generate_multi_prime_key",
+        "rsa_keygen"
       ],
       "related_event_groups": [
         "rsa_keygen_entry"
@@ -37,9 +38,12 @@
     {
       "target_path": "crypto/bn/bn_prime.c",
       "required_symbols": [
+        "BN_generate_prime_ex2",
         "BN_generate_prime_ex",
-        "BN_check_prime",
-        "bn_is_prime_int"
+        "probable_prime",
+        "bn_is_prime_int",
+        "ossl_bn_check_prime",
+        "ossl_bn_check_generated_prime"
       ],
       "related_event_groups": [
         "prime_candidate_generation",

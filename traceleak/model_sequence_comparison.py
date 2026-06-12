@@ -5,6 +5,7 @@ from __future__ import annotations
 from typing import Any
 
 from traceleak.model_sequence_baseline import evaluate_model_sequence_baselines
+from traceleak.model_sequence_boundary import attach_model_sequence_boundary
 from traceleak.model_sequence_nn import train_model_sequence_nn_result
 
 
@@ -33,7 +34,7 @@ def compare_model_sequence_nn_to_baseline(
     neural_accuracy = float(neural["metrics"]["leave_one_out"]["accuracy"])
     delta_accuracy = neural_accuracy - baseline_accuracy
 
-    return {
+    result = {
         "result_type": "model_sequence_nn_vs_baseline",
         "input_format": data.get("format", "unknown"),
         "target": neural["target"],
@@ -63,6 +64,7 @@ def compare_model_sequence_nn_to_baseline(
             "A positive delta does not prove leakage; negative controls must stay near chance.",
         ],
     }
+    return attach_model_sequence_boundary(result, data)
 
 
 def classify_nn_baseline_delta(delta_accuracy: float) -> str:

@@ -74,6 +74,7 @@ def model_sequence_comparison_report_dict(
     neural_accuracy = float(result["neural"]["leave_one_out_accuracy"])
     delta_accuracy = float(result["delta"]["accuracy_vs_nearest_neighbor"])
     control_warning = _control_warning(result)
+    control_summary = control_summary_dict(controls) if controls else None
 
     report = {
         "report_type": "model_sequence_nn_comparison_report",
@@ -85,12 +86,13 @@ def model_sequence_comparison_report_dict(
         "neural_accuracy": neural_accuracy,
         "delta_accuracy": delta_accuracy,
         "interpretation": result["interpretation"],
+        "evidence_status": evidence_status(result["interpretation"], control_summary),
         "control_warning": control_warning,
         "top_attributions": list(result.get("neural", {}).get("top_attributions", [])),
         "notes": list(result.get("notes", [])),
     }
-    if controls:
-        report["control_summary"] = control_summary_dict(controls)
+    if control_summary:
+        report["control_summary"] = control_summary
     return report
 
 
@@ -120,6 +122,18 @@ def control_summary_dict(controls: list[dict[str, Any]]) -> dict[str, Any]:
     }
 
 
+def evidence_status(interpretation: str, control_summary: dict[str, Any] | None) -> str:
+    """Classify whether a positive NN comparison has required control evidence."""
+
+    if interpretation != "neural_better":
+        return "no_neural_advantage"
+    if control_summary is None:
+        return "controls_missing"
+    if control_summary.get("status") != "control_pass":
+        return "control_attention_required"
+    return "candidate_signal_control_checked"
+
+
 def model_sequence_comparison_report_markdown(report: dict[str, Any]) -> str:
     """Render a model sequence comparison report as Markdown."""
 
@@ -142,6 +156,7 @@ def model_sequence_comparison_report_markdown(report: dict[str, Any]) -> str:
         "",
         f"- Accuracy delta vs nearest-neighbor: `{report['delta_accuracy']:.6g}`",
         f"- Interpretation: `{report['interpretation']}`",
+        f"- Evidence status: `{report.get('evidence_status', 'unknown')}`",
         f"- Control warning: `{report['control_warning']}`",
     ]
 

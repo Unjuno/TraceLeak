@@ -115,12 +115,18 @@ def validate_openssl_event_emitter_artifact(artifact: dict[str, Any]) -> None:
         raise OpenSSLEventEmitterArtifactError("emitter artifacts must include value_redacted")
     if "traceleak_event" not in header or "traceleak_event" not in source:
         raise OpenSSLEventEmitterArtifactError("emitter artifacts must define traceleak_event")
+    if "tl_write_json_string" not in source:
+        raise OpenSSLEventEmitterArtifactError("emitter source must define tl_write_json_string")
+    if "%s" in source:
+        raise OpenSSLEventEmitterArtifactError("emitter source must not interpolate JSON strings with %s")
 
 
 def write_openssl_event_emitter_artifact_json(path: str | Path, artifact: dict[str, Any]) -> None:
     """Write the combined emitter artifact JSON."""
 
-    Path(path).write_text(json.dumps(artifact, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    output_path = Path(path)
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    output_path.write_text(json.dumps(artifact, indent=2, sort_keys=True) + "\n", encoding="utf-8")
 
 
 def write_openssl_event_emitter_artifact_files(directory: str | Path, artifact: dict[str, Any]) -> None:
@@ -177,7 +183,9 @@ def openssl_event_emitter_artifact_markdown(artifact: dict[str, Any]) -> str:
 def write_openssl_event_emitter_artifact_markdown(path: str | Path, artifact: dict[str, Any]) -> None:
     """Write a redacted event emitter artifact report."""
 
-    Path(path).write_text(openssl_event_emitter_artifact_markdown(artifact), encoding="utf-8")
+    output_path = Path(path)
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    output_path.write_text(openssl_event_emitter_artifact_markdown(artifact), encoding="utf-8")
 
 
 def _planned_payload(event: dict[str, Any]) -> dict[str, Any]:
@@ -234,13 +242,53 @@ void traceleak_event(FILE *out,
 
 
 def _source_text() -> str:
-    return """#include "traceleak_openssl_event.h"
+    return r"""#include "traceleak_openssl_event.h"
 
 #include <stdio.h>
 
 static const char *tl_safe(const char *value)
 {
     return value == NULL ? "" : value;
+}
+
+static void tl_write_json_string(FILE *out, const char *value)
+{
+    const unsigned char *cursor = (const unsigned char *)tl_safe(value);
+
+    fputc('"', out);
+    while (*cursor != '\0') {
+        switch (*cursor) {
+        case '"':
+            fputs("\\\"", out);
+            break;
+        case '\\':
+            fputs("\\\\", out);
+            break;
+        case '\b':
+            fputs("\\b", out);
+            break;
+        case '\f':
+            fputs("\\f", out);
+            break;
+        case '\n':
+            fputs("\\n", out);
+            break;
+        case '\r':
+            fputs("\\r", out);
+            break;
+        case '\t':
+            fputs("\\t", out);
+            break;
+        default:
+            if (*cursor < 0x20)
+                fprintf(out, "\\u%04x", (unsigned int)*cursor);
+            else
+                fputc((int)*cursor, out);
+            break;
+        }
+        cursor++;
+    }
+    fputc('"', out);
 }
 
 void traceleak_event(FILE *out,
@@ -263,30 +311,43 @@ void traceleak_event(FILE *out,
 {
     if (out == NULL)
         return;
-    fprintf(out,
-            "{\"run_id\":\"%s\"," 
-            "\"target\":\"%s\"," 
-            "\"target_version\":\"%s\"," 
-            "\"view\":\"redacted\"," 
-            "\"metadata\":{\"source_pin\":\"%s\",\"build_id\":\"%s\",\"trace_collection_mode\":\"redacted\",\"raw_secret_captured\":false,\"public_safe\":true}," 
-            "\"labels_lab_only\":{\"%s\":\"%s\"}," 
-            "\"events\":[{\"step\":%d,\"phase\":\"%s\",\"function\":\"%s\",\"event_type\":\"%s\",\"name\":\"%s\",\"file\":\"%s\",\"line\":%d,\"value_redacted\":{\"%s\":%d}}]}\n",
-            tl_safe(run_id),
-            tl_safe(target),
-            tl_safe(target_version),
-            tl_safe(source_pin),
-            tl_safe(build_id),
-            tl_safe(label_key),
-            tl_safe(label_value),
-            step,
-            tl_safe(phase),
-            tl_safe(function_name),
-            tl_safe(event_type),
-            tl_safe(name),
-            tl_safe(file_name),
-            line,
-            tl_safe(value_redacted_key),
-            value_redacted_bucket);
+
+    fputs("{\"run_id\":", out);
+    tl_write_json_string(out, run_id);
+    fputs(",\"target\":", out);
+    tl_write_json_string(out, target);
+    fputs(",\"target_version\":", out);
+    tl_write_json_string(out, target_version);
+    fputs(",\"view\":\"redacted\",", out);
+    fputs("\"metadata\":{\"source_pin\":", out);
+    tl_write_json_string(out, source_pin);
+    fputs(",\"build_id\":", out);
+    tl_write_json_string(out, build_id);
+    fputs(",\"trace_collection_mode\":\"redacted\",", out);
+    fputs("\"raw_secret_captured\":false,\"public_safe\":true},", out);
+    fputs("\"labels_lab_only\":{", out);
+    tl_write_json_string(out, label_key);
+    fputc(':', out);
+    tl_write_json_string(out, label_value);
+    fputs("},\"events\":[{\"step\":", out);
+    fprintf(out, "%d", step);
+    fputs(",\"phase\":", out);
+    tl_write_json_string(out, phase);
+    fputs(",\"function\":", out);
+    tl_write_json_string(out, function_name);
+    fputs(",\"event_type\":", out);
+    tl_write_json_string(out, event_type);
+    fputs(",\"name\":", out);
+    tl_write_json_string(out, name);
+    fputs(",\"file\":", out);
+    tl_write_json_string(out, file_name);
+    fputs(",\"line\":", out);
+    fprintf(out, "%d", line);
+    fputs(",\"value_redacted\":{", out);
+    tl_write_json_string(out, value_redacted_key);
+    fputc(':', out);
+    fprintf(out, "%d", value_redacted_bucket);
+    fputs("}}]}\n", out);
 }
 """
 
@@ -312,8 +373,16 @@ def _validate_planned_payload(payload: Any, *, index: int) -> None:
             f"planned_event_payloads[{index}].anchor_line must be a positive integer"
         )
     _require_string(payload.get("event_type"), f"planned_event_payloads[{index}].event_type")
-    _validate_string_list(payload.get("redacted_values"), f"planned_event_payloads[{index}].redacted_values", min_items=1)
-    _require_equal(payload.get("manual_review_required"), True, f"planned_event_payloads[{index}].manual_review_required")
+    _validate_string_list(
+        payload.get("redacted_values"),
+        f"planned_event_payloads[{index}].redacted_values",
+        min_items=1,
+    )
+    _require_equal(
+        payload.get("manual_review_required"),
+        True,
+        f"planned_event_payloads[{index}].manual_review_required",
+    )
 
 
 def _reject_forbidden_source_terms(content: str, *, name: str) -> None:

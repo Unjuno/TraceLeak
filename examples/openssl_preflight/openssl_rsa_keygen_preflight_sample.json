@@ -65,6 +65,7 @@
     "reports/local/openssl_source_layout.md",
     "reports/local/openssl_layout_inspection.md",
     "reports/local/openssl_patch_plan.md",
+    "reports/local/openssl_instrumentation_stub.md",
     "reports/local/openssl_rsa_keygen_event_map.md",
     "reports/local/openssl_rsa_keygen_model_sequence.json",
     "reports/local/openssl_rsa_keygen_label_audit.md",
@@ -105,6 +106,11 @@
       "command_hint": "python scripts/plan_openssl_instrumentation.py --source-pin reports/local/openssl_source_pin.json --event-map examples/openssl_preflight/openssl_rsa_keygen_event_map_sample.json --out reports/local/openssl_patch_plan.md"
     },
     {
+      "name": "define_instrumentation_stub",
+      "status": "preflight_only",
+      "command_hint": "python scripts/define_openssl_instrumentation_stub.py --source-pin reports/local/openssl_source_pin.json --event-map examples/openssl_preflight/openssl_rsa_keygen_event_map_sample.json --out reports/local/openssl_instrumentation_stub.md"
+    },
+    {
       "name": "collect_redacted_traces",
       "status": "preflight_only",
       "command_hint": "collect traceleak.run.v1 JSONL with redacted value buckets only"
@@ -141,6 +147,7 @@
     "source_layout_inspection_planned",
     "event_map_validation_planned",
     "instrumentation_patch_plan_planned",
+    "instrumentation_stub_spec_planned",
     "manual_patch_review_required",
     "redacted_view_only",
     "no_raw_secret_fields",
@@ -158,6 +165,7 @@
     "This is a preflight manifest only. It must not execute OpenSSL or collect traces by itself.",
     "The first real OpenSSL experiment should start only after this manifest validates cleanly.",
     "Any source changes must pass through a review-only patch plan before patch application is considered.",
+    "Any event payload must pass through the review-only instrumentation stub specification before trace collection is considered.",
     "Any positive NN result must be reviewed with strict label audit and ablation validation before being interpreted as leakage evidence."
   ]
 }

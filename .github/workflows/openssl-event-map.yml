@@ -1,0 +1,37 @@
+name: OpenSSL Event Map
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  event-map:
+    name: Validate OpenSSL event map
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install package
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -e ".[dev]"
+
+      - name: Validate event map
+        run: python scripts/validate_openssl_event_map.py examples/openssl_preflight/openssl_rsa_keygen_event_map_sample.json
+
+      - name: Render event map report
+        run: python scripts/openssl_event_map_to_report.py --in examples/openssl_preflight/openssl_rsa_keygen_event_map_sample.json --out reports/local/openssl_rsa_keygen_event_map.md

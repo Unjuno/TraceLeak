@@ -1,0 +1,80 @@
+{
+  "format": "traceleak.openssl_source_pin.v1",
+  "experiment_id": "exp_010_openssl_rsa_keygen_preflight",
+  "target_family": "openssl-rsa-keygen",
+  "mode": "template",
+  "execution_allowed": false,
+  "public_safe": true,
+  "source": {
+    "kind": "external_worktree",
+    "name": "openssl",
+    "repository_hint": "openssl/openssl",
+    "worktree_hint": "external/openssl",
+    "pin_required_before_execution": true,
+    "exact_commit_sha": null,
+    "ref_policy": "pin_exact_commit_before_run",
+    "notes": [
+      "This template is intentionally not pinned to a real OpenSSL commit.",
+      "Before any real experiment, create a pinned manifest with a 40-hex commit SHA."
+    ]
+  },
+  "event_map_path": "examples/openssl_preflight/openssl_rsa_keygen_event_map_sample.json",
+  "source_layout": [
+    {
+      "target_path": "crypto/rsa/rsa_gen.c",
+      "required_symbols": [
+        "RSA_generate_key_ex",
+        "rsa_builtin_keygen"
+      ],
+      "related_event_groups": [
+        "rsa_keygen_entry"
+      ],
+      "line_binding_policy": "resolve_after_exact_commit_pin",
+      "notes": [
+        "Symbol names and exact line anchors must be verified after commit pinning."
+      ]
+    },
+    {
+      "target_path": "crypto/bn/bn_prime.c",
+      "required_symbols": [
+        "BN_generate_prime_ex",
+        "BN_check_prime",
+        "bn_is_prime_int"
+      ],
+      "related_event_groups": [
+        "prime_candidate_generation",
+        "prime_candidate_filter",
+        "probable_prime_test",
+        "prime_candidate_result"
+      ],
+      "line_binding_policy": "resolve_after_exact_commit_pin",
+      "notes": [
+        "Exact function names may differ across OpenSSL versions; verify against the pinned source tree before patch planning."
+      ]
+    }
+  ],
+  "required_checks": [
+    "exact_commit_sha_recorded_before_execution",
+    "target_files_exist_after_pin",
+    "required_symbols_checked_after_pin",
+    "event_map_groups_covered",
+    "line_bindings_resolved_after_pin",
+    "no_vendored_openssl_source"
+  ],
+  "planned_artifacts": [
+    "reports/local/openssl_source_pin.json",
+    "reports/local/openssl_source_layout.md",
+    "reports/local/openssl_rsa_keygen_event_map.md"
+  ],
+  "gates": [
+    "source_ref_pinned_before_execution",
+    "source_layout_review_required",
+    "event_map_sync_required",
+    "line_binding_after_pin_required",
+    "no_raw_secret_fields"
+  ],
+  "notes": [
+    "This manifest is a source-layout template only and must not be used as proof of a pinned OpenSSL experiment.",
+    "The next phase should generate a pinned manifest from an external OpenSSL worktree and then re-run validation."
+  ]
+}

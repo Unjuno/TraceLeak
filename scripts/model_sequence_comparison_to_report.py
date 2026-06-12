@@ -25,15 +25,23 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--in", dest="input_path", required=True, type=Path, help="Input comparison JSON")
     parser.add_argument("--out", dest="output_path", required=True, type=Path, help="Output report path")
     parser.add_argument("--format", choices=["md", "json"], default="md", help="Output format")
+    parser.add_argument(
+        "--control",
+        dest="control_paths",
+        action="append",
+        default=[],
+        type=Path,
+        help="Optional control comparison JSON; may be passed multiple times",
+    )
     return parser.parse_args()
 
 
 def main() -> int:
     args = parse_args()
     try:
-        report = model_sequence_comparison_report_dict(
-            load_model_sequence_comparison(args.input_path)
-        )
+        comparison = load_model_sequence_comparison(args.input_path)
+        controls = [load_model_sequence_comparison(path) for path in args.control_paths]
+        report = model_sequence_comparison_report_dict(comparison, controls=controls)
     except ModelSequenceComparisonReportingError as exc:
         raise SystemExit(f"error: {exc}") from exc
 

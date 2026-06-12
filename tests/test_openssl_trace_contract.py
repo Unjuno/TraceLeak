@@ -116,4 +116,3 @@ def test_openssl_trace_contract_to_report_cli_writes_markdown(tmp_path: Path) ->
     assert "TraceLeak OpenSSL Trace Contract Report" in markdown
     assert "contract_ready_not_executed" in markdown
     assert "Raw secret captured: `false`" in markdown
-}

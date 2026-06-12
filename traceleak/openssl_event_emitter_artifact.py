@@ -42,6 +42,7 @@ def build_openssl_event_emitter_artifact(
     except OpenSSLTraceContractError as exc:
         raise OpenSSLEventEmitterArtifactError(str(exc)) from exc
     validate_openssl_instrumentation_stub(instrumentation_stub)
+    planned_payloads = [_planned_payload(event) for event in instrumentation_stub["planned_events"]]
     artifact = {
         "format": EMITTER_ARTIFACT_FORMAT,
         "status": "emitter_artifact_ready_not_applied",
@@ -64,7 +65,8 @@ def build_openssl_event_emitter_artifact(
             "value_field": "value_redacted",
             "raw_value_field_allowed": False,
         },
-        "planned_event_groups": [event["group_id"] for event in instrumentation_stub["planned_events"]],
+        "planned_event_groups": [payload["group_id"] for payload in planned_payloads],
+        "planned_event_payloads": planned_payloads,
         "files": {
             HEADER_FILENAME: _header_text(),
             SOURCE_FILENAME: _source_text(),
@@ -97,7 +99,14 @@ def validate_openssl_event_emitter_artifact(artifact: dict[str, Any]) -> None:
     files = _require_object(artifact.get("files"), "files")
     header = _require_string(files.get(HEADER_FILENAME), f"files.{HEADER_FILENAME}")
     source = _require_string(files.get(SOURCE_FILENAME), f"files.{SOURCE_FILENAME}")
-    _require_list(artifact.get("planned_event_groups"), "planned_event_groups", min_items=1)
+    groups = _validate_string_list(artifact.get("planned_event_groups"), "planned_event_groups", min_items=1)
+    payloads = _require_list(artifact.get("planned_event_payloads"), "planned_event_payloads", min_items=1)
+    if len(payloads) != len(groups):
+        raise OpenSSLEventEmitterArtifactError("planned_event_payloads length must match planned_event_groups")
+    for index, payload in enumerate(payloads):
+        _validate_planned_payload(payload, index=index)
+        if payload["group_id"] != groups[index]:
+            raise OpenSSLEventEmitterArtifactError("planned_event_payloads order must match planned_event_groups")
     _reject_forbidden_source_terms(header, name=HEADER_FILENAME)
     _reject_forbidden_source_terms(source, name=SOURCE_FILENAME)
     if "value_raw" in header or "value_raw" in source:
@@ -149,6 +158,16 @@ def openssl_event_emitter_artifact_markdown(artifact: dict[str, Any]) -> str:
         "",
     ]
     lines.extend(f"- `{group}`" for group in artifact["planned_event_groups"])
+    lines.extend(["", "## Planned Event Payloads", ""])
+    lines.extend(
+        "- `{group}` -> `{event_type}` `{target_path}:{anchor_line}`".format(
+            group=payload["group_id"],
+            event_type=payload["event_type"],
+            target_path=payload["target_path"],
+            anchor_line=payload["anchor_line"],
+        )
+        for payload in artifact["planned_event_payloads"]
+    )
     lines.extend(["", "## Notes", ""])
     lines.extend(f"- {note}" for note in artifact["notes"])
     lines.append("")
@@ -161,6 +180,18 @@ def write_openssl_event_emitter_artifact_markdown(path: str | Path, artifact: di
     Path(path).write_text(openssl_event_emitter_artifact_markdown(artifact), encoding="utf-8")
 
 
+def _planned_payload(event: dict[str, Any]) -> dict[str, Any]:
+    return {
+        "group_id": event["group_id"],
+        "target_path": event["target_path"],
+        "anchor_symbol": event["anchor_symbol"],
+        "anchor_line": event["anchor_line"],
+        "event_type": event["event_type"],
+        "redacted_values": list(event["redacted_values"]),
+        "manual_review_required": True,
+    }
+
+
 def _header_text() -> str:
     return """#ifndef TRACELEAK_OPENSSL_EVENT_H
 #define TRACELEAK_OPENSSL_EVENT_H
@@ -168,7 +199,7 @@ def _header_text() -> str:
 #include <stdio.h>
 
 #ifdef __cplusplus
-extern \"C\" {
+extern "C" {
 #endif
 
 /*
@@ -203,13 +234,13 @@ void traceleak_event(FILE *out,
 
 
 def _source_text() -> str:
-    return """#include \"traceleak_openssl_event.h\"
+    return """#include "traceleak_openssl_event.h"
 
 #include <stdio.h>
 
 static const char *tl_safe(const char *value)
 {
-    return value == NULL ? \"\" : value;
+    return value == NULL ? "" : value;
 }
 
 void traceleak_event(FILE *out,
@@ -233,13 +264,13 @@ void traceleak_event(FILE *out,
     if (out == NULL)
         return;
     fprintf(out,
-            \"{\\\"run_id\\\":\\\"%s\\\",\"
-            \"\\\"target\\\":\\\"%s\\\",\"
-            \"\\\"target_version\\\":\\\"%s\\\",\"
-            \"\\\"view\\\":\\\"redacted\\\",\"
-            \"\\\"metadata\\\":{\\\"source_pin\\\":\\\"%s\\\",\\\"build_id\\\":\\\"%s\\\",\\\"trace_collection_mode\\\":\\\"redacted\\\",\\\"raw_secret_captured\\\":false,\\\"public_safe\\\":true},\"
-            \"\\\"labels_lab_only\\\":{\\\"%s\\\":\\\"%s\\\"},\"
-            \"\\\"events\\\":[{\\\"step\\\":%d,\\\"phase\\\":\\\"%s\\\",\\\"function\\\":\\\"%s\\\",\\\"event_type\\\":\\\"%s\\\",\\\"name\\\":\\\"%s\\\",\\\"file\\\":\\\"%s\\\",\\\"line\\\":%d,\\\"value_redacted\\\":{\\\"%s\\\":%d}}]}\\n\",
+            "{\"run_id\":\"%s\"," 
+            "\"target\":\"%s\"," 
+            "\"target_version\":\"%s\"," 
+            "\"view\":\"redacted\"," 
+            "\"metadata\":{\"source_pin\":\"%s\",\"build_id\":\"%s\",\"trace_collection_mode\":\"redacted\",\"raw_secret_captured\":false,\"public_safe\":true}," 
+            "\"labels_lab_only\":{\"%s\":\"%s\"}," 
+            "\"events\":[{\"step\":%d,\"phase\":\"%s\",\"function\":\"%s\",\"event_type\":\"%s\",\"name\":\"%s\",\"file\":\"%s\",\"line\":%d,\"value_redacted\":{\"%s\":%d}}]}\n",
             tl_safe(run_id),
             tl_safe(target),
             tl_safe(target_version),
@@ -269,6 +300,22 @@ def _validate_emitter_api(api: dict[str, Any]) -> None:
     _require_equal(api.get("raw_value_field_allowed"), False, "emitter_api.raw_value_field_allowed")
 
 
+def _validate_planned_payload(payload: Any, *, index: int) -> None:
+    if not isinstance(payload, dict):
+        raise OpenSSLEventEmitterArtifactError(f"planned_event_payloads[{index}] must be an object")
+    _require_string(payload.get("group_id"), f"planned_event_payloads[{index}].group_id")
+    _require_string(payload.get("target_path"), f"planned_event_payloads[{index}].target_path")
+    _require_string(payload.get("anchor_symbol"), f"planned_event_payloads[{index}].anchor_symbol")
+    anchor_line = payload.get("anchor_line")
+    if not isinstance(anchor_line, int) or anchor_line <= 0:
+        raise OpenSSLEventEmitterArtifactError(
+            f"planned_event_payloads[{index}].anchor_line must be a positive integer"
+        )
+    _require_string(payload.get("event_type"), f"planned_event_payloads[{index}].event_type")
+    _validate_string_list(payload.get("redacted_values"), f"planned_event_payloads[{index}].redacted_values", min_items=1)
+    _require_equal(payload.get("manual_review_required"), True, f"planned_event_payloads[{index}].manual_review_required")
+
+
 def _reject_forbidden_source_terms(content: str, *, name: str) -> None:
     lowered = content.lower()
     for term in FORBIDDEN_SOURCE_TERMS:
@@ -288,6 +335,13 @@ def _require_list(value: Any, name: str, *, min_items: int = 0) -> list[Any]:
     if len(value) < min_items:
         raise OpenSSLEventEmitterArtifactError(f"{name} must contain at least {min_items} item(s)")
     return value
+
+
+def _validate_string_list(value: Any, name: str, *, min_items: int = 0) -> list[str]:
+    items = _require_list(value, name, min_items=min_items)
+    if not all(isinstance(item, str) and item for item in items):
+        raise OpenSSLEventEmitterArtifactError(f"{name} must contain only non-empty strings")
+    return items
 
 
 def _require_string(value: Any, name: str) -> str:

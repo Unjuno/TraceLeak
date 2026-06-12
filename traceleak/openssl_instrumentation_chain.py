@@ -2,8 +2,9 @@
 
 The chain joins the existing review artifacts and redacted data gates:
 instrumentation stub, source edit proposal, redacted event emitter artifact,
-redacted event stream validation, model_sequence.v1 sample build, and sample
-acceptance. It does not build, run, instrument, patch, compile, or trace OpenSSL.
+emitter self-check, redacted event stream validation, model_sequence.v1 sample
+build, and sample acceptance. It does not build, run, instrument, patch,
+compile, or trace OpenSSL.
 """
 
 from __future__ import annotations
@@ -13,11 +14,16 @@ from pathlib import Path
 from typing import Any
 
 from traceleak.openssl_event_emitter_artifact import (
+    build_openssl_event_emitter_artifact,
     openssl_event_emitter_artifact_markdown,
     write_openssl_event_emitter_artifact_files,
     write_openssl_event_emitter_artifact_json,
 )
-from traceleak.openssl_event_emitter_artifact import build_openssl_event_emitter_artifact
+from traceleak.openssl_event_emitter_self_check import (
+    openssl_event_emitter_self_check_markdown,
+    run_openssl_event_emitter_self_check,
+    write_openssl_event_emitter_self_check_outputs,
+)
 from traceleak.openssl_instrumentation_stub import (
     build_openssl_instrumentation_stub,
     instrumentation_stub_markdown,
@@ -68,6 +74,10 @@ def run_openssl_instrumentation_dry_run_chain(
             contract=contract,
             instrumentation_stub=stub,
         )
+        emitter_self_check = run_openssl_event_emitter_self_check(
+            contract=contract,
+            emitter_artifact=event_emitter,
+        )
         runs = load_openssl_redacted_event_stream(event_stream_path)
         event_stream_report = openssl_redacted_event_stream_report_dict(contract, runs)
         sample = build_openssl_model_sequence_sample(
@@ -91,6 +101,7 @@ def run_openssl_instrumentation_dry_run_chain(
         "stub_status": stub["status"],
         "source_edit_status": source_edit["status"],
         "event_emitter_status": event_emitter["status"],
+        "emitter_self_check_status": emitter_self_check["status"],
         "event_stream_status": event_stream_report["status"],
         "sample_acceptance_status": sample_acceptance_report["status"],
         "experiment_id": stub["experiment_id"],
@@ -101,6 +112,8 @@ def run_openssl_instrumentation_dry_run_chain(
         "planned_event_count": len(stub["planned_events"]),
         "proposal_count": len(source_edit["proposals"]),
         "emitter_file_count": len(event_emitter["files"]),
+        "self_check_run_count": emitter_self_check["run_count"],
+        "self_check_event_count": emitter_self_check["event_count"],
         "run_count": event_stream_report["run_count"],
         "event_count": event_stream_report["event_count"],
         "record_count": sample_acceptance_report["record_count"],
@@ -109,6 +122,7 @@ def run_openssl_instrumentation_dry_run_chain(
             "instrumentation_stub": stub,
             "source_edit_proposal": source_edit,
             "event_emitter_artifact": event_emitter,
+            "event_emitter_self_check": emitter_self_check,
             "event_stream_report": event_stream_report,
             "model_sequence_sample": sample,
             "sample_acceptance_report": sample_acceptance_report,
@@ -137,6 +151,8 @@ def write_openssl_instrumentation_chain_outputs(out_dir: str | Path, report: dic
         "event_emitter_json": output_dir / "openssl_event_emitter_artifact.json",
         "event_emitter_md": output_dir / "openssl_event_emitter_artifact.md",
         "event_emitter_dir": output_dir / "openssl_event_emitter_files",
+        "event_emitter_self_check_dir": output_dir / "openssl_event_emitter_self_check",
+        "event_emitter_self_check_md": output_dir / "openssl_event_emitter_self_check_summary.md",
         "event_stream_json": output_dir / "openssl_redacted_event_stream_report.json",
         "event_stream_md": output_dir / "openssl_redacted_event_stream_report.md",
         "model_sequence_sample_json": output_dir / "openssl_model_sequence_sample.json",
@@ -163,6 +179,13 @@ def write_openssl_instrumentation_chain_outputs(out_dir: str | Path, report: dic
     write_openssl_event_emitter_artifact_files(
         paths["event_emitter_dir"], artifacts["event_emitter_artifact"]
     )
+    self_check_paths = write_openssl_event_emitter_self_check_outputs(
+        paths["event_emitter_self_check_dir"], artifacts["event_emitter_self_check"]
+    )
+    paths["event_emitter_self_check_md"].write_text(
+        openssl_event_emitter_self_check_markdown(artifacts["event_emitter_self_check"]),
+        encoding="utf-8",
+    )
     paths["event_stream_json"].write_text(
         json.dumps(artifacts["event_stream_report"], indent=2, sort_keys=True) + "\n",
         encoding="utf-8",
@@ -185,7 +208,7 @@ def write_openssl_instrumentation_chain_outputs(out_dir: str | Path, report: dic
         encoding="utf-8",
     )
     paths["summary_md"].write_text(openssl_instrumentation_chain_markdown(report), encoding="utf-8")
-    return paths
+    return paths | {f"event_emitter_self_check_{key}": value for key, value in self_check_paths.items()}
 
 
 def openssl_instrumentation_chain_markdown(report: dict[str, Any]) -> str:
@@ -212,6 +235,7 @@ def openssl_instrumentation_chain_markdown(report: dict[str, Any]) -> str:
         f"- Instrumentation stub: `{report['stub_status']}`",
         f"- Source edit proposal: `{report['source_edit_status']}`",
         f"- Event emitter artifact: `{report['event_emitter_status']}`",
+        f"- Event emitter self-check: `{report['emitter_self_check_status']}`",
         f"- Event stream: `{report['event_stream_status']}`",
         f"- Sample acceptance: `{report['sample_acceptance_status']}`",
         "",
@@ -220,6 +244,8 @@ def openssl_instrumentation_chain_markdown(report: dict[str, Any]) -> str:
         f"- Planned events: `{report['planned_event_count']}`",
         f"- Source edit proposals: `{report['proposal_count']}`",
         f"- Emitter files: `{report['emitter_file_count']}`",
+        f"- Self-check runs: `{report['self_check_run_count']}`",
+        f"- Self-check events: `{report['self_check_event_count']}`",
         f"- Runs: `{report['run_count']}`",
         f"- Events: `{report['event_count']}`",
         f"- Records: `{report['record_count']}`",

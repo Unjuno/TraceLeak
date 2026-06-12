@@ -24,7 +24,8 @@ def init_worktree(path: Path) -> None:
     (path / "crypto" / "rsa" / "rsa_gen.c").write_text(
         "int RSA_generate_key_ex(void);\n"
         "int ossl_rsa_generate_multi_prime_key(void);\n"
-        "static int rsa_keygen(void);\n",
+        "static int rsa_keygen(void);\n"
+        "int RSA_generate_key_ex(void) { return 1; }\n",
         encoding="utf-8",
     )
     (path / "crypto" / "bn" / "bn_prime.c").write_text(
@@ -33,7 +34,10 @@ def init_worktree(path: Path) -> None:
         "static int probable_prime(void);\n"
         "static int bn_is_prime_int(void);\n"
         "int ossl_bn_check_prime(void);\n"
-        "int ossl_bn_check_generated_prime(void);\n",
+        "int ossl_bn_check_generated_prime(void);\n"
+        "static int probable_prime(void) { return 1; }\n"
+        "static int bn_is_prime_int(void) { return 1; }\n"
+        "int ossl_bn_check_generated_prime(void) { return 1; }\n",
         encoding="utf-8",
     )
     run_git(path, "init")
@@ -76,6 +80,18 @@ def test_build_openssl_patch_plan(tmp_path) -> None:
     }
     assert "TraceLeak OpenSSL Instrumentation Patch Plan" in markdown
     assert "rsa_keygen_entry" in markdown
+
+
+def test_patch_plan_prefers_definition_line_over_declaration(tmp_path) -> None:
+    source_pin_path = make_source_pin(tmp_path)
+
+    plan = build_openssl_patch_plan(source_pin_path=source_pin_path, event_map_path=EVENT_MAP)
+    events = {event["group_id"]: event for event in plan["planned_events"]}
+
+    assert events["rsa_keygen_entry"]["anchor_line"] == 4
+    assert events["prime_candidate_generation"]["anchor_line"] == 7
+    assert events["probable_prime_test"]["anchor_line"] == 8
+    assert events["prime_candidate_result"]["anchor_line"] == 9
 
 
 def test_validate_openssl_patch_plan_rejects_patch_application_allowed(tmp_path) -> None:

@@ -39,8 +39,8 @@ jobs:
       - name: Prepare local upstream repo
         run: |
           mkdir -p external/upstream/crypto/rsa external/upstream/crypto/bn
-          printf 'int RSA_generate_key_ex(void);\nint rsa_builtin_keygen(void);\n' > external/upstream/crypto/rsa/rsa_gen.c
-          printf 'int BN_generate_prime_ex(void);\nint BN_check_prime(void);\nint bn_is_prime_int(void);\n' > external/upstream/crypto/bn/bn_prime.c
+          printf 'int RSA_generate_key_ex(void);\nint ossl_rsa_generate_multi_prime_key(void);\nstatic int rsa_keygen(void);\n' > external/upstream/crypto/rsa/rsa_gen.c
+          printf 'int BN_generate_prime_ex2(void);\nint BN_generate_prime_ex(void);\nstatic int probable_prime(void);\nstatic int bn_is_prime_int(void);\nint ossl_bn_check_prime(void);\nint ossl_bn_check_generated_prime(void);\n' > external/upstream/crypto/bn/bn_prime.c
           git -C external/upstream init
           git -C external/upstream config user.email traceleak@example.invalid
           git -C external/upstream config user.name TraceLeak

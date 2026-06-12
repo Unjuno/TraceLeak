@@ -1,3 +1,5 @@
+# ruff: noqa: I001
+
 import copy
 import json
 from pathlib import Path

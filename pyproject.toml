@@ -60,6 +60,7 @@ traceleak-generate-openssl-pinned-manifest = "scripts.generate_openssl_pinned_ma
 traceleak-inspect-openssl-layout = "scripts.inspect_openssl_layout:main"
 traceleak-plan-openssl-instrumentation = "scripts.plan_openssl_instrumentation:main"
 traceleak-define-openssl-instrumentation-stub = "scripts.define_openssl_instrumentation_stub:main"
+traceleak-review-openssl-event-slots = "scripts.review_openssl_event_slots:main"
 traceleak-prepare-openssl-worktree = "scripts.prepare_openssl_worktree:main"
 traceleak-evaluate-baseline = "scripts.evaluate_baseline:main"
 traceleak-make-report = "scripts.make_report:main"

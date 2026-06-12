@@ -242,10 +242,7 @@ def _reject_disallowed_token(token: str, disallowed_fields: set[str], *, index: 
     segments = set(re.findall(r"[a-z0-9_]+", lowered))
     for field in disallowed_fields:
         lowered_field = field.lower()
-        if len(lowered_field) <= 2:
-            matched = lowered_field in segments
-        else:
-            matched = lowered_field in lowered
+        matched = lowered_field in segments if len(lowered_field) <= 2 else lowered_field in lowered
         if matched:
             raise OpenSSLTraceAcceptanceError(
                 f"sample.records[{index}].token_counts contains disallowed token field: {field}"

@@ -12,8 +12,13 @@ This connects the toy target generator to the model sequence NN pipeline:
 from __future__ import annotations
 
 import argparse
+import json
 import sys
 from pathlib import Path
+
+REPO_ROOT = Path(__file__).resolve().parents[1]
+if str(REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(REPO_ROOT))
 
 from examples.toy_rsa_like.target import make_run, write_jsonl
 from scripts.extract_model_sequence import build_output, extract_model_sequences
@@ -115,8 +120,6 @@ def build_toy_rsa_like_model_sequence_sample(
     ]
 
     output_path.parent.mkdir(parents=True, exist_ok=True)
-    import json
-
     output_path.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     return payload, trace_path
 

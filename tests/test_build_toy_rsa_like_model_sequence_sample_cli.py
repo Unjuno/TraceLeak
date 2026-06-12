@@ -38,10 +38,16 @@ def test_build_toy_rsa_like_model_sequence_sample_cli_writes_trace_and_sample(tm
     assert sample["include_counts"] is True
     assert sample["contains_lab_only_labels"] is True
     assert sample["label_name"] == "toy_accept_attempt_bucket"
+    assert sample["label_proxy_filter"]["enabled"] is True
     assert len(sample["records"]) == 8
     assert len(trace_lines) == 8
     assert all("label" in record for record in sample["records"])
     assert all("token_counts" in record for record in sample["records"])
+    assert not any(
+        "attempt_bucket" in token
+        for record in sample["records"]
+        for token in record["token_counts"]
+    )
 
     comparison = compare_model_sequence_nn_to_baseline(sample, epochs=20, learning_rate=0.8)
     assert comparison["result_type"] == "model_sequence_nn_vs_baseline"

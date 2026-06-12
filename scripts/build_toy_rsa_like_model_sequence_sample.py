@@ -20,6 +20,7 @@ from pathlib import Path
 from typing import Any
 
 from scripts.extract_model_sequence import build_output, extract_model_sequences
+from traceleak.model_sequence_audit import label_proxy_filtered_sample
 
 
 class ToyRsaLikeModelSequenceBuildError(ValueError):
@@ -48,6 +49,11 @@ def parse_args() -> argparse.Namespace:
         action="store_true",
         help="Omit redacted value tokens from model-sequence steps",
     )
+    parser.add_argument(
+        "--keep-label-overlap-tokens",
+        action="store_true",
+        help="Keep redacted value tokens that overlap the selected label key",
+    )
     return parser.parse_args()
 
 
@@ -60,6 +66,7 @@ def main() -> int:
             runs=args.runs,
             label_key=args.label_key,
             include_redacted_values=not args.no_redacted_values,
+            filter_label_overlap_tokens=not args.keep_label_overlap_tokens,
         )
     except ToyRsaLikeModelSequenceBuildError as exc:
         print(f"error: {exc}", file=sys.stderr)
@@ -82,6 +89,7 @@ def build_toy_rsa_like_model_sequence_sample(
     runs: int = 16,
     label_key: str = "toy_accept_attempt_bucket",
     include_redacted_values: bool = True,
+    filter_label_overlap_tokens: bool = True,
 ) -> tuple[dict, Path]:
     """Generate toy traces and collapse them into a labeled model-sequence sample."""
 
@@ -117,6 +125,8 @@ def build_toy_rsa_like_model_sequence_sample(
         "Labels are lab-only buckets copied from labels_lab_only for local evaluation.",
         "This remains a public-safe toy workflow, not real RSA or OpenSSL data.",
     ]
+    if filter_label_overlap_tokens:
+        payload = label_proxy_filtered_sample(payload)
 
     output_path.parent.mkdir(parents=True, exist_ok=True)
     output_path.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n", encoding="utf-8")

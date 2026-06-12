@@ -80,14 +80,17 @@ def test_openssl_instrumentation_dry_run_chain_summarizes_all_stages(tmp_path: P
     assert report["stub_status"] == "stub_spec_ready"
     assert report["source_edit_status"] == "source_edit_proposal_ready"
     assert report["event_emitter_status"] == "emitter_artifact_ready_not_applied"
+    assert report["emitter_self_check_status"] == "emitter_self_check_passed"
     assert report["event_stream_status"] == "accepted_redacted_openssl_event_stream"
     assert report["sample_acceptance_status"] == "accepted_redacted_model_sequence_sample"
     assert report["emitter_file_count"] == 2
+    assert report["self_check_run_count"] == 4
+    assert report["self_check_event_count"] == 20
     assert report["run_count"] == 4
     assert report["event_count"] == 12
     assert report["record_count"] == 4
     assert "TraceLeak OpenSSL Instrumentation Dry-Run Chain" in markdown
-    assert "Event emitter artifact: `emitter_artifact_ready_not_applied`" in markdown
+    assert "Event emitter self-check: `emitter_self_check_passed`" in markdown
     assert "Execution allowed: `false`" in markdown
 
 
@@ -108,6 +111,8 @@ def test_write_openssl_instrumentation_chain_outputs(tmp_path: Path) -> None:
     assert paths["event_stream_md"].exists()
     assert paths["model_sequence_sample_json"].exists()
     assert paths["sample_acceptance_md"].exists()
+    assert paths["event_emitter_self_check_md"].exists()
+    assert paths["event_emitter_self_check_event_stream_jsonl"].exists()
     assert (paths["event_emitter_dir"] / "traceleak_openssl_event.h").exists()
     assert (paths["event_emitter_dir"] / "traceleak_openssl_event.c").exists()
     assert "dry_run_chain_ready_not_executed" in paths["summary_json"].read_text(encoding="utf-8")
@@ -136,4 +141,5 @@ def test_run_openssl_instrumentation_chain_cli_writes_outputs(tmp_path: Path) ->
 
     assert (out_dir / "openssl_instrumentation_chain_summary.md").exists()
     assert (out_dir / "openssl_event_emitter_artifact.md").exists()
+    assert (out_dir / "openssl_event_emitter_self_check_summary.md").exists()
     assert (out_dir / "openssl_model_sequence_sample.json").exists()

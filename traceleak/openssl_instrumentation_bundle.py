@@ -14,7 +14,6 @@ from typing import Any
 
 from traceleak.openssl_event_emitter_artifact import validate_openssl_event_emitter_artifact
 from traceleak.openssl_event_emitter_self_check import run_openssl_event_emitter_self_check
-from traceleak.openssl_instrumentation_chain import openssl_instrumentation_chain_markdown
 from traceleak.openssl_instrumentation_stub import validate_openssl_instrumentation_stub
 from traceleak.openssl_source_edit_proposal import validate_openssl_source_edit_proposal
 from traceleak.openssl_trace_acceptance import validate_openssl_trace_sample_acceptance
@@ -224,7 +223,11 @@ def _load_json(path: Path) -> dict[str, Any]:
 
 
 def _nonempty_lines(path: Path) -> list[tuple[int, str]]:
-    return [(index, line.strip()) for index, line in enumerate(path.read_text(encoding="utf-8").splitlines(), start=1) if line.strip()]
+    return [
+        (index, line.strip())
+        for index, line in enumerate(path.read_text(encoding="utf-8").splitlines(), start=1)
+        if line.strip()
+    ]
 
 
 def _json_line(line: str, *, stream_path: Path, line_number: int) -> dict[str, Any]:

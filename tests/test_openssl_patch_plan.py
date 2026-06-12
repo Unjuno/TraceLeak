@@ -31,8 +31,10 @@ def init_worktree(path: Path) -> None:
     (path / "crypto" / "bn" / "bn_prime.c").write_text(
         "int BN_generate_prime_ex2(void);\n"
         "int BN_generate_prime_ex(void);\n"
-        "static int probable_prime(void);\n"
-        "static int bn_is_prime_int(void);\n"
+        "static int probable_prime(void *rnd,\n"
+        "                              int bits);\n"
+        "static int bn_is_prime_int(void *w,\n"
+        "                           int checks);\n"
         "int ossl_bn_check_prime(void);\n"
         "int ossl_bn_check_generated_prime(void);\n"
         "static int probable_prime(void) { return 1; }\n"
@@ -89,9 +91,9 @@ def test_patch_plan_prefers_definition_line_over_declaration(tmp_path) -> None:
     events = {event["group_id"]: event for event in plan["planned_events"]}
 
     assert events["rsa_keygen_entry"]["anchor_line"] == 4
-    assert events["prime_candidate_generation"]["anchor_line"] == 7
-    assert events["probable_prime_test"]["anchor_line"] == 8
-    assert events["prime_candidate_result"]["anchor_line"] == 9
+    assert events["prime_candidate_generation"]["anchor_line"] == 9
+    assert events["probable_prime_test"]["anchor_line"] == 10
+    assert events["prime_candidate_result"]["anchor_line"] == 11
 
 
 def test_validate_openssl_patch_plan_rejects_patch_application_allowed(tmp_path) -> None:

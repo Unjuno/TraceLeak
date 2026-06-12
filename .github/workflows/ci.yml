@@ -53,6 +53,11 @@ jobs:
           python scripts/validate_model_result.py reports/local/model_sequence_nn_hard_result.json
           python scripts/compare_model_sequence_nn_to_baseline.py --in examples/synthetic/model_sequence_nn_hard_sample.json --out reports/local/model_sequence_nn_hard_comparison.json --epochs 80 --learning-rate 0.8
           python scripts/compare_model_sequence_nn_to_baseline.py --in examples/synthetic/model_sequence_nn_negative_control_sample.json --out reports/local/model_sequence_nn_control_comparison.json --epochs 80 --learning-rate 0.8
+          python scripts/compare_model_sequence_nn_to_baseline.py --in examples/synthetic/model_sequence_nn_count_pattern_sample.json --out reports/local/model_sequence_nn_count_pattern_comparison.json --epochs 80 --learning-rate 0.8
+          python scripts/model_sequence_comparison_to_report.py --in reports/local/model_sequence_nn_count_pattern_comparison.json --out reports/local/model_sequence_nn_count_pattern_comparison.md
+          python scripts/compare_model_sequence_nn_to_baseline.py --in examples/synthetic/model_sequence_nn_control_seed_001.json --out reports/local/model_sequence_nn_control_seed_001_comparison.json --epochs 80 --learning-rate 0.8
+          python scripts/compare_model_sequence_nn_to_baseline.py --in examples/synthetic/model_sequence_nn_control_seed_002.json --out reports/local/model_sequence_nn_control_seed_002_comparison.json --epochs 80 --learning-rate 0.8
+          python scripts/compare_model_sequence_nn_to_baseline.py --in examples/synthetic/model_sequence_nn_control_seed_003.json --out reports/local/model_sequence_nn_control_seed_003_comparison.json --epochs 80 --learning-rate 0.8
           python scripts/validate_model_result.py examples/synthetic/model_result_sample.json
           python scripts/model_result_to_report.py --in examples/synthetic/model_result_sample.json --out reports/local/model_report.md
           python scripts/validate_patch_verification.py examples/synthetic/patch_verification_sample.json

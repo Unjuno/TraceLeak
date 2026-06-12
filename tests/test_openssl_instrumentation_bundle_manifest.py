@@ -112,12 +112,13 @@ def test_openssl_instrumentation_bundle_manifest_detects_tamper(tmp_path: Path) 
     bundle_dir = make_bundle(tmp_path)
     contract = load_openssl_trace_contract(CONTRACT)
     manifest = build_openssl_instrumentation_bundle_manifest(contract=contract, bundle_dir=bundle_dir)
-    sample_path = bundle_dir / "openssl_model_sequence_sample.json"
-    sample = json.loads(sample_path.read_text(encoding="utf-8"))
-    sample["records"][0]["token_counts"]["tamper_marker"] = 1
-    sample_path.write_text(json.dumps(sample, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    md_path = bundle_dir / "openssl_trace_sample_acceptance_report.md"
+    md_path.write_text(md_path.read_text(encoding="utf-8") + "\n", encoding="utf-8")
 
-    with pytest.raises(OpenSSLInstrumentationBundleManifestError, match="bundle_sha256|files"):
+    with pytest.raises(
+        OpenSSLInstrumentationBundleManifestError,
+        match="total_size_bytes|bundle_sha256|files",
+    ):
         validate_openssl_instrumentation_bundle_manifest(
             contract=contract,
             bundle_dir=bundle_dir,

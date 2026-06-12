@@ -61,6 +61,7 @@
   },
   "planned_artifacts": [
     "reports/local/openssl_rsa_keygen_traces.jsonl",
+    "reports/local/openssl_rsa_keygen_event_map.md",
     "reports/local/openssl_rsa_keygen_model_sequence.json",
     "reports/local/openssl_rsa_keygen_label_audit.md",
     "reports/local/openssl_rsa_keygen_nn_comparison.json",
@@ -78,6 +79,11 @@
       "name": "pin_source",
       "status": "preflight_only",
       "command_hint": "record exact OpenSSL commit SHA before running instrumentation"
+    },
+    {
+      "name": "validate_event_map",
+      "status": "preflight_only",
+      "command_hint": "python scripts/validate_openssl_event_map.py examples/openssl_preflight/openssl_rsa_keygen_event_map_sample.json"
     },
     {
       "name": "collect_redacted_traces",
@@ -112,6 +118,7 @@
   ],
   "gates": [
     "source_ref_pinned",
+    "event_map_validation_planned",
     "redacted_view_only",
     "no_raw_secret_fields",
     "lab_only_labels_only",

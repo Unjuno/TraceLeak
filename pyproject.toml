@@ -57,6 +57,7 @@ traceleak-openssl-event-map-to-report = "scripts.openssl_event_map_to_report:mai
 traceleak-validate-openssl-source-pin = "scripts.validate_openssl_source_pin:main"
 traceleak-openssl-layout-to-report = "scripts.openssl_layout_to_report:main"
 traceleak-generate-openssl-pinned-manifest = "scripts.generate_openssl_pinned_manifest:main"
+traceleak-prepare-openssl-worktree = "scripts.prepare_openssl_worktree:main"
 traceleak-evaluate-baseline = "scripts.evaluate_baseline:main"
 traceleak-make-report = "scripts.make_report:main"
 traceleak-validate-config = "scripts.validate_config:main"

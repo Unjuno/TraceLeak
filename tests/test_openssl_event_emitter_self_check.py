@@ -125,3 +125,28 @@ def test_run_openssl_event_emitter_self_check_cli_writes_outputs(tmp_path: Path)
 
     assert (out_dir / "openssl_event_emitter_self_check_summary.md").exists()
     assert (out_dir / "openssl_event_emitter_self_check_events.jsonl").exists()
+
+
+def test_run_openssl_event_emitter_self_check_cli_reports_missing_artifact(
+    tmp_path: Path, capsys
+) -> None:
+    missing = tmp_path / "missing-emitter.json"
+    old_parse = run_openssl_event_emitter_self_check.parse_args
+    run_openssl_event_emitter_self_check.parse_args = lambda: type(
+        "Args",
+        (),
+        {
+            "contract": CONTRACT,
+            "emitter_artifact": missing,
+            "out_dir": tmp_path / "self-check",
+            "run_count": 2,
+        },
+    )()
+    try:
+        assert run_openssl_event_emitter_self_check.main() == 1
+    finally:
+        run_openssl_event_emitter_self_check.parse_args = old_parse
+
+    err = capsys.readouterr().err
+    assert "event emitter artifact not found" in err
+    assert "run_openssl_instrumentation_chain.py" in err

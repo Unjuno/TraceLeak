@@ -27,6 +27,7 @@ REQUIRED_CONTROLS = {
 }
 REQUIRED_GATES = {
     "source_ref_pinned",
+    "event_map_validation_planned",
     "redacted_view_only",
     "no_raw_secret_fields",
     "lab_only_labels_only",

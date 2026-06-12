@@ -7,6 +7,7 @@ occurrence lines. It does not build, patch, or execute OpenSSL.
 from __future__ import annotations
 
 import json
+import re
 from pathlib import Path
 from typing import Any
 
@@ -62,16 +63,17 @@ def layout_inspection_markdown(report: dict[str, Any]) -> str:
         "",
         "## Symbol Anchors",
         "",
-        "| Path | Symbol | Lines | Event groups |",
-        "|---|---|---:|---|",
+        "| Path | Symbol | Anchor line | All lines | Event groups |",
+        "|---|---|---:|---:|---|",
     ]
     for item in report["layout"]:
         for symbol in item["symbols"]:
             line_numbers = ", ".join(str(line) for line in symbol["line_numbers"])
             lines.append(
-                "| `{path}` | `{symbol}` | `{lines_}` | `{groups}` |".format(
+                "| `{path}` | `{symbol}` | `{anchor}` | `{lines_}` | `{groups}` |".format(
                     path=item["target_path"],
                     symbol=symbol["name"],
+                    anchor=symbol["anchor_line"],
                     lines_=line_numbers,
                     groups=", ".join(item["related_event_groups"]),
                 )
@@ -111,11 +113,15 @@ def _inspect_layout_item(*, worktree: Path, item: dict[str, Any]) -> dict[str, A
         line_numbers = [index + 1 for index, line in enumerate(lines) if symbol in line]
         if not line_numbers:
             raise OpenSSLLayoutInspectionError(f"symbol not found in {target_path}: {symbol}")
+        definition_line = _definition_line(lines=lines, symbol=symbol)
+        anchor_line = definition_line or line_numbers[0]
         symbols.append(
             {
                 "name": symbol,
                 "line_numbers": line_numbers,
                 "first_line": line_numbers[0],
+                "definition_line": definition_line,
+                "anchor_line": anchor_line,
             }
         )
     return {
@@ -124,3 +130,17 @@ def _inspect_layout_item(*, worktree: Path, item: dict[str, Any]) -> dict[str, A
         "line_binding_policy": item["line_binding_policy"],
         "symbols": symbols,
     }
+
+
+def _definition_line(*, lines: list[str], symbol: str) -> int | None:
+    pattern = re.compile(rf"\b{re.escape(symbol)}\s*\(")
+    for index, line in enumerate(lines):
+        stripped = line.strip()
+        if not pattern.search(stripped):
+            continue
+        if stripped.endswith(";"):
+            continue
+        if stripped.startswith("#"):
+            continue
+        return index + 1
+    return None

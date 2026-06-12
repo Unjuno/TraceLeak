@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import json
 import math
+import re
 from pathlib import Path
 from typing import Any
 
@@ -238,8 +239,14 @@ def _validate_token_count_channel(token: str, allowed_channels: set[str], *, ind
 
 def _reject_disallowed_token(token: str, disallowed_fields: set[str], *, index: int) -> None:
     lowered = token.lower()
+    segments = set(re.findall(r"[a-z0-9_]+", lowered))
     for field in disallowed_fields:
-        if field.lower() in lowered:
+        lowered_field = field.lower()
+        if len(lowered_field) <= 2:
+            matched = lowered_field in segments
+        else:
+            matched = lowered_field in lowered
+        if matched:
             raise OpenSSLTraceAcceptanceError(
                 f"sample.records[{index}].token_counts contains disallowed token field: {field}"
             )

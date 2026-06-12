@@ -74,6 +74,7 @@
       "forbidden_values": [
         "prime_candidate",
         "candidate_value",
+        "private_key",
         "raw_bignum",
         "seed",
         "rng_state"
@@ -103,6 +104,7 @@
       "forbidden_values": [
         "prime_candidate",
         "candidate_value",
+        "private_key",
         "raw_bignum"
       ],
       "notes": [
@@ -131,6 +133,7 @@
         "prime_candidate",
         "candidate_value",
         "witness_value",
+        "private_key",
         "raw_bignum"
       ],
       "notes": [
@@ -158,6 +161,7 @@
       "forbidden_values": [
         "prime_candidate",
         "candidate_value",
+        "private_key",
         "raw_bignum"
       ],
       "notes": [

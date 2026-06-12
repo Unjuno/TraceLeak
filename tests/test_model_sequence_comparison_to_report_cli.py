@@ -5,6 +5,8 @@ import subprocess
 import sys
 
 
+EXPECTED_TOKEN = "event_token=loop:candidate_balance:synthetic_keygen:refine_round"
+
 COMPARISON = {
     "result_type": "model_sequence_nn_vs_baseline",
     "target": "synthetic-count-pattern",
@@ -22,7 +24,7 @@ COMPARISON = {
         "DeltaH": 1.0,
         "top_attributions": [
             {
-                "group_id": "event_token=loop:candidate_balance:synthetic_keygen:refine_round",
+                "group_id": EXPECTED_TOKEN,
                 "group_type": "model_sequence_token",
                 "score": 0.75,
                 "evidence": ["sparse_softmax_weight_separation"],
@@ -74,6 +76,7 @@ def test_model_sequence_comparison_to_report_cli_writes_markdown(tmp_path) -> No
     assert "Top NN Attributions" in markdown
     assert "neural_better" in markdown
     assert "controls_missing" in markdown
+    assert "expected_attributions_not_declared" in markdown
 
 
 def test_model_sequence_comparison_to_report_cli_writes_json(tmp_path) -> None:
@@ -91,6 +94,8 @@ def test_model_sequence_comparison_to_report_cli_writes_json(tmp_path) -> None:
             str(output_path),
             "--format",
             "json",
+            "--expected-attribution-token",
+            EXPECTED_TOKEN,
         ],
         check=False,
         capture_output=True,
@@ -102,6 +107,8 @@ def test_model_sequence_comparison_to_report_cli_writes_json(tmp_path) -> None:
     assert payload["report_type"] == "model_sequence_nn_comparison_report"
     assert payload["delta_accuracy"] == 0.75
     assert payload["evidence_status"] == "controls_missing"
+    assert payload["attribution_status"] == "expected_attribution_observed"
+    assert payload["attribution_matches"] == [EXPECTED_TOKEN]
     assert payload["top_attributions"]
 
 
@@ -120,6 +127,8 @@ def test_model_sequence_comparison_to_report_cli_accepts_controls(tmp_path) -> N
             str(input_path),
             "--control",
             str(control_path),
+            "--expected-attribution-token",
+            EXPECTED_TOKEN,
             "--out",
             str(output_path),
         ],
@@ -131,8 +140,11 @@ def test_model_sequence_comparison_to_report_cli_accepts_controls(tmp_path) -> N
     assert result.returncode == 0, result.stderr
     markdown = output_path.read_text(encoding="utf-8")
     assert "Control Summary" in markdown
+    assert "Expected Attribution Tokens" in markdown
+    assert "Attribution Matches" in markdown
     assert "control_pass" in markdown
     assert "candidate_signal_control_checked" in markdown
+    assert "expected_attribution_observed" in markdown
 
 
 def test_model_sequence_comparison_to_report_cli_rejects_missing_input(tmp_path) -> None:

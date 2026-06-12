@@ -1,3 +1,3 @@
-# Marker
+# Review Note
 
-Review-only note.
+Review-only plan marker.

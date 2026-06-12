@@ -89,6 +89,7 @@ def test_openssl_instrumentation_dry_run_chain_summarizes_all_stages(tmp_path: P
     assert report["run_count"] == 4
     assert report["event_count"] == 12
     assert report["record_count"] == 4
+    assert report["artifacts"]["trace_contract"]["contract_id"] == "openssl-rsa-keygen-trace-contract-sample"
     assert "TraceLeak OpenSSL Instrumentation Dry-Run Chain" in markdown
     assert "Event emitter self-check: `emitter_self_check_passed`" in markdown
     assert "Execution allowed: `false`" in markdown
@@ -113,10 +114,13 @@ def test_write_openssl_instrumentation_chain_outputs(tmp_path: Path) -> None:
     assert paths["sample_acceptance_md"].exists()
     assert paths["event_emitter_self_check_md"].exists()
     assert paths["event_emitter_self_check_event_stream_jsonl"].exists()
+    assert paths["bundle_manifest_json"].exists()
+    assert paths["bundle_manifest_md"].exists()
     assert (paths["event_emitter_dir"] / "traceleak_openssl_event.h").exists()
     assert (paths["event_emitter_dir"] / "traceleak_openssl_event.c").exists()
     assert "dry_run_chain_ready_not_executed" in paths["summary_json"].read_text(encoding="utf-8")
     assert "traceleak.model_sequence.v1" in paths["model_sequence_sample_json"].read_text(encoding="utf-8")
+    assert "bundle_manifest_ready" in paths["bundle_manifest_json"].read_text(encoding="utf-8")
 
 
 def test_run_openssl_instrumentation_chain_cli_writes_outputs(tmp_path: Path) -> None:
@@ -143,3 +147,4 @@ def test_run_openssl_instrumentation_chain_cli_writes_outputs(tmp_path: Path) ->
     assert (out_dir / "openssl_event_emitter_artifact.md").exists()
     assert (out_dir / "openssl_event_emitter_self_check_summary.md").exists()
     assert (out_dir / "openssl_model_sequence_sample.json").exists()
+    assert (out_dir / "openssl_instrumentation_bundle_manifest.json").exists()

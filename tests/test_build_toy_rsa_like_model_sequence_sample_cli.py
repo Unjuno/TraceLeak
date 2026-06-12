@@ -45,7 +45,7 @@ def test_build_toy_rsa_like_model_sequence_sample_cli_writes_trace_and_sample(tm
 
     comparison = compare_model_sequence_nn_to_baseline(sample, epochs=20, learning_rate=0.8)
     assert comparison["result_type"] == "model_sequence_nn_vs_baseline"
-    assert comparison["target"] == "toy-rsa-like"
+    assert comparison["target"] == "toy-rsa-like-trace-derived"
 
 
 def test_build_toy_rsa_like_model_sequence_sample_cli_can_omit_redacted_values(tmp_path) -> None:

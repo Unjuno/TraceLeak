@@ -14,11 +14,18 @@ def init_worktree(path: Path) -> None:
     (path / "crypto" / "rsa").mkdir(parents=True)
     (path / "crypto" / "bn").mkdir(parents=True)
     (path / "crypto" / "rsa" / "rsa_gen.c").write_text(
-        "int RSA_generate_key_ex(void);\nint rsa_builtin_keygen(void);\n",
+        "int RSA_generate_key_ex(void);\n"
+        "int ossl_rsa_generate_multi_prime_key(void);\n"
+        "static int rsa_keygen(void);\n",
         encoding="utf-8",
     )
     (path / "crypto" / "bn" / "bn_prime.c").write_text(
-        "int BN_generate_prime_ex(void);\nint BN_check_prime(void);\nint bn_is_prime_int(void);\n",
+        "int BN_generate_prime_ex2(void);\n"
+        "int BN_generate_prime_ex(void);\n"
+        "static int probable_prime(void);\n"
+        "static int bn_is_prime_int(void);\n"
+        "int ossl_bn_check_prime(void);\n"
+        "int ossl_bn_check_generated_prime(void);\n",
         encoding="utf-8",
     )
     run_git(path, "init")
@@ -85,3 +92,22 @@ def test_inspect_openssl_layout_cli_rejects_template(tmp_path) -> None:
 
     assert result.returncode != 0
     assert "pinned manifest" in result.stderr
+
+
+def test_inspect_openssl_layout_cli_rejects_missing_manifest(tmp_path) -> None:
+    result = subprocess.run(
+        [
+            sys.executable,
+            "scripts/inspect_openssl_layout.py",
+            "--in",
+            str(tmp_path / "missing.json"),
+            "--out",
+            str(tmp_path / "inspection.md"),
+        ],
+        check=False,
+        capture_output=True,
+        text=True,
+    )
+
+    assert result.returncode != 0
+    assert "source pin manifest not found" in result.stderr

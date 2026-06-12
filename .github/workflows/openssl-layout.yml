@@ -60,3 +60,6 @@ jobs:
 
       - name: Inspect layout
         run: python scripts/inspect_openssl_layout.py --in reports/local/openssl_source_pin.json --out reports/local/openssl_layout_inspection.md
+
+      - name: Generate patch plan
+        run: python scripts/plan_openssl_instrumentation.py --source-pin reports/local/openssl_source_pin.json --event-map examples/openssl_preflight/openssl_rsa_keygen_event_map_sample.json --out reports/local/openssl_patch_plan.md

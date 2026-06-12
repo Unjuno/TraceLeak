@@ -1,8 +1,4 @@
-"""Inspect pinned OpenSSL source-layout manifests.
-
-This module reads source files referenced by a pinned manifest and records symbol
-occurrence lines. It does not build, patch, or execute OpenSSL.
-"""
+"""Inspect pinned OpenSSL source-layout manifests."""
 
 from __future__ import annotations
 
@@ -43,8 +39,8 @@ def inspect_openssl_layout_manifest(path: str | Path) -> dict[str, Any]:
         "dirty": bool(source.get("dirty")),
         "layout": inspected_layout,
         "notes": [
-            "Line numbers are inspection anchors, not instrumentation patches.",
-            "Patch planning must re-check these anchors against the same pinned commit.",
+            "Line numbers are inspection anchors, not source changes.",
+            "Planning must re-check these anchors against the same pinned commit.",
         ],
     }
 
@@ -136,11 +132,24 @@ def _definition_line(*, lines: list[str], symbol: str) -> int | None:
     pattern = re.compile(rf"\b{re.escape(symbol)}\s*\(")
     for index, line in enumerate(lines):
         stripped = line.strip()
-        if not pattern.search(stripped):
+        if not pattern.search(stripped) or stripped.startswith("#"):
             continue
-        if stripped.endswith(";"):
-            continue
+        if _signature_is_definition(lines=lines, start=index):
+            return index + 1
+    return None
+
+
+def _signature_is_definition(*, lines: list[str], start: int, max_scan_lines: int = 20) -> bool:
+    seen = ""
+    for line in lines[start : start + max_scan_lines]:
+        stripped = line.strip()
         if stripped.startswith("#"):
             continue
-        return index + 1
-    return None
+        seen += " " + stripped
+        semicolon_index = seen.find(";")
+        brace_index = seen.find("{")
+        if brace_index != -1 and (semicolon_index == -1 or brace_index < semicolon_index):
+            return True
+        if semicolon_index != -1 and (brace_index == -1 or semicolon_index < brace_index):
+            return False
+    return False

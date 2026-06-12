@@ -29,6 +29,13 @@ def parse_args() -> argparse.Namespace:
 def load_emitter_artifact(path: Path) -> dict:
     try:
         artifact = json.loads(path.read_text(encoding="utf-8"))
+    except FileNotFoundError as exc:
+        raise OpenSSLEventEmitterArtifactError(
+            f"event emitter artifact not found: {path}. Run scripts/run_openssl_instrumentation_chain.py "
+            "or scripts/build_openssl_event_emitter_artifact.py first."
+        ) from exc
+    except OSError as exc:
+        raise OpenSSLEventEmitterArtifactError(f"cannot read event emitter artifact {path}: {exc}") from exc
     except json.JSONDecodeError as exc:
         raise OpenSSLEventEmitterArtifactError(f"invalid JSON in {path}: {exc}") from exc
     if not isinstance(artifact, dict):

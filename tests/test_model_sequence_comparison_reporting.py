@@ -5,8 +5,10 @@ from pathlib import Path
 
 from traceleak.model_sequence_comparison import compare_model_sequence_nn_to_baseline
 from traceleak.model_sequence_comparison_reporting import (
+    attribution_status,
     control_summary_dict,
     evidence_status,
+    expected_attribution_matches,
     model_sequence_comparison_report_dict,
     model_sequence_comparison_report_markdown,
 )
@@ -16,6 +18,8 @@ RATIO_TOKENS = {
     "event_token=loop:candidate_balance:synthetic_keygen:refine_round",
     "event_token=loop:candidate_balance:synthetic_keygen:accept_round",
 }
+EXPECTED_TOKEN = "event_token=loop:candidate_balance:synthetic_keygen:refine_round"
+MISSING_EXPECTED_TOKEN = "event_token=branch:candidate_balance:synthetic_keygen:missing_branch"
 
 
 def comparison_result() -> dict:
@@ -36,7 +40,7 @@ def comparison_result() -> dict:
             "DeltaH": 1.0,
             "top_attributions": [
                 {
-                    "group_id": "event_token=loop:candidate_balance:synthetic_keygen:refine_round",
+                    "group_id": EXPECTED_TOKEN,
                     "group_type": "model_sequence_token",
                     "score": 0.75,
                     "evidence": ["sparse_softmax_weight_separation"],
@@ -68,6 +72,7 @@ def test_model_sequence_comparison_report_dict() -> None:
     assert report["baseline_accuracy"] == 0.25
     assert report["neural_accuracy"] == 1.0
     assert report["evidence_status"] == "controls_missing"
+    assert report["attribution_status"] == "expected_attributions_not_declared"
     assert report["control_warning"] == "not_a_control_result"
     assert report["top_attributions"]
 
@@ -77,12 +82,18 @@ def test_model_sequence_comparison_report_dict_with_controls() -> None:
         control_result("synthetic-count-pattern-control-001", 0.0),
         control_result("synthetic-count-pattern-control-002", 0.25),
     ]
-    report = model_sequence_comparison_report_dict(comparison_result(), controls=controls)
+    report = model_sequence_comparison_report_dict(
+        comparison_result(),
+        controls=controls,
+        expected_attribution_tokens=[EXPECTED_TOKEN],
+    )
 
     assert report["control_summary"]["control_count"] == 2
     assert report["control_summary"]["max_neural_accuracy"] == 0.25
     assert report["control_summary"]["status"] == "control_pass"
     assert report["evidence_status"] == "candidate_signal_control_checked"
+    assert report["attribution_status"] == "expected_attribution_observed"
+    assert report["attribution_matches"] == [EXPECTED_TOKEN]
 
 
 def test_control_summary_rejects_high_control_accuracy() -> None:
@@ -104,10 +115,24 @@ def test_evidence_status_requires_neural_gain_and_controls() -> None:
     )
 
 
+def test_attribution_status_requires_expected_token_match() -> None:
+    top_attributions = comparison_result()["neural"]["top_attributions"]
+
+    assert attribution_status(top_attributions, []) == "expected_attributions_not_declared"
+    assert attribution_status([], [EXPECTED_TOKEN]) == "attributions_missing"
+    assert attribution_status(top_attributions, [EXPECTED_TOKEN]) == "expected_attribution_observed"
+    assert (
+        attribution_status(top_attributions, [MISSING_EXPECTED_TOKEN])
+        == "expected_attribution_missing"
+    )
+    assert expected_attribution_matches(top_attributions, [EXPECTED_TOKEN]) == [EXPECTED_TOKEN]
+
+
 def test_model_sequence_comparison_report_markdown() -> None:
     report = model_sequence_comparison_report_dict(
         comparison_result(),
         controls=[control_result("synthetic-count-pattern-control-001", 0.0)],
+        expected_attribution_tokens=[EXPECTED_TOKEN],
     )
     markdown = model_sequence_comparison_report_markdown(report)
 
@@ -116,8 +141,11 @@ def test_model_sequence_comparison_report_markdown() -> None:
     assert "Sparse-softmax NN" in markdown
     assert "Top NN Attributions" in markdown
     assert "Control Summary" in markdown
+    assert "Expected Attribution Tokens" in markdown
+    assert "Attribution Matches" in markdown
     assert "neural_better" in markdown
     assert "candidate_signal_control_checked" in markdown
+    assert "expected_attribution_observed" in markdown
 
 
 def test_count_pattern_sample_favors_count_learning_over_jaccard_presence() -> None:

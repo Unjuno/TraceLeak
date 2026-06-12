@@ -14,6 +14,11 @@ from typing import Any
 from traceleak.model_features import ModelFeatureError, sequence_token_counts, trace_to_model_sequence
 from traceleak.openssl_trace_acceptance import validate_openssl_trace_sample_acceptance
 from traceleak.openssl_trace_contract import MODEL_SEQUENCE_FORMAT, OpenSSLTraceContractError, validate_openssl_trace_contract
+from traceleak.openssl_trace_event_stream import (
+    OpenSSLTraceEventStreamError,
+    load_openssl_redacted_event_stream,
+    validate_openssl_redacted_event_stream,
+)
 from traceleak.schema import TraceSchemaError, validate_run
 
 
@@ -24,29 +29,10 @@ class OpenSSLTraceSampleBuilderError(ValueError):
 def load_redacted_event_runs(path: str | Path) -> list[dict[str, Any]]:
     """Load redacted TraceLeak run dictionaries from a JSONL file."""
 
-    input_path = Path(path)
-    if not input_path.exists():
-        raise OpenSSLTraceSampleBuilderError(f"redacted event stream not found: {input_path}")
-    runs: list[dict[str, Any]] = []
-    with input_path.open("r", encoding="utf-8") as handle:
-        for line_number, line in enumerate(handle, start=1):
-            stripped = line.strip()
-            if not stripped:
-                continue
-            try:
-                run = json.loads(stripped)
-            except json.JSONDecodeError as exc:
-                raise OpenSSLTraceSampleBuilderError(
-                    f"{input_path}:{line_number}: invalid JSON: {exc}"
-                ) from exc
-            if not isinstance(run, dict):
-                raise OpenSSLTraceSampleBuilderError(
-                    f"{input_path}:{line_number}: each JSONL record must be an object"
-                )
-            runs.append(run)
-    if not runs:
-        raise OpenSSLTraceSampleBuilderError(f"no redacted event runs found in {input_path}")
-    return runs
+    try:
+        return load_openssl_redacted_event_stream(path)
+    except OpenSSLTraceEventStreamError as exc:
+        raise OpenSSLTraceSampleBuilderError(str(exc)) from exc
 
 
 def build_openssl_model_sequence_sample(
@@ -60,7 +46,8 @@ def build_openssl_model_sequence_sample(
 
     try:
         validate_openssl_trace_contract(contract)
-    except OpenSSLTraceContractError as exc:
+        validate_openssl_redacted_event_stream(contract, runs)
+    except (OpenSSLTraceContractError, OpenSSLTraceEventStreamError) as exc:
         raise OpenSSLTraceSampleBuilderError(str(exc)) from exc
     if not runs:
         raise OpenSSLTraceSampleBuilderError("at least one run is required")
@@ -124,12 +111,6 @@ def _build_record(
     _require_equal(run.get("target"), contract["target"], f"runs[{index}].target")
     _require_equal(run.get("target_version"), contract["target_version"], f"runs[{index}].target_version")
     _require_equal(run.get("view"), "redacted", f"runs[{index}].view")
-    metadata = _require_object(run.get("metadata", {}), f"runs[{index}].metadata")
-    _require_equal(metadata.get("source_pin"), contract["source_pin"], f"runs[{index}].metadata.source_pin")
-    _require_equal(metadata.get("build_id"), contract["build_id"], f"runs[{index}].metadata.build_id")
-    _require_equal(metadata.get("trace_collection_mode"), "redacted", f"runs[{index}].metadata.trace_collection_mode")
-    _require_equal(metadata.get("raw_secret_captured"), False, f"runs[{index}].metadata.raw_secret_captured")
-    _require_equal(metadata.get("public_safe"), True, f"runs[{index}].metadata.public_safe")
     try:
         sequence = trace_to_model_sequence(run, allow_raw=False, include_redacted_values=False)
     except (TraceSchemaError, ModelFeatureError) as exc:
@@ -158,12 +139,6 @@ def _label_from_run(run: dict[str, Any], label_key: str) -> str:
     if label_key not in labels:
         raise OpenSSLTraceSampleBuilderError(f"run {run['run_id']!r} is missing labels_lab_only.{label_key}")
     return str(labels[label_key])
-
-
-def _require_object(value: Any, name: str) -> dict[str, Any]:
-    if not isinstance(value, dict):
-        raise OpenSSLTraceSampleBuilderError(f"{name} must be an object")
-    return value
 
 
 def _require_equal(value: Any, expected: Any, name: str) -> None:

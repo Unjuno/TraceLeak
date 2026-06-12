@@ -1,0 +1,184 @@
+{
+  "format": "traceleak.model_sequence.v1",
+  "input": "synthetic-hard-model-sequence",
+  "run_count": 8,
+  "public_safe": true,
+  "include_counts": true,
+  "include_redacted_values": false,
+  "label_name": "secret_bucket",
+  "contains_lab_only_labels": true,
+  "target": "synthetic-leak-hard",
+  "view": "redacted",
+  "notes": [
+    "Harder public-safe sample for model sequence neural checks.",
+    "Labels are not represented by redacted value bucket tokens."
+  ],
+  "records": [
+    {
+      "run_id": "hard_seq_000001",
+      "target": "synthetic-leak-hard",
+      "target_version": "v1",
+      "view": "redacted",
+      "label": "1",
+      "token_counts": {
+        "event_type=phase": 1.0,
+        "event_type=branch": 2.0,
+        "event_type=loop": 1.0,
+        "phase=keygen_start": 1.0,
+        "phase=shared_screening": 2.0,
+        "phase=candidate_refine": 1.0,
+        "context_token=shared_screening:synthetic_keygen": 2.0,
+        "event_token=branch:shared_screening:synthetic_keygen:trial_division": 1.0,
+        "event_token=branch:candidate_refine:synthetic_keygen:high_bucket_refine": 1.0,
+        "event_token=loop:candidate_refine:synthetic_keygen:extra_refine_round": 1.0,
+        "source_token=examples/synthetic/target.c:31:synthetic_keygen:trial_division": 1.0,
+        "source_token=examples/synthetic/target.c:44:synthetic_keygen:high_bucket_refine": 1.0
+      }
+    },
+    {
+      "run_id": "hard_seq_000002",
+      "target": "synthetic-leak-hard",
+      "target_version": "v1",
+      "view": "redacted",
+      "label": "1",
+      "token_counts": {
+        "event_type=phase": 1.0,
+        "event_type=branch": 1.0,
+        "event_type=loop": 2.0,
+        "phase=keygen_start": 1.0,
+        "phase=shared_screening": 2.0,
+        "phase=candidate_refine": 2.0,
+        "context_token=shared_screening:synthetic_keygen": 2.0,
+        "event_token=branch:shared_screening:synthetic_keygen:trial_division": 1.0,
+        "event_token=loop:candidate_refine:synthetic_keygen:extra_refine_round": 2.0,
+        "source_token=examples/synthetic/target.c:31:synthetic_keygen:trial_division": 1.0,
+        "source_token=examples/synthetic/target.c:47:synthetic_keygen:extra_refine_round": 2.0
+      }
+    },
+    {
+      "run_id": "hard_seq_000003",
+      "target": "synthetic-leak-hard",
+      "target_version": "v1",
+      "view": "redacted",
+      "label": "1",
+      "token_counts": {
+        "event_type=phase": 1.0,
+        "event_type=branch": 2.0,
+        "event_type=loop": 1.0,
+        "phase=keygen_start": 1.0,
+        "phase=shared_screening": 3.0,
+        "phase=candidate_refine": 1.0,
+        "context_token=shared_screening:synthetic_keygen": 3.0,
+        "event_token=branch:shared_screening:synthetic_keygen:trial_division": 2.0,
+        "event_token=branch:candidate_refine:synthetic_keygen:high_bucket_refine": 1.0,
+        "event_token=loop:shared_screening:synthetic_keygen:common_retry": 1.0,
+        "source_token=examples/synthetic/target.c:31:synthetic_keygen:trial_division": 2.0,
+        "source_token=examples/synthetic/target.c:44:synthetic_keygen:high_bucket_refine": 1.0
+      }
+    },
+    {
+      "run_id": "hard_seq_000004",
+      "target": "synthetic-leak-hard",
+      "target_version": "v1",
+      "view": "redacted",
+      "label": "1",
+      "token_counts": {
+        "event_type=phase": 1.0,
+        "event_type=branch": 1.0,
+        "event_type=loop": 2.0,
+        "phase=keygen_start": 1.0,
+        "phase=shared_screening": 2.0,
+        "phase=candidate_refine": 2.0,
+        "context_token=shared_screening:synthetic_keygen": 2.0,
+        "event_token=branch:shared_screening:synthetic_keygen:trial_division": 1.0,
+        "event_token=loop:candidate_refine:synthetic_keygen:extra_refine_round": 1.0,
+        "event_token=loop:shared_screening:synthetic_keygen:common_retry": 1.0,
+        "source_token=examples/synthetic/target.c:47:synthetic_keygen:extra_refine_round": 1.0,
+        "source_token=examples/synthetic/target.c:31:synthetic_keygen:trial_division": 1.0
+      }
+    },
+    {
+      "run_id": "hard_seq_000005",
+      "target": "synthetic-leak-hard",
+      "target_version": "v1",
+      "view": "redacted",
+      "label": "0",
+      "token_counts": {
+        "event_type=phase": 1.0,
+        "event_type=branch": 2.0,
+        "event_type=loop": 1.0,
+        "phase=keygen_start": 1.0,
+        "phase=shared_screening": 2.0,
+        "phase=candidate_accept": 1.0,
+        "context_token=shared_screening:synthetic_keygen": 2.0,
+        "event_token=branch:shared_screening:synthetic_keygen:trial_division": 1.0,
+        "event_token=branch:candidate_accept:synthetic_keygen:low_bucket_accept": 1.0,
+        "event_token=loop:candidate_accept:synthetic_keygen:short_accept_round": 1.0,
+        "source_token=examples/synthetic/target.c:31:synthetic_keygen:trial_division": 1.0,
+        "source_token=examples/synthetic/target.c:52:synthetic_keygen:low_bucket_accept": 1.0
+      }
+    },
+    {
+      "run_id": "hard_seq_000006",
+      "target": "synthetic-leak-hard",
+      "target_version": "v1",
+      "view": "redacted",
+      "label": "0",
+      "token_counts": {
+        "event_type=phase": 1.0,
+        "event_type=branch": 1.0,
+        "event_type=loop": 2.0,
+        "phase=keygen_start": 1.0,
+        "phase=shared_screening": 2.0,
+        "phase=candidate_accept": 2.0,
+        "context_token=shared_screening:synthetic_keygen": 2.0,
+        "event_token=branch:shared_screening:synthetic_keygen:trial_division": 1.0,
+        "event_token=loop:candidate_accept:synthetic_keygen:short_accept_round": 2.0,
+        "source_token=examples/synthetic/target.c:31:synthetic_keygen:trial_division": 1.0,
+        "source_token=examples/synthetic/target.c:55:synthetic_keygen:short_accept_round": 2.0
+      }
+    },
+    {
+      "run_id": "hard_seq_000007",
+      "target": "synthetic-leak-hard",
+      "target_version": "v1",
+      "view": "redacted",
+      "label": "0",
+      "token_counts": {
+        "event_type=phase": 1.0,
+        "event_type=branch": 2.0,
+        "event_type=loop": 1.0,
+        "phase=keygen_start": 1.0,
+        "phase=shared_screening": 3.0,
+        "phase=candidate_accept": 1.0,
+        "context_token=shared_screening:synthetic_keygen": 3.0,
+        "event_token=branch:shared_screening:synthetic_keygen:trial_division": 2.0,
+        "event_token=branch:candidate_accept:synthetic_keygen:low_bucket_accept": 1.0,
+        "event_token=loop:shared_screening:synthetic_keygen:common_retry": 1.0,
+        "source_token=examples/synthetic/target.c:31:synthetic_keygen:trial_division": 2.0,
+        "source_token=examples/synthetic/target.c:52:synthetic_keygen:low_bucket_accept": 1.0
+      }
+    },
+    {
+      "run_id": "hard_seq_000008",
+      "target": "synthetic-leak-hard",
+      "target_version": "v1",
+      "view": "redacted",
+      "label": "0",
+      "token_counts": {
+        "event_type=phase": 1.0,
+        "event_type=branch": 1.0,
+        "event_type=loop": 2.0,
+        "phase=keygen_start": 1.0,
+        "phase=shared_screening": 2.0,
+        "phase=candidate_accept": 2.0,
+        "context_token=shared_screening:synthetic_keygen": 2.0,
+        "event_token=branch:shared_screening:synthetic_keygen:trial_division": 1.0,
+        "event_token=loop:candidate_accept:synthetic_keygen:short_accept_round": 1.0,
+        "event_token=loop:shared_screening:synthetic_keygen:common_retry": 1.0,
+        "source_token=examples/synthetic/target.c:55:synthetic_keygen:short_accept_round": 1.0,
+        "source_token=examples/synthetic/target.c:31:synthetic_keygen:trial_division": 1.0
+      }
+    }
+  ]
+}

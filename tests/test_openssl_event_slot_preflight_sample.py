@@ -15,3 +15,6 @@ def test_event_slot_review_is_declared_in_preflight_sample() -> None:
     assert "build_human_review_checklist" in stage_names
     assert "reports/local/openssl_human_review_checklist.md" in manifest["planned_artifacts"]
     assert "human_review_checklist_planned" in manifest["gates"]
+    assert "build_pending_review" in stage_names
+    assert "reports/local/openssl_pending_review.md" in manifest["planned_artifacts"]
+    assert "pending_review_template_planned" in manifest["gates"]

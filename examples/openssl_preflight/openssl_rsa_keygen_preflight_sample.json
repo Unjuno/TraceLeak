@@ -1,0 +1,114 @@
+{
+  "format": "traceleak.openssl_preflight.v1",
+  "experiment_id": "exp_010_openssl_rsa_keygen_preflight",
+  "target_family": "openssl-rsa-keygen",
+  "mode": "preflight_only",
+  "public_safe": true,
+  "execution_allowed": false,
+  "source": {
+    "kind": "external_worktree",
+    "name": "openssl",
+    "ref_policy": "pin_exact_commit_before_run",
+    "worktree_hint": "external/openssl",
+    "target_paths": [
+      "crypto/rsa/rsa_gen.c",
+      "crypto/bn/bn_prime.c"
+    ],
+    "notes": [
+      "Do not run against a moving branch; pin an exact OpenSSL commit before experiment execution.",
+      "This repository intentionally does not vendor OpenSSL source."
+    ]
+  },
+  "instrumentation": {
+    "trace_view": "redacted",
+    "event_schema": "traceleak.run.v1",
+    "raw_secret_capture_allowed": false,
+    "required_event_fields": [
+      "step",
+      "phase",
+      "function",
+      "file",
+      "line",
+      "event_type",
+      "name",
+      "value_redacted"
+    ],
+    "disallowed_fields": [
+      "p",
+      "q",
+      "d",
+      "dp",
+      "dq",
+      "iqmp",
+      "private_key",
+      "raw_bignum",
+      "prime_candidate",
+      "candidate_value",
+      "seed",
+      "rng_state"
+    ]
+  },
+  "labels": {
+    "lab_only": true,
+    "allowed_label_keys": [
+      "rsa_prime_attempt_bucket",
+      "rsa_rejection_reason_bucket",
+      "rsa_keygen_round_bucket"
+    ],
+    "notes": [
+      "Labels are local-only evaluation buckets and must not be exported as public trace fields."
+    ]
+  },
+  "planned_artifacts": [
+    "reports/local/openssl_rsa_keygen_traces.jsonl",
+    "reports/local/openssl_rsa_keygen_model_sequence.json",
+    "reports/local/openssl_rsa_keygen_nn_comparison.json",
+    "reports/local/openssl_rsa_keygen_nn_report.md",
+    "reports/local/openssl_rsa_keygen_control_summary.md"
+  ],
+  "required_controls": [
+    "shuffled_label_negative_control",
+    "public_only_baseline",
+    "seed_relabel_control"
+  ],
+  "pipeline_stages": [
+    {
+      "name": "pin_source",
+      "status": "preflight_only",
+      "command_hint": "record exact OpenSSL commit SHA before running instrumentation"
+    },
+    {
+      "name": "collect_redacted_traces",
+      "status": "preflight_only",
+      "command_hint": "collect traceleak.run.v1 JSONL with redacted value buckets only"
+    },
+    {
+      "name": "extract_model_sequence_counts",
+      "status": "preflight_only",
+      "command_hint": "python scripts/extract_model_sequence.py --counts --label-key <lab-only-label>"
+    },
+    {
+      "name": "compare_nn_to_baseline",
+      "status": "preflight_only",
+      "command_hint": "python scripts/compare_model_sequence_nn_to_baseline.py --in <model-sequence.json> --out <comparison.json>"
+    },
+    {
+      "name": "render_report",
+      "status": "preflight_only",
+      "command_hint": "python scripts/model_sequence_comparison_to_report.py --in <comparison.json> --out <report.md>"
+    }
+  ],
+  "gates": [
+    "source_ref_pinned",
+    "redacted_view_only",
+    "no_raw_secret_fields",
+    "lab_only_labels_only",
+    "negative_controls_planned",
+    "baseline_comparison_planned",
+    "attribution_review_planned"
+  ],
+  "notes": [
+    "This is a preflight manifest only. It must not execute OpenSSL or collect traces by itself.",
+    "The first real OpenSSL experiment should start only after this manifest validates cleanly."
+  ]
+}

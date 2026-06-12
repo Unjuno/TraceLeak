@@ -1,0 +1,66 @@
+{
+  "format": "traceleak.openssl_trace_contract.v1",
+  "contract_id": "openssl_rsa_keygen_redacted_model_sequence_contract",
+  "target": "openssl-rsa-keygen",
+  "target_family": "openssl",
+  "target_version": "openssl-3.x-test-pin",
+  "source_pin": "sha256:source-test-pin",
+  "build_id": "openssl-local-redacted-build-001",
+  "actual_trace_derived": true,
+  "trace_collection_mode": "redacted",
+  "raw_secret_captured": false,
+  "public_safe": true,
+  "execution_allowed": false,
+  "collector": {
+    "mode": "local_manual_contract_only",
+    "contract_only": true,
+    "produces_format": "traceleak.model_sequence.v1",
+    "output_kind": "model_sequence_token_counts",
+    "required_record_fields": [
+      "run_id",
+      "target",
+      "target_version",
+      "view",
+      "label",
+      "token_counts"
+    ]
+  },
+  "labels": {
+    "lab_only": true,
+    "label_source": "post_collection_public_redacted_metadata",
+    "allowed_label_keys": [
+      "rsa_keygen_attempt_bucket"
+    ]
+  },
+  "safety": {
+    "raw_trace_retention": "forbidden",
+    "allowed_value_channels": [
+      "event_token",
+      "source_token",
+      "context_token",
+      "event_type",
+      "phase",
+      "count"
+    ],
+    "disallowed_fields": [
+      "p",
+      "q",
+      "d",
+      "private_key",
+      "raw_bignum",
+      "prime_candidate",
+      "seed",
+      "rng_state"
+    ]
+  },
+  "required_controls": [
+    "shuffled_label_negative_control",
+    "public_only_baseline",
+    "expected_token_ablation"
+  ],
+  "notes": [
+    "Contract for future local OpenSSL actual trace-derived model-sequence token-count samples.",
+    "This artifact does not build, run, instrument, or collect OpenSSL traces.",
+    "Raw secrets and raw trace retention are outside the allowed contract."
+  ]
+}

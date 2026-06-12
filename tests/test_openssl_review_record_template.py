@@ -90,10 +90,37 @@ def test_validate_openssl_review_record_template_rejects_recorded_approval(tmp_p
         validate_openssl_review_record_template(template)
 
 
+def test_validate_openssl_review_record_template_rejects_completed_review(tmp_path) -> None:
+    source_pin_path = make_source_pin(tmp_path)
+    template = build_openssl_review_record_template(source_pin_path=source_pin_path, event_map_path=EVENT_MAP)
+    template["completed_review_recorded"] = True
+
+    with pytest.raises(OpenSSLReviewRecordTemplateError, match="completed_review_recorded"):
+        validate_openssl_review_record_template(template)
+
+
 def test_validate_openssl_review_record_template_rejects_non_pending_decision(tmp_path) -> None:
     source_pin_path = make_source_pin(tmp_path)
     template = build_openssl_review_record_template(source_pin_path=source_pin_path, event_map_path=EVENT_MAP)
     template["records"][0]["decision"] = "accepted"
 
     with pytest.raises(OpenSSLReviewRecordTemplateError, match="decision"):
+        validate_openssl_review_record_template(template)
+
+
+def test_validate_openssl_review_record_template_rejects_non_pending_review_status(tmp_path) -> None:
+    source_pin_path = make_source_pin(tmp_path)
+    template = build_openssl_review_record_template(source_pin_path=source_pin_path, event_map_path=EVENT_MAP)
+    template["records"][0]["review_status"] = "reviewed"
+
+    with pytest.raises(OpenSSLReviewRecordTemplateError, match="review_status"):
+        validate_openssl_review_record_template(template)
+
+
+def test_validate_openssl_review_record_template_rejects_non_pending_check_status(tmp_path) -> None:
+    source_pin_path = make_source_pin(tmp_path)
+    template = build_openssl_review_record_template(source_pin_path=source_pin_path, event_map_path=EVENT_MAP)
+    template["records"][0]["check_results"][0]["status"] = "checked"
+
+    with pytest.raises(OpenSSLReviewRecordTemplateError, match="status"):
         validate_openssl_review_record_template(template)

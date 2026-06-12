@@ -2,6 +2,7 @@ import json
 from pathlib import Path
 
 from scripts import extract_openssl_patch_materialization_approval_skeleton as extract_cli
+from traceleak.openssl_human_review_checklist import REQUIRED_CHECK_IDS
 
 
 def test_extract_openssl_patch_materialization_approval_skeleton_cli_writes_skeleton(
@@ -49,16 +50,7 @@ def test_extract_openssl_patch_materialization_approval_skeleton_cli_writes_skel
                         "status": "pending",
                         "comment": "",
                     }
-                    for check_id in [
-                        "anchor_matches_expected_symbol",
-                        "insertion_point_is_after_argument_collection",
-                        "no_secret_value_materialized",
-                        "redacted_event_fields_only",
-                        "no_control_flow_change",
-                        "no_error_path_change",
-                        "no_key_material_logging",
-                        "trace_event_contract_mapping_confirmed",
-                    ]
+                    for check_id in REQUIRED_CHECK_IDS
                 ],
             }
         ],

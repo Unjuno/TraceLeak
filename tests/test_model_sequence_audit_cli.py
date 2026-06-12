@@ -120,6 +120,11 @@ def test_model_sequence_ablation_report_cli_writes_json(tmp_path) -> None:
     payload = json.loads(output_path.read_text(encoding="utf-8"))
     assert payload["report_type"] == "model_sequence_ablation_report"
     assert payload["ablations"]
+    assert payload["top_attribution_ablation"]["status"] in {
+        "baseline_dominates",
+        "top_attribution_sensitive",
+        "top_attribution_stable",
+    }
 
 
 def test_audit_model_sequence_labels_cli_rejects_missing_file(tmp_path) -> None:

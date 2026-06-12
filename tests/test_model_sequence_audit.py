@@ -4,6 +4,7 @@ from traceleak.model_sequence_audit import (
     audit_report_markdown,
     label_leakage_audit,
     model_sequence_ablation_report,
+    top_attribution_ablation_summary,
 )
 
 
@@ -106,5 +107,27 @@ def test_model_sequence_ablation_report() -> None:
         "drop_source_token",
         "drop_context_token",
         "event_type_phase_only",
+        "drop_top_attributions",
     }
+    assert report["top_attribution_ablation"]["status"] in {
+        "baseline_dominates",
+        "top_attribution_sensitive",
+        "top_attribution_stable",
+    }
+    assert report["top_attribution_ablation"]["dropped_tokens"]
     assert "TraceLeak Model Sequence Ablation Report" in markdown
+    assert "Top attribution ablation status" in markdown
+    assert "Top Attribution Ablation" in markdown
+
+
+def test_top_attribution_ablation_summary_handles_missing_drop_row() -> None:
+    original = {
+        "neural": {"leave_one_out_accuracy": 1.0},
+        "baseline": {"leave_one_out_nearest_neighbor_accuracy": 0.25},
+    }
+
+    summary = top_attribution_ablation_summary(original, [])
+
+    assert summary["status"] == "not_run"
+    assert summary["nn_accuracy_drop"] == 0.0
+    assert summary["dropped_tokens"] == []

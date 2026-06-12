@@ -43,7 +43,7 @@ def test_train_model_sequence_mlp_cli_writes_valid_model_result(tmp_path) -> Non
             "--out",
             str(output_path),
             "--epochs",
-            "80",
+            "200",
             "--learning-rate",
             "0.2",
             "--hidden-size",

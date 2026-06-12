@@ -33,6 +33,13 @@ def parse_args() -> argparse.Namespace:
         type=Path,
         help="Optional control comparison JSON; may be passed multiple times",
     )
+    parser.add_argument(
+        "--expected-attribution-token",
+        dest="expected_attribution_tokens",
+        action="append",
+        default=[],
+        help="Expected source-level attribution token; may be passed multiple times",
+    )
     return parser.parse_args()
 
 
@@ -41,7 +48,11 @@ def main() -> int:
     try:
         comparison = load_model_sequence_comparison(args.input_path)
         controls = [load_model_sequence_comparison(path) for path in args.control_paths]
-        report = model_sequence_comparison_report_dict(comparison, controls=controls)
+        report = model_sequence_comparison_report_dict(
+            comparison,
+            controls=controls,
+            expected_attribution_tokens=args.expected_attribution_tokens,
+        )
     except ModelSequenceComparisonReportingError as exc:
         raise SystemExit(f"error: {exc}") from exc
 

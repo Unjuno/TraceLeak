@@ -69,6 +69,7 @@ traceleak-build-openssl-instrumentation-bundle-manifest = "scripts.build_openssl
 traceleak-validate-openssl-instrumentation-bundle-manifest = "scripts.validate_openssl_instrumentation_bundle_manifest:main"
 traceleak-validate-openssl-patch-materialization-gate = "scripts.validate_openssl_patch_materialization_gate:main"
 traceleak-build-openssl-patch-materialization-review-template = "scripts.build_openssl_patch_materialization_review_template:main"
+traceleak-validate-openssl-patch-materialization-review-template = "scripts.validate_openssl_patch_materialization_review_template:main"
 traceleak-validate-openssl-event-map = "scripts.validate_openssl_event_map:main"
 traceleak-openssl-event-map-to-report = "scripts.openssl_event_map_to_report:main"
 traceleak-validate-openssl-source-pin = "scripts.validate_openssl_source_pin:main"

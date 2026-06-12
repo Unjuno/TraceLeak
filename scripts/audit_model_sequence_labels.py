@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
-"""Audit a model-sequence sample for label leakage risk."""
+"""Audit a model-sequence sample for label-feature overlap."""
 
 from __future__ import annotations
 
 import argparse
+import sys
 from pathlib import Path
 
 from traceleak.model_sequence_audit import (
@@ -21,6 +22,11 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--in", dest="input_path", required=True, type=Path, help="Input sample JSON")
     parser.add_argument("--out", dest="output_path", required=True, type=Path, help="Output report path")
     parser.add_argument("--format", choices=["md", "json"], default="md", help="Output format")
+    parser.add_argument(
+        "--strict",
+        action="store_true",
+        help="Exit with failure status when direct label-feature overlap is high",
+    )
     return parser.parse_args()
 
 
@@ -38,6 +44,9 @@ def main() -> int:
     else:
         write_markdown(args.output_path, audit_report_markdown(report))
     print(f"wrote model sequence label audit: {args.output_path}")
+    if args.strict and report["risk_level"] == "high":
+        print("error: strict label audit did not pass", file=sys.stderr)
+        return 1
     return 0
 
 

@@ -38,7 +38,10 @@ def test_openssl_preflight_rejects_missing_human_review_checklist_artifact() -> 
 def test_openssl_preflight_rejects_missing_pending_review_gate() -> None:
     manifest = sample_manifest()
     manifest["gates"] = [
-        gate for gate in manifest["gates"] if gate != "pending_review_template_planned"
+        "unexpected_gate_for_missing_required_gate_test"
+        if gate == "pending_review_template_planned"
+        else gate
+        for gate in manifest["gates"]
     ]
 
     with pytest.raises(OpenSSLPreflightError, match="gates missing"):

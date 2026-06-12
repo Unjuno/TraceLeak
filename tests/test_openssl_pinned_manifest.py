@@ -14,11 +14,18 @@ def init_worktree(path: Path) -> None:
     (path / "crypto" / "rsa").mkdir(parents=True)
     (path / "crypto" / "bn").mkdir(parents=True)
     (path / "crypto" / "rsa" / "rsa_gen.c").write_text(
-        "int RSA_generate_key_ex(void);\nint rsa_builtin_keygen(void);\n",
+        "int RSA_generate_key_ex(void);\n"
+        "int ossl_rsa_generate_multi_prime_key(void);\n"
+        "static int rsa_keygen(void);\n",
         encoding="utf-8",
     )
     (path / "crypto" / "bn" / "bn_prime.c").write_text(
-        "int BN_generate_prime_ex(void);\nint BN_check_prime(void);\nint bn_is_prime_int(void);\n",
+        "int BN_generate_prime_ex2(void);\n"
+        "int BN_generate_prime_ex(void);\n"
+        "static int probable_prime(void);\n"
+        "static int bn_is_prime_int(void);\n"
+        "int ossl_bn_check_prime(void);\n"
+        "int ossl_bn_check_generated_prime(void);\n",
         encoding="utf-8",
     )
     run_git(path, "init")
@@ -77,7 +84,7 @@ def test_generate_pinned_manifest_rejects_missing_symbol(tmp_path) -> None:
     worktree = tmp_path / "worktree"
     worktree.mkdir()
     init_worktree(worktree)
-    (worktree / "crypto" / "bn" / "bn_prime.c").write_text("int BN_check_prime(void);\n", encoding="utf-8")
+    (worktree / "crypto" / "bn" / "bn_prime.c").write_text("int BN_generate_prime_ex(void);\n", encoding="utf-8")
     run_git(worktree, "add", ".")
     run_git(worktree, "commit", "-m", "update")
 

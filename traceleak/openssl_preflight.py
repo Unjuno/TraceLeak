@@ -25,10 +25,25 @@ REQUIRED_CONTROLS = {
     "shuffled_label_negative_control",
     "public_only_baseline",
 }
+REQUIRED_STAGES = {
+    "pin_source",
+    "validate_source_layout",
+    "inspect_source_layout",
+    "validate_event_map",
+    "plan_instrumentation",
+}
+REQUIRED_ARTIFACTS = {
+    "reports/local/openssl_source_pin.json",
+    "reports/local/openssl_layout_inspection.md",
+    "reports/local/openssl_patch_plan.md",
+}
 REQUIRED_GATES = {
     "source_ref_pinned",
     "source_layout_validation_planned",
+    "source_layout_inspection_planned",
     "event_map_validation_planned",
+    "instrumentation_patch_plan_planned",
+    "manual_patch_review_required",
     "redacted_view_only",
     "no_raw_secret_fields",
     "lab_only_labels_only",
@@ -79,7 +94,10 @@ def validate_openssl_preflight(manifest: dict[str, Any]) -> None:
     _validate_source(_require_object(manifest.get("source"), "source"))
     _validate_instrumentation(_require_object(manifest.get("instrumentation"), "instrumentation"))
     _validate_labels(_require_object(manifest.get("labels"), "labels"))
-    _validate_string_list(manifest.get("planned_artifacts"), "planned_artifacts", min_items=1)
+    artifacts = set(_validate_string_list(manifest.get("planned_artifacts"), "planned_artifacts", min_items=1))
+    missing_artifacts = sorted(REQUIRED_ARTIFACTS - artifacts)
+    if missing_artifacts:
+        raise OpenSSLPreflightError(f"planned_artifacts missing: {', '.join(missing_artifacts)}")
 
     controls = set(_validate_string_list(manifest.get("required_controls"), "required_controls", min_items=1))
     missing_controls = sorted(REQUIRED_CONTROLS - controls)
@@ -87,8 +105,12 @@ def validate_openssl_preflight(manifest: dict[str, Any]) -> None:
         raise OpenSSLPreflightError(f"required_controls missing: {', '.join(missing_controls)}")
 
     stages = _require_list(manifest.get("pipeline_stages"), "pipeline_stages", min_items=1)
+    stage_names = set()
     for index, stage in enumerate(stages):
-        _validate_pipeline_stage(stage, index=index)
+        stage_names.add(_validate_pipeline_stage(stage, index=index))
+    missing_stages = sorted(REQUIRED_STAGES - stage_names)
+    if missing_stages:
+        raise OpenSSLPreflightError(f"pipeline_stages missing: {', '.join(missing_stages)}")
 
     gates = set(_validate_string_list(manifest.get("gates"), "gates", min_items=len(REQUIRED_GATES)))
     missing_gates = sorted(REQUIRED_GATES - gates)
@@ -208,12 +230,13 @@ def _validate_labels(labels: dict[str, Any]) -> None:
     _validate_string_list(labels.get("allowed_label_keys"), "labels.allowed_label_keys", min_items=1)
 
 
-def _validate_pipeline_stage(stage: Any, *, index: int) -> None:
+def _validate_pipeline_stage(stage: Any, *, index: int) -> str:
     if not isinstance(stage, dict):
         raise OpenSSLPreflightError(f"pipeline_stages[{index}] must be an object")
-    _require_string(stage.get("name"), f"pipeline_stages[{index}].name")
+    name = _require_string(stage.get("name"), f"pipeline_stages[{index}].name")
     _require_equal(stage.get("status"), "preflight_only", f"pipeline_stages[{index}].status")
     _require_string(stage.get("command_hint"), f"pipeline_stages[{index}].command_hint")
+    return name
 
 
 def _require_object(value: Any, name: str) -> dict[str, Any]:

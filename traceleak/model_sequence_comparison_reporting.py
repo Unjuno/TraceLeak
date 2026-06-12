@@ -76,7 +76,8 @@ def model_sequence_comparison_report_dict(
     delta_accuracy = float(result["delta"]["accuracy_vs_nearest_neighbor"])
     control_warning = _control_warning(result)
     control_summary = control_summary_dict(controls) if controls else None
-    top_attributions = list(result.get("neural", {}).get("top_attributions", []))
+    neural = result.get("neural", {})
+    top_attributions = list(neural.get("top_attributions", []))
     expected_tokens = list(expected_attribution_tokens or [])
     attribution_matches = expected_attribution_matches(top_attributions, expected_tokens)
 
@@ -88,6 +89,8 @@ def model_sequence_comparison_report_dict(
         "example_count": int(result["example_count"]),
         "baseline_accuracy": baseline_accuracy,
         "neural_accuracy": neural_accuracy,
+        "neural_model_name": str(neural.get("model_name", "sparse-softmax-model-sequence-nn")),
+        "neural_architecture": str(neural.get("architecture", "single-layer-softmax")),
         "delta_accuracy": delta_accuracy,
         "interpretation": result["interpretation"],
         "evidence_status": evidence_status(result["interpretation"], control_summary),
@@ -169,6 +172,8 @@ def expected_attribution_matches(
 def model_sequence_comparison_report_markdown(report: dict[str, Any]) -> str:
     """Render a model sequence comparison report as Markdown."""
 
+    neural_label = report.get("neural_model_name", "sparse-softmax-model-sequence-nn")
+    neural_architecture = report.get("neural_architecture", "single-layer-softmax")
     lines = [
         "# TraceLeak Model Sequence NN Comparison Report",
         "",
@@ -176,13 +181,15 @@ def model_sequence_comparison_report_markdown(report: dict[str, Any]) -> str:
         f"- View: `{report['view']}`",
         f"- Label: `{report['label_name']}`",
         f"- Examples: `{report['example_count']}`",
+        f"- Neural model: `{neural_label}`",
+        f"- Neural architecture: `{neural_architecture}`",
         "",
         "## Scores",
         "",
         "| Evaluator | Leave-one-out accuracy |",
         "|---|---:|",
         f"| Nearest-neighbor baseline | {report['baseline_accuracy']:.6g} |",
-        f"| Sparse-softmax NN | {report['neural_accuracy']:.6g} |",
+        f"| {neural_label} | {report['neural_accuracy']:.6g} |",
         "",
         "## Delta",
         "",

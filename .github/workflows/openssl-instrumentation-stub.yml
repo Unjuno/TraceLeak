@@ -1,0 +1,53 @@
+name: OpenSSL Instrumentation Stub
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  stub:
+    name: Build stub specification
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install package
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -e ".[dev]"
+
+      - name: Prepare local upstream repo
+        run: |
+          mkdir -p external/upstream/crypto/rsa external/upstream/crypto/bn
+          printf 'int RSA_generate_key_ex(void);\nint ossl_rsa_generate_multi_prime_key(void);\nstatic int rsa_keygen(void);\n' > external/upstream/crypto/rsa/rsa_gen.c
+          printf 'int BN_generate_prime_ex2(void);\nint BN_generate_prime_ex(void);\nstatic int probable_prime(void);\nstatic int bn_is_prime_int(void);\nint ossl_bn_check_prime(void);\nint ossl_bn_check_generated_prime(void);\n' > external/upstream/crypto/bn/bn_prime.c
+          git -C external/upstream init
+          git -C external/upstream config user.email traceleak@example.invalid
+          git -C external/upstream config user.name TraceLeak
+          git -C external/upstream add .
+          git -C external/upstream commit -m initial
+
+      - name: Prepare local worktree
+        run: |
+          SHA=$(git -C external/upstream rev-parse HEAD)
+          python scripts/prepare_openssl_worktree.py --repo external/upstream --ref "$SHA" --worktree external/openssl --out reports/local/openssl_worktree.json
+
+      - name: Generate pinned manifest
+        run: python scripts/generate_openssl_pinned_manifest.py --template examples/openssl_preflight/openssl_source_pin_sample.json --worktree external/openssl --out reports/local/openssl_source_pin.json
+
+      - name: Build stub specification
+        run: python scripts/define_openssl_instrumentation_stub.py --source-pin reports/local/openssl_source_pin.json --event-map examples/openssl_preflight/openssl_rsa_keygen_event_map_sample.json --out reports/local/openssl_instrumentation_stub.md

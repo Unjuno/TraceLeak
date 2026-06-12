@@ -1,5 +1,6 @@
 # ruff: noqa: I001
 
+import subprocess
 from pathlib import Path
 
 import pytest
@@ -11,11 +12,39 @@ from traceleak.openssl_patch_plan import (
     validate_openssl_patch_plan,
 )
 from traceleak.openssl_pinned_manifest import generate_pinned_manifest, write_pinned_manifest
-from tests.test_openssl_pinned_manifest import init_worktree
 
 
 TEMPLATE = Path("examples/openssl_preflight/openssl_source_pin_sample.json")
 EVENT_MAP = Path("examples/openssl_preflight/openssl_rsa_keygen_event_map_sample.json")
+
+
+def init_worktree(path: Path) -> None:
+    (path / "crypto" / "rsa").mkdir(parents=True)
+    (path / "crypto" / "bn").mkdir(parents=True)
+    (path / "crypto" / "rsa" / "rsa_gen.c").write_text(
+        "int RSA_generate_key_ex(void);\n"
+        "int ossl_rsa_generate_multi_prime_key(void);\n"
+        "static int rsa_keygen(void);\n",
+        encoding="utf-8",
+    )
+    (path / "crypto" / "bn" / "bn_prime.c").write_text(
+        "int BN_generate_prime_ex2(void);\n"
+        "int BN_generate_prime_ex(void);\n"
+        "static int probable_prime(void);\n"
+        "static int bn_is_prime_int(void);\n"
+        "int ossl_bn_check_prime(void);\n"
+        "int ossl_bn_check_generated_prime(void);\n",
+        encoding="utf-8",
+    )
+    run_git(path, "init")
+    run_git(path, "config", "user.email", "traceleak@example.invalid")
+    run_git(path, "config", "user.name", "TraceLeak Test")
+    run_git(path, "add", ".")
+    run_git(path, "commit", "-m", "initial")
+
+
+def run_git(path: Path, *args: str) -> None:
+    subprocess.run(["git", "-C", str(path), *args], check=True, capture_output=True, text=True)
 
 
 def make_source_pin(tmp_path) -> Path:

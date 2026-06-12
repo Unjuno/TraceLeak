@@ -62,7 +62,9 @@
   "planned_artifacts": [
     "reports/local/openssl_rsa_keygen_traces.jsonl",
     "reports/local/openssl_rsa_keygen_model_sequence.json",
+    "reports/local/openssl_rsa_keygen_label_audit.md",
     "reports/local/openssl_rsa_keygen_nn_comparison.json",
+    "reports/local/openssl_rsa_keygen_ablation_report.md",
     "reports/local/openssl_rsa_keygen_nn_report.md",
     "reports/local/openssl_rsa_keygen_control_summary.md"
   ],
@@ -88,9 +90,19 @@
       "command_hint": "python scripts/extract_model_sequence.py --counts --label-key <lab-only-label>"
     },
     {
+      "name": "audit_label_leakage",
+      "status": "preflight_only",
+      "command_hint": "python scripts/audit_model_sequence_labels.py --in <model-sequence.json> --out <label-audit.md>"
+    },
+    {
       "name": "compare_nn_to_baseline",
       "status": "preflight_only",
       "command_hint": "python scripts/compare_model_sequence_nn_to_baseline.py --in <model-sequence.json> --out <comparison.json>"
+    },
+    {
+      "name": "run_ablation_validation",
+      "status": "preflight_only",
+      "command_hint": "python scripts/model_sequence_ablation_report.py --in <model-sequence.json> --out <ablation-report.md>"
     },
     {
       "name": "render_report",
@@ -105,10 +117,14 @@
     "lab_only_labels_only",
     "negative_controls_planned",
     "baseline_comparison_planned",
-    "attribution_review_planned"
+    "attribution_review_planned",
+    "label_leakage_audit_planned",
+    "ablation_validation_planned",
+    "split_validation_planned"
   ],
   "notes": [
     "This is a preflight manifest only. It must not execute OpenSSL or collect traces by itself.",
-    "The first real OpenSSL experiment should start only after this manifest validates cleanly."
+    "The first real OpenSSL experiment should start only after this manifest validates cleanly.",
+    "Any positive NN result must be reviewed with label leakage audit and ablation validation before being interpreted as leakage evidence."
   ]
 }

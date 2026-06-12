@@ -12,8 +12,8 @@ import json
 from pathlib import Path
 from typing import Any
 
-from traceleak.model_sequence_nn import ModelSequenceNNError, train_model_sequence_nn_result
 from traceleak.model_results import ModelResultError, validate_model_result
+from traceleak.model_sequence_nn import ModelSequenceNNError, train_model_sequence_nn_result
 
 
 def parse_args() -> argparse.Namespace:

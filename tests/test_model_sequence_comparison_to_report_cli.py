@@ -73,6 +73,7 @@ def test_model_sequence_comparison_to_report_cli_writes_markdown(tmp_path) -> No
     assert "TraceLeak Model Sequence NN Comparison Report" in markdown
     assert "Top NN Attributions" in markdown
     assert "neural_better" in markdown
+    assert "controls_missing" in markdown
 
 
 def test_model_sequence_comparison_to_report_cli_writes_json(tmp_path) -> None:
@@ -100,6 +101,7 @@ def test_model_sequence_comparison_to_report_cli_writes_json(tmp_path) -> None:
     payload = json.loads(output_path.read_text(encoding="utf-8"))
     assert payload["report_type"] == "model_sequence_nn_comparison_report"
     assert payload["delta_accuracy"] == 0.75
+    assert payload["evidence_status"] == "controls_missing"
     assert payload["top_attributions"]
 
 
@@ -130,6 +132,7 @@ def test_model_sequence_comparison_to_report_cli_accepts_controls(tmp_path) -> N
     markdown = output_path.read_text(encoding="utf-8")
     assert "Control Summary" in markdown
     assert "control_pass" in markdown
+    assert "candidate_signal_control_checked" in markdown
 
 
 def test_model_sequence_comparison_to_report_cli_rejects_missing_input(tmp_path) -> None:

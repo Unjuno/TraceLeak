@@ -8,6 +8,7 @@ from traceleak.openssl_instrumentation_chain import (
     write_openssl_instrumentation_chain_outputs,
 )
 from traceleak.openssl_pinned_manifest import generate_pinned_manifest, write_pinned_manifest
+from traceleak.openssl_trace_contract import load_openssl_trace_contract
 
 TEMPLATE = Path("examples/openssl_preflight/openssl_source_pin_sample.json")
 EVENT_MAP = Path("examples/openssl_preflight/openssl_rsa_keygen_event_map_sample.json")
@@ -70,6 +71,7 @@ def test_openssl_instrumentation_dry_run_chain_summarizes_all_stages(tmp_path: P
         event_stream_path=EVENT_STREAM,
     )
     markdown = openssl_instrumentation_chain_markdown(report)
+    contract = load_openssl_trace_contract(CONTRACT)
 
     assert report["status"] == "dry_run_chain_ready_not_executed"
     assert report["execution_allowed"] is False
@@ -89,7 +91,8 @@ def test_openssl_instrumentation_dry_run_chain_summarizes_all_stages(tmp_path: P
     assert report["run_count"] == 4
     assert report["event_count"] == 12
     assert report["record_count"] == 4
-    assert report["artifacts"]["trace_contract"]["contract_id"] == "openssl-rsa-keygen-trace-contract-sample"
+    assert report["artifacts"]["trace_contract"] == contract
+    assert report["artifacts"]["trace_contract"]["contract_id"] == contract["contract_id"]
     assert "TraceLeak OpenSSL Instrumentation Dry-Run Chain" in markdown
     assert "Event emitter self-check: `emitter_self_check_passed`" in markdown
     assert "Execution allowed: `false`" in markdown

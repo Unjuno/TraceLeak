@@ -15,6 +15,8 @@ from traceleak.openssl_event_emitter_artifact import (
     openssl_event_emitter_artifact_markdown,
     validate_openssl_event_emitter_artifact,
     write_openssl_event_emitter_artifact_files,
+    write_openssl_event_emitter_artifact_json,
+    write_openssl_event_emitter_artifact_markdown,
 )
 from traceleak.openssl_instrumentation_stub import build_openssl_instrumentation_stub, write_instrumentation_stub_json
 from traceleak.openssl_pinned_manifest import generate_pinned_manifest, write_pinned_manifest
@@ -88,6 +90,20 @@ def test_builds_redacted_event_emitter_artifact(tmp_path: Path) -> None:
     assert "TraceLeak OpenSSL Redacted Event Emitter Artifact" in markdown
 
 
+def test_event_emitter_source_json_escapes_all_string_fields(tmp_path: Path) -> None:
+    artifact = build_artifact(contract=load_openssl_trace_contract(CONTRACT), instrumentation_stub=stub(tmp_path))
+    source = artifact["files"][SOURCE_FILENAME]
+
+    assert "tl_write_json_string" in source
+    assert "%s" not in source
+    assert "tl_write_json_string(out, run_id);" in source
+    assert "tl_write_json_string(out, target);" in source
+    assert "tl_write_json_string(out, label_key);" in source
+    assert "tl_write_json_string(out, value_redacted_key);" in source
+    assert "fprintf(out, \"%d\", step);" in source
+    assert "fprintf(out, \"%d\", value_redacted_bucket);" in source
+
+
 def test_write_event_emitter_artifact_files(tmp_path: Path) -> None:
     artifact = build_artifact(contract=load_openssl_trace_contract(CONTRACT), instrumentation_stub=stub(tmp_path))
     out_dir = tmp_path / "emitter"
@@ -97,6 +113,18 @@ def test_write_event_emitter_artifact_files(tmp_path: Path) -> None:
     assert (out_dir / HEADER_FILENAME).exists()
     assert (out_dir / SOURCE_FILENAME).exists()
     assert "traceleak_event" in (out_dir / HEADER_FILENAME).read_text(encoding="utf-8")
+
+
+def test_write_event_emitter_artifact_reports_create_parent_directories(tmp_path: Path) -> None:
+    artifact = build_artifact(contract=load_openssl_trace_contract(CONTRACT), instrumentation_stub=stub(tmp_path))
+    out_json = tmp_path / "nested" / "artifact.json"
+    out_md = tmp_path / "nested" / "artifact.md"
+
+    write_openssl_event_emitter_artifact_json(out_json, artifact)
+    write_openssl_event_emitter_artifact_markdown(out_md, artifact)
+
+    assert json.loads(out_json.read_text(encoding="utf-8"))["status"] == "emitter_artifact_ready_not_applied"
+    assert "TraceLeak OpenSSL Redacted Event Emitter Artifact" in out_md.read_text(encoding="utf-8")
 
 
 def test_validate_event_emitter_artifact_rejects_raw_value_field(tmp_path: Path) -> None:
@@ -112,6 +140,29 @@ def test_validate_event_emitter_artifact_rejects_forbidden_source_term(tmp_path:
     artifact["files"][SOURCE_FILENAME] += "\n/* private_key */\n"
 
     with pytest.raises(OpenSSLEventEmitterArtifactError, match="private_key"):
+        validate_openssl_event_emitter_artifact(artifact)
+
+
+def test_validate_event_emitter_artifact_rejects_unsafe_string_interpolation(tmp_path: Path) -> None:
+    artifact = build_artifact(contract=load_openssl_trace_contract(CONTRACT), instrumentation_stub=stub(tmp_path))
+    artifact["files"][SOURCE_FILENAME] = artifact["files"][SOURCE_FILENAME].replace(
+        "tl_write_json_string(out, run_id);",
+        "fprintf(out, \"%s\", run_id);",
+        1,
+    )
+
+    with pytest.raises(OpenSSLEventEmitterArtifactError, match="%s"):
+        validate_openssl_event_emitter_artifact(artifact)
+
+
+def test_validate_event_emitter_artifact_rejects_missing_json_string_writer(tmp_path: Path) -> None:
+    artifact = build_artifact(contract=load_openssl_trace_contract(CONTRACT), instrumentation_stub=stub(tmp_path))
+    artifact["files"][SOURCE_FILENAME] = artifact["files"][SOURCE_FILENAME].replace(
+        "tl_write_json_string",
+        "tl_missing_json_string_writer",
+    )
+
+    with pytest.raises(OpenSSLEventEmitterArtifactError, match="tl_write_json_string"):
         validate_openssl_event_emitter_artifact(artifact)
 
 

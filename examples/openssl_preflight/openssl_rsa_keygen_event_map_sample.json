@@ -1,0 +1,189 @@
+{
+  "format": "traceleak.openssl_event_map.v1",
+  "experiment_id": "exp_010_openssl_rsa_keygen_preflight",
+  "target_family": "openssl-rsa-keygen",
+  "source_ref_policy": "pin_exact_commit_before_run",
+  "execution_allowed": false,
+  "public_safe": true,
+  "trace_view": "redacted",
+  "raw_secret_capture_allowed": false,
+  "label_policy": {
+    "lab_only": true,
+    "forbidden_public_label_fields": [
+      "p",
+      "q",
+      "d",
+      "private_key",
+      "seed",
+      "rng_state"
+    ],
+    "planned_label_keys": [
+      "rsa_prime_attempt_bucket",
+      "rsa_rejection_reason_bucket",
+      "rsa_keygen_round_bucket"
+    ]
+  },
+  "event_groups": [
+    {
+      "group_id": "rsa_keygen_entry",
+      "target_path": "crypto/rsa/rsa_gen.c",
+      "phase": "keygen_entry",
+      "event_type": "phase",
+      "name": "rsa_keygen_entry",
+      "capture": [
+        "function",
+        "file",
+        "line",
+        "phase",
+        "event_type",
+        "name"
+      ],
+      "redacted_values": [
+        "key_bits_bucket",
+        "public_exponent_bucket"
+      ],
+      "forbidden_values": [
+        "p",
+        "q",
+        "d",
+        "private_key",
+        "raw_bignum"
+      ],
+      "notes": [
+        "Entry-level event only; do not capture raw key material."
+      ]
+    },
+    {
+      "group_id": "prime_candidate_generation",
+      "target_path": "crypto/bn/bn_prime.c",
+      "phase": "candidate_generation",
+      "event_type": "phase",
+      "name": "prime_candidate_generated",
+      "capture": [
+        "function",
+        "file",
+        "line",
+        "phase",
+        "event_type",
+        "name"
+      ],
+      "redacted_values": [
+        "candidate_bit_length_bucket",
+        "candidate_parity_bucket"
+      ],
+      "forbidden_values": [
+        "prime_candidate",
+        "candidate_value",
+        "raw_bignum",
+        "seed",
+        "rng_state"
+      ],
+      "notes": [
+        "Capture only coarse public-safe buckets about candidate shape."
+      ]
+    },
+    {
+      "group_id": "prime_candidate_filter",
+      "target_path": "crypto/bn/bn_prime.c",
+      "phase": "candidate_filter",
+      "event_type": "loop",
+      "name": "candidate_filter_round",
+      "capture": [
+        "function",
+        "file",
+        "line",
+        "phase",
+        "event_type",
+        "name"
+      ],
+      "redacted_values": [
+        "filter_round_bucket",
+        "small_divisor_count_bucket"
+      ],
+      "forbidden_values": [
+        "prime_candidate",
+        "candidate_value",
+        "raw_bignum"
+      ],
+      "notes": [
+        "This is intended for count-pattern analysis; no raw candidate value may be captured."
+      ]
+    },
+    {
+      "group_id": "probable_prime_test",
+      "target_path": "crypto/bn/bn_prime.c",
+      "phase": "probable_prime_test",
+      "event_type": "loop",
+      "name": "probable_prime_round",
+      "capture": [
+        "function",
+        "file",
+        "line",
+        "phase",
+        "event_type",
+        "name"
+      ],
+      "redacted_values": [
+        "test_round_bucket",
+        "witness_result_bucket"
+      ],
+      "forbidden_values": [
+        "prime_candidate",
+        "candidate_value",
+        "witness_value",
+        "raw_bignum"
+      ],
+      "notes": [
+        "Round counts may be captured; witness values must not be captured."
+      ]
+    },
+    {
+      "group_id": "prime_candidate_result",
+      "target_path": "crypto/bn/bn_prime.c",
+      "phase": "candidate_result",
+      "event_type": "branch",
+      "name": "candidate_result",
+      "capture": [
+        "function",
+        "file",
+        "line",
+        "phase",
+        "event_type",
+        "name"
+      ],
+      "redacted_values": [
+        "result_bucket",
+        "attempt_count_bucket"
+      ],
+      "forbidden_values": [
+        "prime_candidate",
+        "candidate_value",
+        "raw_bignum"
+      ],
+      "notes": [
+        "If this event is used as a label source, matching redacted value buckets must be filtered from model features."
+      ]
+    }
+  ],
+  "required_controls": [
+    "shuffled_label_negative_control",
+    "public_only_baseline",
+    "seed_relabel_control",
+    "drop_redacted_value_ablation",
+    "drop_source_token_ablation"
+  ],
+  "gates": [
+    "source_ref_pinned",
+    "redacted_view_only",
+    "no_raw_secret_fields",
+    "label_overlap_features_blocked",
+    "strict_label_audit_required",
+    "ablation_validation_required",
+    "negative_controls_required"
+  ],
+  "notes": [
+    "This event map is a pre-instrumentation contract. It does not execute OpenSSL.",
+    "Target paths and exact line bindings must be rechecked after pinning the OpenSSL commit.",
+    "Any event producing label-adjacent redacted values must be filtered before training."
+  ]
+}

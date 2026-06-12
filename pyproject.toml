@@ -62,6 +62,7 @@ traceleak-plan-openssl-instrumentation = "scripts.plan_openssl_instrumentation:m
 traceleak-define-openssl-instrumentation-stub = "scripts.define_openssl_instrumentation_stub:main"
 traceleak-review-openssl-event-slots = "scripts.review_openssl_event_slots:main"
 traceleak-build-openssl-review-checklist = "scripts.build_openssl_review_checklist:main"
+traceleak-build-openssl-pending-review = "scripts.build_openssl_pending_review:main"
 traceleak-prepare-openssl-worktree = "scripts.prepare_openssl_worktree:main"
 traceleak-evaluate-baseline = "scripts.evaluate_baseline:main"
 traceleak-make-report = "scripts.make_report:main"

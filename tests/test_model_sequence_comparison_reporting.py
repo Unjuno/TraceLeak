@@ -6,6 +6,7 @@ from pathlib import Path
 from traceleak.model_sequence_comparison import compare_model_sequence_nn_to_baseline
 from traceleak.model_sequence_comparison_reporting import (
     control_summary_dict,
+    evidence_status,
     model_sequence_comparison_report_dict,
     model_sequence_comparison_report_markdown,
 )
@@ -66,6 +67,7 @@ def test_model_sequence_comparison_report_dict() -> None:
     assert report["report_type"] == "model_sequence_nn_comparison_report"
     assert report["baseline_accuracy"] == 0.25
     assert report["neural_accuracy"] == 1.0
+    assert report["evidence_status"] == "controls_missing"
     assert report["control_warning"] == "not_a_control_result"
     assert report["top_attributions"]
 
@@ -80,12 +82,26 @@ def test_model_sequence_comparison_report_dict_with_controls() -> None:
     assert report["control_summary"]["control_count"] == 2
     assert report["control_summary"]["max_neural_accuracy"] == 0.25
     assert report["control_summary"]["status"] == "control_pass"
+    assert report["evidence_status"] == "candidate_signal_control_checked"
 
 
 def test_control_summary_rejects_high_control_accuracy() -> None:
     summary = control_summary_dict([control_result("synthetic-count-pattern-control-001", 0.75)])
 
     assert summary["status"] == "control_attention"
+
+
+def test_evidence_status_requires_neural_gain_and_controls() -> None:
+    assert evidence_status("similar", None) == "no_neural_advantage"
+    assert evidence_status("neural_better", None) == "controls_missing"
+    assert (
+        evidence_status("neural_better", {"status": "control_attention"})
+        == "control_attention_required"
+    )
+    assert (
+        evidence_status("neural_better", {"status": "control_pass"})
+        == "candidate_signal_control_checked"
+    )
 
 
 def test_model_sequence_comparison_report_markdown() -> None:
@@ -101,6 +117,7 @@ def test_model_sequence_comparison_report_markdown() -> None:
     assert "Top NN Attributions" in markdown
     assert "Control Summary" in markdown
     assert "neural_better" in markdown
+    assert "candidate_signal_control_checked" in markdown
 
 
 def test_count_pattern_sample_favors_count_learning_over_jaccard_presence() -> None:

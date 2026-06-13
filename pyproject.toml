@@ -58,6 +58,7 @@ traceleak-build-openssl-isolated-execution-plan = "scripts.build_openssl_isolate
 traceleak-build-openssl-reviewed-materialization-request = "scripts.build_openssl_reviewed_materialization_request:main"
 traceleak-validate-openssl-materialization-approval-gate = "scripts.validate_openssl_materialization_approval_gate:main"
 traceleak-build-openssl-materialization-output-contract = "scripts.build_openssl_materialization_output_contract:main"
+traceleak-validate-openssl-materialization-output-manifest = "scripts.validate_openssl_materialization_output_manifest:main"
 traceleak-validate-openssl-preflight = "scripts.validate_openssl_preflight:main"
 traceleak-openssl-preflight-to-report = "scripts.openssl_preflight_to_report:main"
 traceleak-validate-openssl-trace-contract = "scripts.validate_openssl_trace_contract:main"

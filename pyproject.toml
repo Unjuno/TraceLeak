@@ -52,6 +52,7 @@ traceleak-audit-model-sequence-labels = "scripts.audit_model_sequence_labels:mai
 traceleak-model-sequence-ablation-report = "scripts.model_sequence_ablation_report:main"
 traceleak-run-mlp-report-chain = "scripts.run_mlp_report_chain:main"
 traceleak-run-mlp-expected-check = "scripts.run_mlp_expected_check:main"
+traceleak-build-review-chain-summary = "scripts.build_review_chain_summary:main"
 traceleak-validate-openssl-preflight = "scripts.validate_openssl_preflight:main"
 traceleak-openssl-preflight-to-report = "scripts.openssl_preflight_to_report:main"
 traceleak-validate-openssl-trace-contract = "scripts.validate_openssl_trace_contract:main"

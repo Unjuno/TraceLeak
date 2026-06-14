@@ -5,6 +5,16 @@ from __future__ import annotations
 from pathlib import Path
 from typing import Any
 
+REQUIRED_MARKDOWN_HEADINGS = [
+    "# Metadata Demo Summary",
+    "## Status",
+    "## Safety flags",
+    "## Baseline",
+    "## Neural model",
+    "## Manifest binding",
+    "## Notes",
+]
+
 
 class MetadataDemoMarkdownSummaryError(ValueError):
     """Raised when metadata demo summary inputs are invalid."""
@@ -78,18 +88,66 @@ def render_metadata_demo_markdown_summary(
             "",
         ]
     )
-    return "\n".join(lines)
+    markdown = "\n".join(lines)
+    validate_metadata_demo_markdown_summary(markdown)
+    return markdown
+
+
+def render_metadata_demo_markdown_summary_from_artifacts(
+    artifacts: dict[str, Any],
+    *,
+    include_ranking: bool = False,
+) -> str:
+    """Render Markdown directly from metadata demo chain artifacts."""
+
+    summary = _dict(artifacts.get("demo_summary"), "artifacts.demo_summary")
+    manifest = _dict(artifacts.get("demo_manifest"), "artifacts.demo_manifest")
+    ranking = None
+    if include_ranking:
+        from traceleak.metadata_demo_token_ranking import build_metadata_demo_token_ranking
+
+        ranking = build_metadata_demo_token_ranking(
+            demo_manifest=manifest,
+            nn_result=_dict(artifacts.get("nn_result"), "artifacts.nn_result"),
+        )
+    return render_metadata_demo_markdown_summary(
+        summary=summary,
+        manifest=manifest,
+        ranking=ranking,
+    )
+
+
+def validate_metadata_demo_markdown_summary(markdown: str) -> None:
+    """Validate the required Markdown summary shape."""
+
+    if not isinstance(markdown, str) or not markdown:
+        raise MetadataDemoMarkdownSummaryError("markdown must be a non-empty string")
+    if not markdown.endswith("\n"):
+        raise MetadataDemoMarkdownSummaryError("markdown must end with a newline")
+    position = -1
+    for heading in REQUIRED_MARKDOWN_HEADINGS:
+        current = markdown.find(heading)
+        if current < 0:
+            raise MetadataDemoMarkdownSummaryError(f"missing heading: {heading}")
+        if current <= position:
+            raise MetadataDemoMarkdownSummaryError(f"heading out of order: {heading}")
+        position = current
 
 
 def write_metadata_demo_markdown_summary(path: Path, markdown: str) -> None:
     """Write a Markdown summary."""
 
+    validate_metadata_demo_markdown_summary(markdown)
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(markdown, encoding="utf-8")
 
 
 def _require_summary(summary: dict[str, Any]) -> None:
-    _eq(summary.get("format"), "traceleak.openssl_model_sequence_metadata_sample_demo_result.v1", "summary.format")
+    _eq(
+        summary.get("format"),
+        "traceleak.openssl_model_sequence_metadata_sample_demo_result.v1",
+        "summary.format",
+    )
     _eq(summary.get("phase"), "P24", "summary.phase")
     for field in ["sample_id", "sample_digest", "source_pin_digest", "label_name"]:
         _non_empty(summary.get(field), f"summary.{field}")

@@ -6,6 +6,10 @@ from __future__ import annotations
 import argparse
 from pathlib import Path
 
+from traceleak.metadata_demo_markdown_summary import (
+    render_metadata_demo_markdown_summary_from_artifacts,
+    write_metadata_demo_markdown_summary,
+)
 from traceleak.openssl_metadata_demo_chain import (
     build_openssl_metadata_demo_chain,
     write_openssl_metadata_demo_chain,
@@ -17,6 +21,8 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--out-dir", default=Path("reports/local/openssl_metadata_demo"), type=Path)
     parser.add_argument("--record-count", default=4, type=int)
     parser.add_argument("--epochs", default=20, type=int)
+    parser.add_argument("--write-markdown-summary", action="store_true")
+    parser.add_argument("--include-ranking", action="store_true")
     return parser.parse_args()
 
 
@@ -31,6 +37,12 @@ def main() -> int:
             output_dir=args.out_dir,
             artifacts=artifacts,
         )
+        if args.write_markdown_summary:
+            markdown = render_metadata_demo_markdown_summary_from_artifacts(
+                artifacts,
+                include_ranking=args.include_ranking,
+            )
+            write_metadata_demo_markdown_summary(args.out_dir / "demo-summary.md", markdown)
     except Exception as exc:
         print(f"invalid OpenSSL metadata demo chain request: {exc}")
         return 1

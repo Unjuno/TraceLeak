@@ -1,6 +1,6 @@
 # Next session handoff
 
-Current checkpoint: P84-P86 authored symbolic baseline/NN demo chain implemented; local validation pending.
+Current checkpoint: P87-P89 metadata/symbolic demo summary comparison implemented; local validation pending.
 
 ## Local validation
 
@@ -14,6 +14,8 @@ pytest
 ## Focused checks
 
 ```powershell
+pytest tests/test_demo_summary_comparison.py
+pytest tests/test_compare_demo_summaries_cli.py
 pytest tests/test_symbolic_metadata_demo_chain.py
 pytest tests/test_run_symbolic_metadata_demo_chain_cli.py
 pytest tests/test_metadata_symbolic_authoring.py
@@ -30,22 +32,22 @@ pytest tests/test_openssl_metadata_demo_chain_outputs.py
 
 ## What changed in this block
 
-- Added authored symbolic metadata demo chain helper.
-- Connected authored symbolic metadata to adapter, baseline, NN, and summary outputs.
-- Added symbolic demo Markdown report renderer.
-- Added CLI to run the authored symbolic metadata demo chain.
-- Registered `traceleak-run-symbolic-metadata-demo-chain` entry point.
-- Updated local docs for one-command authored symbolic demo generation.
+- Added metadata/symbolic demo summary comparison helper.
+- Added compact comparison Markdown renderer.
+- Added JSON and Markdown writers for comparison outputs.
+- Added CLI to compare `demo-summary.json` and `symbolic-demo-summary.json`.
+- Registered `traceleak-compare-demo-summaries` entry point.
+- Updated local validation docs with comparison commands.
 
-## Local symbolic metadata demo command
+## Local comparison command
 
 ```powershell
-traceleak-run-symbolic-metadata-demo-chain --out-dir reports/local/symbolic_metadata_demo --epochs 20 --write-report
+traceleak-compare-demo-summaries --metadata-summary reports/local/openssl_metadata_demo/demo-summary.json --symbolic-summary reports/local/symbolic_metadata_demo/symbolic-demo-summary.json --out reports/local/demo-summary-comparison.json --markdown-out reports/local/demo-summary-comparison.md
 ```
 
 ## Next likely work
 
 - Fix any local test failures first.
-- If all pass, add comparison/reporting between metadata demo and authored symbolic demo outputs.
+- If all pass, add local combined dashboard/index for metadata demo, symbolic demo, and comparison outputs.
 - Keep generated demo files under `reports/local/`.
 - Keep the next technical step small and validation-focused.

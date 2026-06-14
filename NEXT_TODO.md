@@ -1,6 +1,6 @@
 # TraceLeak NEXT TODO
 
-Current checkpoint: P56-P64 metadata demo Markdown integration block implemented; local validation pending.
+Current checkpoint: P66-P75 compact metrics export block implemented; local validation pending.
 
 This file is the active short-term TODO. `TODO.md` is kept as historical context and should not be deleted.
 
@@ -15,9 +15,10 @@ ruff check .
 pytest
 ```
 
-Focused validation for the current Markdown path:
+Focused validation for the current metrics path:
 
 ```powershell
+pytest tests/test_metadata_demo_metrics.py
 pytest tests/test_metadata_demo_markdown_summary.py tests/test_metadata_demo_markdown_summary_cli.py
 pytest tests/test_openssl_metadata_demo_chain_outputs.py
 pytest tests/test_run_openssl_metadata_demo_chain_cli.py
@@ -41,53 +42,38 @@ pytest tests/test_run_openssl_metadata_demo_chain_cli.py
 - [x] P61: added Markdown summary validation helper and missing-heading test.
 - [x] P62: updated next-session handoff docs.
 - [x] P63: kept `NEXT_TODO.md` as the active short-term list.
-- [ ] P64: local focused tests, `ruff check .`, and full `pytest` still need to be run locally.
+- [x] P64: local validation reported all pass.
+- [x] P65: selected compact metrics export as the next technical direction.
+- [x] P66: added compact demo metrics object.
+- [x] P67: added one-row CSV export for demo metrics.
+- [x] P68: added chain CLI options for metrics JSON and CSV.
+- [x] P69: updated local validation docs.
+- [x] P70: updated handoff docs.
+- [ ] P71-P75: local focused tests, `ruff check .`, and full `pytest` still need to be run locally.
 
-## P65: choose next technical direction after local all-pass
+## Candidate next block after local all-pass
 
-After P64 is all pass, choose one path:
+### P76: improve model-sequence report rendering
 
-- [ ] Improve Markdown report quality further.
-- [ ] Add CSV or table export for summary metrics.
-- [ ] Improve local artifact generation ergonomics.
-- [ ] Improve model-sequence report rendering.
-- [ ] Improve symbolic metadata authoring helpers.
+- [ ] Add a compact report renderer for model-sequence demo metrics.
+- [ ] Keep it independent from OpenSSL runtime paths.
+- [ ] Use already generated metadata demo outputs.
 
-Recommended default: add a compact metrics export, because it complements the Markdown report without expanding scope.
+### P77: add artifact index for local reports
 
-## Candidate next block: P66-P75
+- [ ] Build a small JSON index for files under `reports/local/openssl_metadata_demo`.
+- [ ] Include filenames, role labels, and generated status only.
+- [ ] Do not inspect or embed file payloads.
 
-### P66: add compact demo metrics object
+### P78: add local README snippet generator
 
-- [ ] Build a small metrics object from summary and manifest JSON.
-- [ ] Include record count, label count, baseline scores, NN score, attribution count, and sample digest.
-- [ ] Keep it deterministic and JSON-only.
+- [ ] Render a short copy/paste command block from the active demo outputs.
+- [ ] Keep generated text under `reports/local/`.
 
-### P67: add CSV export for demo metrics
-
-- [ ] Render the compact metrics object to one-row CSV.
-- [ ] Add helper tests.
-- [ ] Add CLI tests only after helper tests pass.
-
-### P68: add chain CLI option for metrics CSV
-
-- [ ] Add an opt-in flag to write `demo-metrics.csv`.
-- [ ] Do not change default chain behavior.
-- [ ] Add CLI test.
-
-### P69: update local validation docs
-
-- [ ] Add metrics CSV validation commands.
-- [ ] Add local command for JSON + Markdown + CSV generation.
-
-### P70: update handoff docs
-
-- [ ] Reflect Markdown and CSV state after implementation.
-- [ ] Keep commands concise.
-
-### P71-P75: validation checkpoint
+### P79: validation checkpoint
 
 - [ ] Run focused tests.
 - [ ] Run `ruff check .`.
 - [ ] Run full `pytest`.
-- [ ] Fix failures before adding new surface area.
+
+Recommended default: improve local artifact generation ergonomics, because it makes the public demo easier to inspect without expanding the analysis scope.

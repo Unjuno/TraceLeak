@@ -1,6 +1,6 @@
 # TraceLeak NEXT TODO
 
-Current checkpoint: P90-P92 combined local dashboard implemented; local validation pending.
+Current checkpoint: P93-P95 one-command local report bundle implemented; local validation pending.
 
 This file is the active short-term TODO. `TODO.md` is kept as historical context and should not be deleted.
 
@@ -15,14 +15,25 @@ ruff check .
 pytest
 ```
 
-Focused validation for the current local dashboard path:
+Focused validation for the current local report bundle path:
 
 ```powershell
-pytest tests/test_local_demo_dashboard.py
-pytest tests/test_write_local_demo_dashboard_cli.py
+pytest tests/test_local_report_bundle.py
+pytest tests/test_write_local_report_bundle_cli.py
+pytest tests/test_local_demo_dashboard.py tests/test_write_local_demo_dashboard_cli.py
 pytest tests/test_demo_summary_comparison.py tests/test_compare_demo_summaries_cli.py
-pytest tests/test_symbolic_metadata_demo_chain.py tests/test_run_symbolic_metadata_demo_chain_cli.py
 ```
+
+## Level 5 completion checklist
+
+- [x] Metadata demo report surfaces implemented.
+- [x] Symbolic metadata demo report surfaces implemented.
+- [x] Metadata/symbolic summary comparison implemented.
+- [x] Combined local dashboard implemented.
+- [x] One-command local report bundle implemented.
+- [ ] Focused bundle tests still need to be run locally.
+- [ ] `ruff check .` still needs to be run locally.
+- [ ] Full `pytest` still needs to be run locally.
 
 ## Completed recent block
 
@@ -66,26 +77,34 @@ pytest tests/test_symbolic_metadata_demo_chain.py tests/test_run_symbolic_metada
 - [x] P89: local validation reported all pass.
 - [x] P90: added combined local dashboard helper.
 - [x] P91: added dashboard Markdown renderer and CLI.
-- [ ] P92: local focused tests, `ruff check .`, and full `pytest` still need to be run locally.
+- [x] P92: combined dashboard implemented; local validation pending at handoff time.
+- [x] P93: added one-command local report bundle helper.
+- [x] P94: added local report bundle smoke tests and CLI.
+- [ ] P95: local focused tests, `ruff check .`, and full `pytest` still need to be run locally.
 
 ## Candidate next block after local all-pass
 
-### P93: add one-command local report bundle runner
+### P96: OpenSSL-derived metadata ingestion profile
 
-- [ ] Run metadata demo generation, symbolic demo generation, comparison, and dashboard generation from one CLI.
-- [ ] Keep all outputs under `reports/local/`.
-- [ ] Keep it metadata-only and payload-free.
+- [ ] Define the minimal accepted metadata fields for OpenSSL-derived local inputs.
+- [ ] Add a profile object that states allowed fields, forbidden fields, and label requirements.
+- [ ] Keep the profile metadata-only and payload-free.
 
-### P94: add bundle smoke tests
+### P97: ingestion profile validator
 
-- [ ] Verify all expected report surfaces are written.
-- [ ] Verify dashboard present count after bundle generation.
-- [ ] Verify failure mode for invalid epochs.
+- [ ] Add tests for valid metadata-only OpenSSL-derived records.
+- [ ] Reject source text, command text, raw payload, and private material fields.
+- [ ] Reject unbalanced labels and unstable run identifiers.
 
-### P95: validation checkpoint
+### P98: profile-to-adapter bridge
 
-- [ ] Run focused tests.
+- [ ] Convert valid profile input into the existing derived metadata adapter input.
+- [ ] Prove it still reaches model-sequence, baseline, and NN smoke paths.
+
+### P99: validation checkpoint
+
+- [ ] Run focused Level 6 tests.
 - [ ] Run `ruff check .`.
 - [ ] Run full `pytest`.
 
-Recommended default: add a one-command local report bundle next, because it reduces manual steps and prepares a reproducible local demo surface.
+Recommended default: after Level 5 all pass, start Level 6 with the ingestion profile before moving closer to OpenSSL-derived inputs.

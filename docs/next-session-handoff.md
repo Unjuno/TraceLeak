@@ -1,6 +1,6 @@
 # Next session handoff
 
-Current checkpoint: P93-P95 one-command local report bundle implemented; local validation pending.
+Current checkpoint: Level 7 planning layer implemented and locally reported all pass.
 
 ## Local validation
 
@@ -14,44 +14,53 @@ pytest
 ## Focused checks
 
 ```powershell
-pytest tests/test_local_report_bundle.py
-pytest tests/test_write_local_report_bundle_cli.py
-pytest tests/test_local_demo_dashboard.py
-pytest tests/test_write_local_demo_dashboard_cli.py
-pytest tests/test_demo_summary_comparison.py
-pytest tests/test_compare_demo_summaries_cli.py
-pytest tests/test_symbolic_metadata_demo_chain.py
-pytest tests/test_run_symbolic_metadata_demo_chain_cli.py
-pytest tests/test_metadata_symbolic_authoring.py
-pytest tests/test_build_metadata_symbolic_input_cli.py
-pytest tests/test_openssl_runtime_transition_gate.py tests/test_validate_openssl_runtime_transition_gate_cli.py
-pytest tests/test_openssl_derived_metadata_adapter.py tests/test_adapt_openssl_derived_metadata_cli.py
-pytest tests/test_metadata_demo_artifact_index.py
-pytest tests/test_metadata_demo_readme_snippet.py
-pytest tests/test_metadata_demo_metrics.py
-pytest tests/test_metadata_demo_markdown_summary.py tests/test_metadata_demo_markdown_summary_cli.py
-pytest tests/test_run_openssl_metadata_demo_chain_cli.py
-pytest tests/test_openssl_metadata_demo_chain_outputs.py
+pytest tests/test_openssl_derived_metadata_profile.py
+pytest tests/test_openssl_derived_metadata_profile_demo_chain.py
+pytest tests/test_openssl_derived_metadata_profile_report.py
+pytest tests/test_write_level6_artifacts_cli.py
+pytest tests/test_level7_review_gate.py
+pytest tests/test_level7_planning_contract.py
+pytest tests/test_level7_artifact_boundary_plan.py
+pytest tests/test_level7_readiness_artifacts.py
+pytest tests/test_write_level7_artifacts_cli.py
 ```
 
-## What changed in this block
+## What changed in the latest block
 
-- Added Level 5 to Level 6 TODO document.
-- Added one-command local report bundle helper.
-- Added local report bundle summary and validation.
-- Added CLI to write the local report bundle.
-- Registered `traceleak-write-local-report-bundle` entry point.
-- Updated local validation docs with bundle generation commands.
+- Level 6 was locally reported all pass.
+- Added Level 7 completion TODO.
+- Added Level 7 planning-only contract on top of the existing review gate.
+- Added Level 7 artifact boundary plan.
+- Added Level 7 review checklist and readiness report.
+- Added Level 7 planning artifact writer CLI.
+- Registered `traceleak-write-level7-artifacts` entry point.
+- Updated local validation docs with Level 6 and Level 7 commands.
 
-## Local report bundle command
+## Level 7 generation commands
+
+Review gate only:
 
 ```powershell
-traceleak-write-local-report-bundle --root-dir reports/local --record-count 4 --epochs 20
+traceleak-write-level7-artifacts --out-dir reports/local/level7_planning
 ```
+
+Planning artifact set:
+
+```powershell
+traceleak-write-level7-artifacts --out-dir reports/local/level7_planning --approve-planning-only
+```
+
+## Current safety boundary
+
+Level 7 remains planning-only. The current artifacts explicitly keep these disabled:
+
+- direct action
+- source mutation
+- payload collection
+- claim generation
 
 ## Next likely work
 
-- Fix any local test failures first.
-- If all pass, start Level 6 with an OpenSSL-derived metadata ingestion profile.
-- Keep Level 6 metadata-only and payload-free at the ingress boundary.
-- Do not introduce OpenSSL build, run, source patch, or raw capture steps in the first Level 6 block.
+- Add Level 8 TODO as approved metadata artifact intake.
+- Keep Level 8 restricted to already-approved local metadata/report artifact classes under `reports/local/`.
+- Do not introduce external build, external run, source mutation, raw capture, payload collection, or claims.

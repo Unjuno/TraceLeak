@@ -1,6 +1,6 @@
 # TraceLeak NEXT TODO
 
-Current checkpoint: P66-P75 compact metrics export block implemented; local validation pending.
+Current checkpoint: P76-P79 local artifact ergonomics block implemented; local validation pending.
 
 This file is the active short-term TODO. `TODO.md` is kept as historical context and should not be deleted.
 
@@ -15,9 +15,11 @@ ruff check .
 pytest
 ```
 
-Focused validation for the current metrics path:
+Focused validation for the current local artifact path:
 
 ```powershell
+pytest tests/test_metadata_demo_artifact_index.py
+pytest tests/test_metadata_demo_readme_snippet.py
 pytest tests/test_metadata_demo_metrics.py
 pytest tests/test_metadata_demo_markdown_summary.py tests/test_metadata_demo_markdown_summary_cli.py
 pytest tests/test_openssl_metadata_demo_chain_outputs.py
@@ -49,31 +51,36 @@ pytest tests/test_run_openssl_metadata_demo_chain_cli.py
 - [x] P68: added chain CLI options for metrics JSON and CSV.
 - [x] P69: updated local validation docs.
 - [x] P70: updated handoff docs.
-- [ ] P71-P75: local focused tests, `ruff check .`, and full `pytest` still need to be run locally.
+- [x] P71-P75: local validation reported all pass.
+- [x] P76: added local artifact index helper and Markdown renderer.
+- [x] P77: added artifact index CLI outputs.
+- [x] P78: added local command snippet generator and CLI output.
+- [ ] P79: local focused tests, `ruff check .`, and full `pytest` still need to be run locally.
 
 ## Candidate next block after local all-pass
 
-### P76: improve model-sequence report rendering
+### P80: improve symbolic metadata authoring helpers
 
-- [ ] Add a compact report renderer for model-sequence demo metrics.
-- [ ] Keep it independent from OpenSSL runtime paths.
-- [ ] Use already generated metadata demo outputs.
+- [ ] Add a small authoring helper for metadata-only symbolic records.
+- [ ] Validate label balance before writing output.
+- [ ] Keep it independent from runtime paths.
 
-### P77: add artifact index for local reports
+### P81: add local authoring fixture test
 
-- [ ] Build a small JSON index for files under `reports/local/openssl_metadata_demo`.
-- [ ] Include filenames, role labels, and generated status only.
-- [ ] Do not inspect or embed file payloads.
+- [ ] Generate a tiny metadata input from symbolic record specs.
+- [ ] Adapt it through the existing derived metadata adapter.
+- [ ] Confirm it remains parser-compatible with model-sequence tooling.
 
-### P78: add local README snippet generator
+### P82: add docs for authored symbolic metadata
 
-- [ ] Render a short copy/paste command block from the active demo outputs.
-- [ ] Keep generated text under `reports/local/`.
+- [ ] Document the minimal fields.
+- [ ] Provide a local-only command path.
+- [ ] Keep generated files under `reports/local/`.
 
-### P79: validation checkpoint
+### P83: validation checkpoint
 
 - [ ] Run focused tests.
 - [ ] Run `ruff check .`.
 - [ ] Run full `pytest`.
 
-Recommended default: improve local artifact generation ergonomics, because it makes the public demo easier to inspect without expanding the analysis scope.
+Recommended default: improve symbolic metadata authoring helpers next, because that moves closer to actual user-controlled sample creation while staying metadata-only.

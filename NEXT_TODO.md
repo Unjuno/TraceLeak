@@ -1,6 +1,6 @@
 # TraceLeak NEXT TODO
 
-Current checkpoint: Level 8 approved artifact intake implemented; local validation pending.
+Current checkpoint: Level 9 readiness audit implemented; local validation pending.
 
 This file is the active short-term TODO. `TODO.md` is kept as historical context and should not be deleted.
 
@@ -15,13 +15,10 @@ ruff check .
 pytest
 ```
 
-Focused validation for the current Level 8 artifact intake path:
+Focused validation for the current Level 9 readiness path:
 
 ```powershell
-pytest tests/test_level8_artifact_intake_manifest.py
-pytest tests/test_level8_artifact_intake_index.py
-pytest tests/test_level8_artifact_intake_report.py
-pytest tests/test_write_level8_files_cli.py
+pytest tests/test_level9_readiness_audit.py
 ```
 
 ## Completed recent blocks
@@ -53,9 +50,13 @@ pytest tests/test_write_level8_files_cli.py
 - [x] P117: added Level 8 intake Markdown report.
 - [x] P118: added Level 8 file writer CLI.
 - [x] P119: updated local validation docs with Level 8 commands.
-- [ ] P120: run focused Level 8 tests, `ruff check .`, and full `pytest` locally.
+- [x] P120: Level 8 local validation reported all pass.
+- [x] P121: added Level 9 readiness audit helper.
+- [x] P122: added Level 9 readiness Markdown report.
+- [x] P123: added Level 9 readiness writer CLI.
+- [ ] P124: run focused Level 9 tests, `ruff check .`, and full `pytest` locally.
 
-## Level 1 to Level 8 roadmap summary
+## Level 1 to Level 9 roadmap summary
 
 - Level 1: core validation, feature extraction, baseline/report surface.
 - Level 2: model-sequence samples and lightweight model checks.
@@ -65,26 +66,22 @@ pytest tests/test_write_level8_files_cli.py
 - Level 6: metadata profile ingress and adapter/model/report proof.
 - Level 7: review-gated planning, boundary plan, checklist, readiness report.
 - Level 8: approved local metadata/report artifact intake, path-only index, intake report.
+- Level 9: readiness audit over the Level 8 path-only index.
 
-## Current Level 8 commands
+## Current Level 9 commands
 
-Generate Level 8 files:
-
-```powershell
-traceleak-write-level8-files --out-dir reports/local/level8_intake --root-dir .
-```
-
-Validate Level 8 focused tests:
+Generate Level 9 files:
 
 ```powershell
-pytest tests/test_level8_artifact_intake_manifest.py
-pytest tests/test_level8_artifact_intake_index.py
-pytest tests/test_level8_artifact_intake_report.py
-pytest tests/test_write_level8_files_cli.py
+traceleak-write-level9-files --out-dir reports/local/level9_readiness --root-dir .
 ```
 
-## Candidate next block after Level 8 all-pass
+Validate Level 9 focused tests:
 
-Do not start Level 9 until P120 is complete. The next block should first create a Level 9 TODO and review gate rather than widening behavior directly.
+```powershell
+pytest tests/test_level9_readiness_audit.py
+```
 
-Recommended default: finish Level 8 validation first.
+## Candidate next block after Level 9 all-pass
+
+Do not start Level 10 until P124 is complete. The next block should first create a Level 10 TODO and review checkpoint rather than widening behavior directly.

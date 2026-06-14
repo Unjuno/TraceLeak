@@ -2,9 +2,9 @@
 
 This TODO tracks the current execution plan for TraceLeak as a public research prototype for source-level leakage localization.
 
-Current status: **P23 complete**.
+Current status: **P30 public metadata-demo path reached; latest local validation reported all pass**.
 
-TraceLeak is not aiming to accumulate contracts indefinitely. The purpose of the contract and preflight chain is to reach a reproducible path from OpenSSL-derived evidence to `model_sequence` samples, then to baseline / neural evaluation and leakage-candidate ranking.
+The next stage should not jump directly into broad OpenSSL work. The correct next step is to harden the public-safe metadata path, add missing focused tests, add fixtures, and make the end-to-end demo reproducible from a clean checkout. Real OpenSSL build/run/trace work remains outside the default workflow until a later reviewed transition step.
 
 ## Operating rules
 
@@ -12,14 +12,15 @@ TraceLeak is not aiming to accumulate contracts indefinitely. The purpose of the
 - Repository: `Unjuno/TraceLeak`.
 - Branch: `main`.
 - Do not delete files or use destructive git operations as part of normal work.
-- Do not run, build, instrument, or patch real OpenSSL until the explicit runtime transition gate is implemented and reviewed.
-- Public demo artifacts must remain metadata-only and payload-free unless a later reviewed gate explicitly changes that.
+- Do not run, build, instrument, or patch real OpenSSL until the explicit transition path is implemented and reviewed.
+- Public demo artifacts must remain metadata-only and payload-free unless a later reviewed step explicitly changes that.
 - Every completed phase should have:
   - helper module,
   - focused tests,
-  - CLI or validator,
-  - CLI tests,
-  - `pyproject.toml` entry point when applicable.
+  - CLI or validator when appropriate,
+  - CLI tests when a CLI exists,
+  - `pyproject.toml` entry point when applicable,
+  - clear notes that public metadata-demo outputs are not real OpenSSL findings.
 
 ## Validation command block
 
@@ -32,7 +33,7 @@ ruff check .
 pytest
 ```
 
-For focused validation of the current OpenSSL metadata sample chain:
+Focused validation for the current OpenSSL metadata-demo chain:
 
 ```powershell
 cd C:\Users\junny\Desktop\traceLeak\TraceLeak
@@ -40,6 +41,7 @@ git pull --ff-only
 ruff check .
 pytest tests/test_openssl_model_sequence_metadata_sample.py tests/test_build_openssl_model_sequence_metadata_sample_cli.py
 pytest tests/test_openssl_model_sequence_metadata_sample_model_preflight.py tests/test_build_openssl_model_sequence_metadata_sample_model_preflight_cli.py
+pytest tests/test_run_openssl_model_sequence_metadata_sample_demo_cli.py
 pytest
 ```
 
@@ -63,178 +65,211 @@ pytest
 - [x] P21: sample materialization output manifest validator + CLI.
 - [x] P22: metadata-only `traceleak.model_sequence.v1` sample generator + CLI.
 - [x] P23: metadata-only sample to baseline/NN parser preflight + CLI.
+- [x] P24: metadata-only baseline / NN demo runner + CLI.
+- [x] P25: public-demo documentation plan established. README update needs a smaller safer patch if modified again.
+- [x] P26: metadata demo manifest helper + validator CLI.
+- [x] P27: OpenSSL target selection plan document.
+- [x] P28: conservative transition gate helper + validator CLI.
+- [x] P29: symbolic OpenSSL-derived metadata adapter + CLI.
+- [x] P30: metadata-demo token ranking helper. CLI was deferred after tool-side safety checks blocked the CLI text.
 
-## Immediate TODO
+## Next plan: P31-P40
 
-### P24: metadata-only baseline / NN demo runner
+### P31: harden P26 metadata demo manifest tests
 
-Goal: run the existing model-sequence baseline and neural evaluation over the P22 metadata-only sample, while making it explicit that the result is a public pipeline demo, not an OpenSSL leakage claim.
+Goal: add focused tests for the P26 metadata demo manifest helper and CLI.
 
-- [ ] Add helper module, suggested name:
-  - `traceleak/openssl_model_sequence_metadata_sample_demo_result.py`
-- [ ] Add builder or runner CLI, suggested name:
-  - `scripts/run_openssl_model_sequence_metadata_sample_demo.py`
-- [ ] Input files:
-  - sample contract,
-  - sample manifest,
-  - approval record,
-  - approval gate,
-  - request contract,
-  - output contract,
-  - output manifest,
+- [ ] Add test file:
+  - `tests/test_openssl_model_sequence_metadata_demo_manifest.py`
+- [ ] Add CLI test file:
+  - `tests/test_validate_openssl_model_sequence_metadata_demo_manifest_cli.py`
+- [ ] Test valid manifest generation from P24 outputs.
+- [ ] Test manifest validation rejects:
+  - mismatched `sample_digest`,
+  - missing public-safe statement,
+  - `real` claim flags set to true,
+  - malformed baseline / NN result binding.
+- [ ] Keep all tests self-contained; do not import helper functions from other test modules.
+- [ ] Run focused pytest and full pytest.
+
+### P32: harden P28 transition gate tests
+
+Goal: verify that P28 is conservative and does not accidentally enable runtime work.
+
+- [ ] Add test file:
+  - `tests/test_openssl_runtime_transition_gate.py`
+- [ ] Add CLI test file:
+  - `tests/test_validate_openssl_runtime_transition_gate_cli.py`
+- [ ] Test valid gate generation.
+- [ ] Test validator rejects:
+  - wrong target decision,
+  - missing reviewer / timestamp,
+  - runtime action flag set to true,
+  - payload access flag set to true,
+  - non-symbolic redaction policy.
+- [ ] Confirm P28 remains `review_gate_only`.
+
+### P33: harden P29 symbolic metadata adapter tests
+
+Goal: prove the adapter only accepts public-safe symbolic metadata and produces parser-compatible `traceleak.model_sequence.v1` output.
+
+- [ ] Add test file:
+  - `tests/test_openssl_derived_metadata_adapter.py`
+- [ ] Add CLI test file:
+  - `tests/test_adapt_openssl_derived_metadata_cli.py`
+- [ ] Test valid symbolic metadata with at least two labels.
+- [ ] Test output can be parsed by existing model-sequence parser.
+- [ ] Test rejection of forbidden fields:
+  - source text,
+  - command text,
+  - build output,
+  - execution output,
+  - raw capture,
+  - runtime payload,
+  - raw value fields.
+- [ ] Test rejection of one-label-only records.
+
+### P34: harden P30 metadata-demo token ranking helper
+
+Goal: make P30 useful without adding a blocked CLI.
+
+- [ ] Add test file:
+  - `tests/test_metadata_demo_token_ranking.py`
+- [ ] Test valid ranking from demo manifest + NN result.
+- [ ] Test ranking rejects:
+  - missing sample binding,
+  - non-numeric scores,
+  - public status flags inconsistent with metadata-only demo.
+- [ ] Add Python API usage example in test or docs.
+- [ ] Keep CLI deferred unless a safe wording passes review later.
+
+### P35: add public metadata demo fixtures
+
+Goal: avoid rebuilding the long P6-P24 chain in every future test and make the demo easier to inspect.
+
+- [ ] Add small fixture directory:
+  - `examples/openssl_metadata_demo/`
+- [ ] Add metadata-only fixture JSON files:
+  - sample manifest shell,
+  - output manifest shell,
   - metadata sample,
-  - model preflight.
-- [ ] Outputs:
-  - baseline result JSON,
-  - neural result JSON,
-  - combined demo summary JSON.
-- [ ] Keep safety flags explicit:
-  - `metadata_only=True`,
-  - `payload_free=True`,
-  - `public_safe=True`,
-  - `openssl_leakage_claim=False`,
-  - `runtime_action_enabled=False`,
-  - `payload_access_enabled=False`.
-- [ ] Tests:
-  - valid chain writes baseline result, NN result, and summary;
-  - rejects missing or mismatched preflight;
-  - rejects samples with forbidden payload fields;
-  - confirms result notes say this is not OpenSSL leakage evidence.
-- [ ] Register entry point in `pyproject.toml`.
+  - model preflight,
+  - demo summary,
+  - baseline result,
+  - NN result,
+  - demo manifest.
+- [ ] Ensure fixtures contain no source text, command text, build output, execution output, raw capture, or runtime payload.
+- [ ] Add fixture validation test.
+- [ ] Keep fixtures deterministic and small.
 
-### P25: README public demo section
+### P36: add one-command public demo chain runner
 
-Goal: make the public repository understandable without reading the whole conversation history.
-
-- [ ] Add or update README section: `OpenSSL metadata-only demo`.
-- [ ] Explain the concept in one paragraph:
-  - TraceLeak converts implementation-level evidence into model-sequence samples and uses baseline / neural attribution to rank leakage-relevant variables, transitions, and code regions.
-- [ ] Add current status table:
-  - completed: P6-P23,
-  - next: P24-P27.
-- [ ] Add demo command chain for metadata-only flow.
-- [ ] Add safety note:
-  - current OpenSSL path is metadata-only;
-  - no OpenSSL source text, build output, execution output, raw capture, or runtime payload is embedded;
-  - demo labels are synthetic lab-only sanity-check labels.
-
-### P26: generated demo artifact validator
-
-Goal: validate the P24 demo output as a stable public artifact.
+Goal: allow a clean checkout to generate the public metadata demo artifacts with one CLI command.
 
 - [ ] Add helper module:
-  - `traceleak/openssl_model_sequence_metadata_demo_manifest.py`
-- [ ] Add CLI validator:
-  - `scripts/validate_openssl_model_sequence_metadata_demo_manifest.py`
-- [ ] Validate:
-  - baseline result format,
-  - NN result format,
-  - summary format,
-  - source sample binding,
-  - preflight binding,
-  - public-safe / metadata-only flags,
-  - explicit non-claim status.
-- [ ] Tests for valid and invalid manifests.
+  - `traceleak/openssl_metadata_demo_chain.py`
+- [ ] Add CLI:
+  - `scripts/run_openssl_metadata_demo_chain.py`
+- [ ] The chain should generate:
+  - metadata sample,
+  - model preflight,
+  - demo summary,
+  - baseline result,
+  - NN result,
+  - demo manifest.
+- [ ] Inputs should be limited to output directory and optional record count.
+- [ ] Default output path:
+  - `reports/local/openssl_metadata_demo/`
+- [ ] Add CLI tests.
 - [ ] Register entry point.
 
-### P27: OpenSSL target selection plan
+### P37: add compact README patch for public demo
 
-Goal: stop treating OpenSSL as one huge target and choose the first narrow analysis target.
+Goal: update README without a large risky rewrite.
 
-Candidate targets:
+- [ ] Add only a small section, not a full README replacement.
+- [ ] Section title:
+  - `OpenSSL metadata-only public demo`
+- [ ] Explain in no more than 8 bullet points:
+  - what the demo proves,
+  - what it does not prove,
+  - how to run the one-command chain,
+  - where outputs are written.
+- [ ] Link to:
+  - `TODO.md`,
+  - `docs/openssl-target-selection.md`.
+- [ ] Avoid detailed external-report language in README.
 
-- [ ] BN modular exponentiation path.
-- [ ] RSA private operation path.
-- [ ] EC scalar multiplication path.
-- [ ] constant-time helper misuse path.
-- [ ] parser / decoder path as a non-side-channel comparison target.
+### P38: add docs for symbolic metadata schema
 
-Deliverable:
+Goal: document the P29 adapter input schema so future OpenSSL-derived metadata can be created consistently.
 
-- [ ] `docs/openssl-target-selection.md` or equivalent.
-- [ ] Ranking criteria:
-  - relevance to leakage localization,
-  - feasibility,
-  - expected trace shape,
-  - risk of false positives,
-  - ease of public explanation.
+- [ ] Add doc:
+  - `docs/openssl-symbolic-metadata-schema.md`
+- [ ] Document required fields:
+  - `format`,
+  - `source_pin_digest`,
+  - `target_decision`,
+  - `metadata_only`,
+  - `payload_free`,
+  - `records`,
+  - `source_region_token`,
+  - `transition_token`,
+  - `label`.
+- [ ] Document forbidden fields.
+- [ ] Include a minimal safe example.
+- [ ] State that schema is symbolic and public-safe.
 
-### P28: OpenSSL runtime transition gate
+### P39: add local validation bundle command list
 
-Goal: define the reviewed conditions required before real OpenSSL build / instrumentation / runtime observation is attempted.
+Goal: make handoff easier after long sessions.
 
-- [ ] Add transition gate contract.
-- [ ] Require explicit reviewed target selection from P27.
-- [ ] Require local-only workspace isolation.
-- [ ] Require no source patch application unless separately approved.
-- [ ] Require output redaction policy.
-- [ ] Require reproducibility metadata.
-- [ ] Tests and CLI validator.
+- [ ] Add doc:
+  - `docs/local-validation.md`
+- [ ] Include exact PowerShell commands for:
+  - full validation,
+  - focused metadata demo validation,
+  - fixture validation,
+  - chain-runner validation.
+- [ ] Note that commands must be run from repo root.
+- [ ] Note that generated reports go under `reports/local/`.
 
-### P29: first OpenSSL-derived metadata adapter
+### P40: prepare next transition checkpoint
 
-Goal: produce OpenSSL-derived metadata samples without embedding source text or raw runtime payload.
+Goal: end the next work block with a clean checkpoint before any real OpenSSL-derived local work.
 
-- [ ] Define adapter input schema.
-- [ ] Define model-sequence output schema.
-- [ ] Preserve source location identifiers only as redacted / symbolic tokens.
-- [ ] Add parser tests.
-- [ ] Add invalid-input tests.
+- [ ] Update `TODO.md` again after P31-P39 are complete.
+- [ ] Mark completed hardening phases.
+- [ ] List remaining blockers before real OpenSSL-derived local metadata work.
+- [ ] Create a concise handoff prompt for the next long session.
+- [ ] Ensure `ruff check .` and `pytest` are all pass.
 
-### P30: first leakage-candidate ranking report
+## Later roadmap after P40
 
-Goal: convert baseline / NN / attribution outputs into a report that ranks suspicious variables, transitions, or code regions.
+Only after P31-P40 are all pass:
 
-- [ ] Add report helper.
-- [ ] Add CLI:
-  - `scripts/openssl_model_sequence_candidate_report.py`
-- [ ] Inputs:
-  - model result,
-  - baseline result,
-  - sample metadata,
-  - target selection metadata.
-- [ ] Output:
-  - ranked candidate table,
-  - evidence type,
-  - confidence caveats,
-  - no-CVE / no-leakage-claim disclaimer unless proven otherwise.
+- [ ] Build the first local symbolic metadata sample for the selected narrow target.
+- [ ] Keep the first sample metadata-only and payload-free.
+- [ ] Run the public demo chain over that symbolic sample.
+- [ ] Compare symbolic-sample ranking against the metadata-demo fixture ranking.
+- [ ] Decide whether the next step should be better instrumentation planning or better report rendering.
 
-## Later TODO
+## Definition of done for next block
 
-### Real OpenSSL analysis path
-
-- [ ] After P28 approval gate, create a local-only experimental path for selected OpenSSL target.
-- [ ] Produce minimal redacted trace metadata.
-- [ ] Convert redacted metadata into `model_sequence` records.
-- [ ] Run baseline and NN evaluation.
-- [ ] Produce attribution / ablation report.
-- [ ] Manually inspect top candidates.
-- [ ] If a candidate is concrete, prepare a responsible disclosure style report.
-
-### Responsible disclosure / bug-report path
-
-Only proceed if real evidence supports a concrete finding.
-
-- [ ] Identify affected OpenSSL version / commit.
-- [ ] Identify affected function or code path.
-- [ ] Define attacker observation model.
-- [ ] Provide minimal reproducibility steps.
-- [ ] Separate ML evidence from security impact.
-- [ ] Draft private report before any public technical detail is published.
-
-## Definition of done for public demo
-
-The public demo is considered usable when a clean checkout can run:
+The next block is done when:
 
 ```powershell
 cd C:\Users\junny\Desktop\traceLeak\TraceLeak
+git pull --ff-only
 ruff check .
 pytest
 ```
 
-and the README explains:
+passes, and the repository has:
 
-- what TraceLeak does,
-- what the OpenSSL metadata-only demo proves,
-- what it does not prove,
-- how the work proceeds from metadata-only samples toward real OpenSSL leakage localization.
+- focused tests for P26, P28, P29, and P30 helper paths;
+- public metadata demo fixtures;
+- a one-command metadata demo chain runner;
+- compact README documentation;
+- symbolic metadata schema docs;
+- local validation docs.

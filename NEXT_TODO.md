@@ -1,6 +1,6 @@
 # TraceLeak NEXT TODO
 
-Current checkpoint: P76-P79 local artifact ergonomics block implemented; local validation pending.
+Current checkpoint: P80-P83 symbolic metadata authoring block implemented; local validation pending.
 
 This file is the active short-term TODO. `TODO.md` is kept as historical context and should not be deleted.
 
@@ -15,15 +15,13 @@ ruff check .
 pytest
 ```
 
-Focused validation for the current local artifact path:
+Focused validation for the current symbolic metadata path:
 
 ```powershell
-pytest tests/test_metadata_demo_artifact_index.py
-pytest tests/test_metadata_demo_readme_snippet.py
-pytest tests/test_metadata_demo_metrics.py
-pytest tests/test_metadata_demo_markdown_summary.py tests/test_metadata_demo_markdown_summary_cli.py
-pytest tests/test_openssl_metadata_demo_chain_outputs.py
-pytest tests/test_run_openssl_metadata_demo_chain_cli.py
+pytest tests/test_metadata_symbolic_authoring.py
+pytest tests/test_build_metadata_symbolic_input_cli.py
+pytest tests/test_openssl_derived_metadata_adapter.py tests/test_adapt_openssl_derived_metadata_cli.py
+pytest tests/test_openssl_runtime_transition_gate.py tests/test_validate_openssl_runtime_transition_gate_cli.py
 ```
 
 ## Completed recent block
@@ -55,32 +53,30 @@ pytest tests/test_run_openssl_metadata_demo_chain_cli.py
 - [x] P76: added local artifact index helper and Markdown renderer.
 - [x] P77: added artifact index CLI outputs.
 - [x] P78: added local command snippet generator and CLI output.
-- [ ] P79: local focused tests, `ruff check .`, and full `pytest` still need to be run locally.
+- [x] P79: local validation reported all pass.
+- [x] P80: added symbolic metadata authoring helper.
+- [x] P81: added tests proving authored symbolic input adapts into model-sequence shape.
+- [x] P82: added docs and local commands for authored symbolic metadata.
+- [ ] P83: local focused tests, `ruff check .`, and full `pytest` still need to be run locally.
 
 ## Candidate next block after local all-pass
 
-### P80: improve symbolic metadata authoring helpers
+### P84: connect authored symbolic metadata to baseline and NN demo path
 
-- [ ] Add a small authoring helper for metadata-only symbolic records.
-- [ ] Validate label balance before writing output.
-- [ ] Keep it independent from runtime paths.
+- [ ] Add a helper that takes authored symbolic metadata, adapts it, and runs baseline compatibility checks.
+- [ ] Add a minimal NN smoke path using the existing model-sequence NN parser/trainer.
+- [ ] Keep generated outputs under `reports/local/`.
 
-### P81: add local authoring fixture test
+### P85: add authored symbolic report summary
 
-- [ ] Generate a tiny metadata input from symbolic record specs.
-- [ ] Adapt it through the existing derived metadata adapter.
-- [ ] Confirm it remains parser-compatible with model-sequence tooling.
+- [ ] Render a small Markdown report from authored symbolic sample outputs.
+- [ ] Include label distribution, baseline scores, NN score, and attribution count.
+- [ ] Keep wording clear that this is metadata-only local demo output.
 
-### P82: add docs for authored symbolic metadata
-
-- [ ] Document the minimal fields.
-- [ ] Provide a local-only command path.
-- [ ] Keep generated files under `reports/local/`.
-
-### P83: validation checkpoint
+### P86: validation checkpoint
 
 - [ ] Run focused tests.
 - [ ] Run `ruff check .`.
 - [ ] Run full `pytest`.
 
-Recommended default: improve symbolic metadata authoring helpers next, because that moves closer to actual user-controlled sample creation while staying metadata-only.
+Recommended default: connect authored symbolic metadata to the existing baseline/NN path next, because it turns user-authored metadata into an end-to-end local demo.

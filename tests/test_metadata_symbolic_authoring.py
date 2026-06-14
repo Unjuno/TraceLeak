@@ -8,9 +8,9 @@ from traceleak.metadata_symbolic_authoring import (
     validate_symbolic_metadata_input,
     write_symbolic_metadata_input,
 )
+from traceleak.model_sequence_nn import parse_model_sequence_nn_vectors
 from traceleak.openssl_derived_metadata_adapter import adapt_openssl_derived_metadata_to_model_sequence
 from traceleak.openssl_runtime_transition_gate import build_openssl_runtime_transition_gate
-from traceleak.model_sequence_nn import parse_model_sequence_nn_vectors
 
 
 def symbolic_records() -> list[dict[str, str]]:
@@ -67,11 +67,12 @@ def test_symbolic_metadata_authoring_adapts_to_model_sequence() -> None:
         runtime_gate=gate,
     )
     parsed = parse_model_sequence_nn_vectors(sample)
+    labels = [example.label for example in parsed]
 
     assert sample["format"] == "traceleak.model_sequence.v1"
     assert sample["run_count"] == 4
-    assert len(parsed.labels) == 4
-    assert set(parsed.labels) == {"bucket_a", "bucket_b"}
+    assert len(parsed) == 4
+    assert set(labels) == {"bucket_a", "bucket_b"}
 
 
 def test_symbolic_metadata_authoring_writes_json(tmp_path) -> None:

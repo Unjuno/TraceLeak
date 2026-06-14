@@ -35,6 +35,12 @@ pytest tests/test_metadata_demo_token_ranking.py
 pytest tests/test_openssl_metadata_demo_fixtures.py
 ```
 
+## Markdown summary validation
+
+```powershell
+pytest tests/test_metadata_demo_markdown_summary.py tests/test_metadata_demo_markdown_summary_cli.py
+```
+
 ## Shared fixture validation
 
 ```powershell
@@ -45,6 +51,12 @@ pytest tests/test_openssl_model_sequence_metadata_demo_manifest.py tests/test_me
 
 ```powershell
 traceleak-run-openssl-metadata-demo-chain --out-dir reports/local/openssl_metadata_demo --record-count 4 --epochs 20
+```
+
+## Render local Markdown summary
+
+```powershell
+traceleak-metadata-demo-markdown-summary --summary reports/local/openssl_metadata_demo/demo-summary.json --manifest reports/local/openssl_metadata_demo/demo-manifest.json --out reports/local/openssl_metadata_demo/demo-summary.md
 ```
 
 Generated files should stay under `reports/local/`.

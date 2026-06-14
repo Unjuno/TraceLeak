@@ -81,6 +81,14 @@ pytest tests/test_compare_demo_summaries_cli.py
 pytest tests/test_symbolic_metadata_demo_chain.py tests/test_run_symbolic_metadata_demo_chain_cli.py
 ```
 
+## Local demo dashboard validation
+
+```powershell
+pytest tests/test_local_demo_dashboard.py
+pytest tests/test_write_local_demo_dashboard_cli.py
+pytest tests/test_demo_summary_comparison.py tests/test_compare_demo_summaries_cli.py
+```
+
 ## Shared fixture validation
 
 ```powershell
@@ -134,6 +142,12 @@ traceleak-run-symbolic-metadata-demo-chain --out-dir reports/local/symbolic_meta
 
 ```powershell
 traceleak-compare-demo-summaries --metadata-summary reports/local/openssl_metadata_demo/demo-summary.json --symbolic-summary reports/local/symbolic_metadata_demo/symbolic-demo-summary.json --out reports/local/demo-summary-comparison.json --markdown-out reports/local/demo-summary-comparison.md
+```
+
+## Build combined local dashboard
+
+```powershell
+traceleak-write-local-demo-dashboard --root-dir reports/local --out reports/local/local-demo-dashboard.json --markdown-out reports/local/local-demo-dashboard.md
 ```
 
 ## Render local Markdown summary from existing JSON

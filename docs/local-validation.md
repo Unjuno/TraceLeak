@@ -97,6 +97,14 @@ pytest tests/test_write_local_report_bundle_cli.py
 pytest tests/test_local_demo_dashboard.py tests/test_write_local_demo_dashboard_cli.py
 ```
 
+## Level 6 profile validation
+
+```powershell
+pytest tests/test_openssl_derived_metadata_profile.py
+pytest tests/test_openssl_derived_metadata_profile_demo_chain.py
+pytest tests/test_openssl_derived_metadata_profile_report.py
+```
+
 ## Shared fixture validation
 
 ```powershell
@@ -162,6 +170,12 @@ traceleak-write-local-demo-dashboard --root-dir reports/local --out reports/loca
 
 ```powershell
 traceleak-write-local-report-bundle --root-dir reports/local --record-count 4 --epochs 20
+```
+
+## Generate Level 6 profile demo from Python
+
+```powershell
+python -c "from pathlib import Path; from traceleak.openssl_derived_metadata_profile_demo_chain import build_openssl_derived_metadata_profile_demo_chain, write_openssl_derived_metadata_profile_demo_chain; from traceleak.openssl_derived_metadata_profile_report import render_openssl_derived_metadata_profile_report, write_openssl_derived_metadata_profile_report; out=Path('reports/local/openssl_derived_metadata_profile_demo'); a=build_openssl_derived_metadata_profile_demo_chain(epochs=20); write_openssl_derived_metadata_profile_demo_chain(output_dir=out, artifacts=a); write_openssl_derived_metadata_profile_report(out / 'profile-demo-report.md', render_openssl_derived_metadata_profile_report(a['demo_summary']))"
 ```
 
 ## Render local Markdown summary from existing JSON

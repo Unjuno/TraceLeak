@@ -13,9 +13,27 @@ from traceleak.openssl_derived_metadata_profile_demo_chain import (
 
 LEVEL7_REVIEW_GATE_FORMAT = "traceleak.level7_review_gate.v1"
 LEVEL7_REVIEW_GATE_PHASE = "P106"
+LEVEL7_PLANNING_CONTRACT_FORMAT = "traceleak.level7_planning_contract.v1"
+LEVEL7_PLANNING_CONTRACT_PHASE = "P107"
 ALLOWED_LEVEL7_REVIEW_DECISIONS = {
     "defer",
     "approve_planning_only",
+}
+ALLOWED_LEVEL7_PLANNING_TASKS = {
+    "metadata_ingress_review",
+    "artifact_shape_review",
+    "field_allowlist_review",
+    "validation_command_review",
+    "report_surface_review",
+}
+FORBIDDEN_LEVEL7_PLANNING_TASKS = {
+    "external_build",
+    "external_run",
+    "source_mutation",
+    "patch_materialization",
+    "raw_capture_collection",
+    "payload_collection",
+    "claim_making",
 }
 
 
@@ -80,6 +98,48 @@ def build_level7_review_gate(
     return gate
 
 
+def build_level7_planning_contract(
+    *,
+    review_gate: dict[str, Any],
+    plan_id: str = "level7-planning-contract",
+    tasks: list[str] | None = None,
+) -> dict[str, Any]:
+    """Build a planning-only contract from an approved Level 7 review gate."""
+
+    validate_level7_review_gate(review_gate)
+    _non_empty(plan_id, "plan_id")
+    if review_gate["decision"] != "approve_planning_only":
+        raise Level7ReviewGateError("review gate must approve planning only")
+    if review_gate["allowances"]["planning_only"] is not True:
+        raise Level7ReviewGateError("review gate must enable planning_only")
+    selected_tasks = tasks or sorted(ALLOWED_LEVEL7_PLANNING_TASKS)
+    _validate_level7_planning_tasks(selected_tasks)
+    contract = {
+        "format": LEVEL7_PLANNING_CONTRACT_FORMAT,
+        "phase": LEVEL7_PLANNING_CONTRACT_PHASE,
+        "plan_id": plan_id,
+        "review_gate_format": review_gate["format"],
+        "review_gate_phase": review_gate["phase"],
+        "review_decision": review_gate["decision"],
+        "tasks": list(selected_tasks),
+        "allowed_task_set": sorted(ALLOWED_LEVEL7_PLANNING_TASKS),
+        "forbidden_task_set": sorted(FORBIDDEN_LEVEL7_PLANNING_TASKS),
+        "allowances": {
+            "planning_only": True,
+            "direct_action_enabled": False,
+            "source_change_enabled": False,
+            "payload_collection_enabled": False,
+            "claim_enabled": False,
+        },
+        "notes": [
+            "This contract authorizes planning artifact generation only.",
+            "It does not authorize broader direct action, source changes, collection, or claims.",
+        ],
+    }
+    validate_level7_planning_contract(contract)
+    return contract
+
+
 def validate_level7_review_gate(gate: dict[str, Any]) -> None:
     """Validate Level 7 review gate shape."""
 
@@ -129,12 +189,66 @@ def validate_level7_review_gate(gate: dict[str, Any]) -> None:
         _non_empty(item, f"gate.requirements_before_next_step[{index}]")
 
 
+def validate_level7_planning_contract(contract: dict[str, Any]) -> None:
+    """Validate a Level 7 planning-only contract."""
+
+    if not isinstance(contract, dict):
+        raise Level7ReviewGateError("contract must be an object")
+    _eq(contract.get("format"), LEVEL7_PLANNING_CONTRACT_FORMAT, "contract.format")
+    _eq(contract.get("phase"), LEVEL7_PLANNING_CONTRACT_PHASE, "contract.phase")
+    _non_empty(contract.get("plan_id"), "contract.plan_id")
+    _eq(contract.get("review_gate_format"), LEVEL7_REVIEW_GATE_FORMAT, "contract.review_gate_format")
+    _eq(contract.get("review_gate_phase"), LEVEL7_REVIEW_GATE_PHASE, "contract.review_gate_phase")
+    _eq(contract.get("review_decision"), "approve_planning_only", "contract.review_decision")
+    _validate_level7_planning_tasks(contract.get("tasks"))
+    _eq(contract.get("allowed_task_set"), sorted(ALLOWED_LEVEL7_PLANNING_TASKS), "contract.allowed_task_set")
+    _eq(
+        contract.get("forbidden_task_set"),
+        sorted(FORBIDDEN_LEVEL7_PLANNING_TASKS),
+        "contract.forbidden_task_set",
+    )
+    allowances = contract.get("allowances")
+    if not isinstance(allowances, dict):
+        raise Level7ReviewGateError("contract.allowances must be an object")
+    _eq(allowances.get("planning_only"), True, "contract.allowances.planning_only")
+    for key in [
+        "direct_action_enabled",
+        "source_change_enabled",
+        "payload_collection_enabled",
+        "claim_enabled",
+    ]:
+        _eq(allowances.get(key), False, f"contract.allowances.{key}")
+    notes = contract.get("notes")
+    if not isinstance(notes, list) or len(notes) < 2:
+        raise Level7ReviewGateError("contract.notes must contain at least two notes")
+    for index, note in enumerate(notes):
+        _non_empty(note, f"contract.notes[{index}]")
+
+
 def write_level7_review_gate(path: Path, gate: dict[str, Any]) -> None:
     """Write Level 7 review gate JSON."""
 
     validate_level7_review_gate(gate)
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(gate, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+
+
+def write_level7_planning_contract(path: Path, contract: dict[str, Any]) -> None:
+    """Write Level 7 planning contract JSON."""
+
+    validate_level7_planning_contract(contract)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(contract, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+
+
+def _validate_level7_planning_tasks(tasks: Any) -> None:
+    if not isinstance(tasks, list) or not tasks:
+        raise Level7ReviewGateError("tasks must be a non-empty list")
+    for task in tasks:
+        if task in FORBIDDEN_LEVEL7_PLANNING_TASKS:
+            raise Level7ReviewGateError(f"task is forbidden: {task}")
+        if task not in ALLOWED_LEVEL7_PLANNING_TASKS:
+            raise Level7ReviewGateError(f"task is not allowed: {task}")
 
 
 def _non_empty(value: Any, name: str) -> None:

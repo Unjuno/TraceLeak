@@ -103,6 +103,17 @@ pytest tests/test_local_demo_dashboard.py tests/test_write_local_demo_dashboard_
 pytest tests/test_openssl_derived_metadata_profile.py
 pytest tests/test_openssl_derived_metadata_profile_demo_chain.py
 pytest tests/test_openssl_derived_metadata_profile_report.py
+pytest tests/test_write_level6_artifacts_cli.py
+```
+
+## Level 7 planning validation
+
+```powershell
+pytest tests/test_level7_review_gate.py
+pytest tests/test_level7_planning_contract.py
+pytest tests/test_level7_artifact_boundary_plan.py
+pytest tests/test_level7_readiness_artifacts.py
+pytest tests/test_write_level7_artifacts_cli.py
 ```
 
 ## Shared fixture validation
@@ -172,10 +183,24 @@ traceleak-write-local-demo-dashboard --root-dir reports/local --out reports/loca
 traceleak-write-local-report-bundle --root-dir reports/local --record-count 4 --epochs 20
 ```
 
-## Generate Level 6 profile demo from Python
+## Generate Level 6 profile demo
 
 ```powershell
-python -c "from pathlib import Path; from traceleak.openssl_derived_metadata_profile_demo_chain import build_openssl_derived_metadata_profile_demo_chain, write_openssl_derived_metadata_profile_demo_chain; from traceleak.openssl_derived_metadata_profile_report import render_openssl_derived_metadata_profile_report, write_openssl_derived_metadata_profile_report; out=Path('reports/local/openssl_derived_metadata_profile_demo'); a=build_openssl_derived_metadata_profile_demo_chain(epochs=20); write_openssl_derived_metadata_profile_demo_chain(output_dir=out, artifacts=a); write_openssl_derived_metadata_profile_report(out / 'profile-demo-report.md', render_openssl_derived_metadata_profile_report(a['demo_summary']))"
+traceleak-write-level6-artifacts --out-dir reports/local/level6_profile --epochs 20 --write-report
+```
+
+## Generate Level 7 planning artifacts
+
+Review gate only:
+
+```powershell
+traceleak-write-level7-artifacts --out-dir reports/local/level7_planning
+```
+
+Planning artifact set:
+
+```powershell
+traceleak-write-level7-artifacts --out-dir reports/local/level7_planning --approve-planning-only
 ```
 
 ## Render local Markdown summary from existing JSON

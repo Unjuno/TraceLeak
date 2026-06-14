@@ -73,6 +73,14 @@ pytest tests/test_run_symbolic_metadata_demo_chain_cli.py
 pytest tests/test_metadata_symbolic_authoring.py tests/test_build_metadata_symbolic_input_cli.py
 ```
 
+## Demo summary comparison validation
+
+```powershell
+pytest tests/test_demo_summary_comparison.py
+pytest tests/test_compare_demo_summaries_cli.py
+pytest tests/test_symbolic_metadata_demo_chain.py tests/test_run_symbolic_metadata_demo_chain_cli.py
+```
+
 ## Shared fixture validation
 
 ```powershell
@@ -120,6 +128,12 @@ traceleak-adapt-openssl-derived-metadata --metadata reports/local/openssl_metada
 
 ```powershell
 traceleak-run-symbolic-metadata-demo-chain --out-dir reports/local/symbolic_metadata_demo --epochs 20 --write-report
+```
+
+## Compare metadata and symbolic demo summaries
+
+```powershell
+traceleak-compare-demo-summaries --metadata-summary reports/local/openssl_metadata_demo/demo-summary.json --symbolic-summary reports/local/symbolic_metadata_demo/symbolic-demo-summary.json --out reports/local/demo-summary-comparison.json --markdown-out reports/local/demo-summary-comparison.md
 ```
 
 ## Render local Markdown summary from existing JSON

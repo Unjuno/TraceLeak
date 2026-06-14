@@ -57,6 +57,14 @@ pytest tests/test_metadata_demo_readme_snippet.py
 pytest tests/test_run_openssl_metadata_demo_chain_cli.py
 ```
 
+## Symbolic metadata authoring validation
+
+```powershell
+pytest tests/test_metadata_symbolic_authoring.py
+pytest tests/test_build_metadata_symbolic_input_cli.py
+pytest tests/test_openssl_derived_metadata_adapter.py tests/test_adapt_openssl_derived_metadata_cli.py
+```
+
 ## Shared fixture validation
 
 ```powershell
@@ -85,6 +93,19 @@ traceleak-run-openssl-metadata-demo-chain --out-dir reports/local/openssl_metada
 
 ```powershell
 traceleak-run-openssl-metadata-demo-chain --out-dir reports/local/openssl_metadata_demo --record-count 4 --epochs 20 --write-markdown-summary --include-ranking --write-metrics-json --write-metrics-csv --write-artifact-index-json --write-artifact-index-markdown --write-command-snippet
+```
+
+## Build authored symbolic metadata input
+
+```powershell
+traceleak-build-metadata-symbolic-input --out reports/local/openssl_metadata_demo/symbolic-metadata-input.json
+```
+
+## Adapt authored symbolic metadata input
+
+```powershell
+traceleak-validate-openssl-runtime-transition-gate --out reports/local/openssl_metadata_demo/runtime-gate.json --reviewer reviewer --reviewed-at 2026-06-14T00:00:00Z
+traceleak-adapt-openssl-derived-metadata --metadata reports/local/openssl_metadata_demo/symbolic-metadata-input.json --runtime-gate reports/local/openssl_metadata_demo/runtime-gate.json --out reports/local/openssl_metadata_demo/symbolic-model-sequence.json
 ```
 
 ## Render local Markdown summary from existing JSON

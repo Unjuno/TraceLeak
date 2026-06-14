@@ -1,6 +1,6 @@
 # Next session handoff
 
-Current checkpoint: P66-P75 compact metrics export block implemented; local validation pending.
+Current checkpoint: P76-P79 local artifact ergonomics block implemented; local validation pending.
 
 ## Local validation
 
@@ -14,6 +14,8 @@ pytest
 ## Focused checks
 
 ```powershell
+pytest tests/test_metadata_demo_artifact_index.py
+pytest tests/test_metadata_demo_readme_snippet.py
 pytest tests/test_metadata_demo_metrics.py
 pytest tests/test_metadata_demo_markdown_summary.py tests/test_metadata_demo_markdown_summary_cli.py
 pytest tests/test_run_openssl_metadata_demo_chain_cli.py
@@ -27,17 +29,18 @@ pytest tests/test_openssl_metadata_demo_fixtures.py
 
 ## What changed in this block
 
-- Added compact metadata demo metrics helper.
-- Added one-row CSV rendering for compact metrics.
-- Added JSON and CSV write helpers for metrics exports.
-- The chain CLI can write `demo-metrics.json` with `--write-metrics-json`.
-- The chain CLI can write `demo-metrics.csv` with `--write-metrics-csv`.
-- Local validation docs include JSON + Markdown + metrics commands.
+- Added local artifact index helper for metadata demo outputs.
+- Added artifact index Markdown rendering.
+- Added command snippet renderer for local demo generation.
+- The chain CLI can write `artifact-index.json` with `--write-artifact-index-json`.
+- The chain CLI can write `artifact-index.md` with `--write-artifact-index-markdown`.
+- The chain CLI can write `demo-commands.md` with `--write-command-snippet`.
+- Local validation docs include full JSON + Markdown + metrics + index generation commands.
 
-## Local demo commands
+## Local demo command
 
 ```powershell
-traceleak-run-openssl-metadata-demo-chain --out-dir reports/local/openssl_metadata_demo --record-count 4 --epochs 20 --write-markdown-summary --include-ranking --write-metrics-json --write-metrics-csv
+traceleak-run-openssl-metadata-demo-chain --out-dir reports/local/openssl_metadata_demo --record-count 4 --epochs 20 --write-markdown-summary --include-ranking --write-metrics-json --write-metrics-csv --write-artifact-index-json --write-artifact-index-markdown --write-command-snippet
 ```
 
 ## Next likely work

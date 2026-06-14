@@ -92,6 +92,35 @@ def test_run_openssl_metadata_demo_chain_cli_writes_metrics_outputs(tmp_path, mo
     assert rows[0]["sample_id"] == metrics["sample_id"]
 
 
+def test_run_openssl_metadata_demo_chain_cli_writes_artifact_index_outputs(tmp_path, monkeypatch) -> None:
+    out_dir = tmp_path / "openssl_metadata_demo"
+    monkeypatch.setattr(
+        "sys.argv",
+        [
+            "run_openssl_metadata_demo_chain",
+            "--out-dir",
+            str(out_dir),
+            "--record-count",
+            "4",
+            "--epochs",
+            "20",
+            "--write-markdown-summary",
+            "--write-metrics-json",
+            "--write-metrics-csv",
+            "--write-artifact-index-json",
+            "--write-artifact-index-markdown",
+        ],
+    )
+
+    assert cli.main() == 0
+    index = json.loads((out_dir / "artifact-index.json").read_text(encoding="utf-8"))
+    markdown = (out_dir / "artifact-index.md").read_text(encoding="utf-8")
+    assert index["format"] == "traceleak.metadata_demo_artifact_index.v1"
+    assert index["phase"] == "P76"
+    assert index["payload_inspected"] is False
+    assert "# Metadata Demo Artifact Index" in markdown
+
+
 def test_run_openssl_metadata_demo_chain_cli_rejects_bad_record_count(tmp_path, monkeypatch) -> None:
     out_dir = tmp_path / "openssl_metadata_demo"
     monkeypatch.setattr(

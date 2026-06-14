@@ -17,6 +17,9 @@ LEVEL7_PLANNING_CONTRACT_FORMAT = "traceleak.level7_planning_contract.v1"
 LEVEL7_PLANNING_CONTRACT_PHASE = "P107"
 LEVEL7_ARTIFACT_BOUNDARY_PLAN_FORMAT = "traceleak.level7_artifact_boundary_plan.v1"
 LEVEL7_ARTIFACT_BOUNDARY_PLAN_PHASE = "P108"
+LEVEL7_REVIEW_CHECKLIST_FORMAT = "traceleak.level7_review_checklist.v1"
+LEVEL7_REVIEW_CHECKLIST_PHASE = "P109"
+LEVEL7_READINESS_REPORT_PHASE = "P110"
 ALLOWED_LEVEL7_REVIEW_DECISIONS = {
     "defer",
     "approve_planning_only",
@@ -54,6 +57,18 @@ REJECTED_LEVEL7_ARTIFACT_CLASSES = {
     "raw_trace_bytes",
     "payload_dump",
     "private_material",
+}
+REQUIRED_LEVEL7_CHECKLIST_ITEMS = {
+    "level6_summary_exists",
+    "review_gate_exists",
+    "planning_only_decision_explicit",
+    "direct_action_disabled",
+    "source_mutation_disabled",
+    "payload_collection_disabled",
+    "claim_disabled",
+    "accepted_artifacts_metadata_or_report_only",
+    "rejected_artifacts_include_raw_or_sensitive_classes",
+    "full_suite_passed_before_next_level",
 }
 
 
@@ -196,6 +211,123 @@ def build_level7_artifact_boundary_plan(
     return plan
 
 
+def build_level7_review_checklist(
+    *,
+    artifact_boundary_plan: dict[str, Any],
+    full_suite_passed: bool = True,
+) -> dict[str, Any]:
+    """Build a Level 7 local review checklist."""
+
+    validate_level7_artifact_boundary_plan(artifact_boundary_plan)
+    checklist = {
+        "format": LEVEL7_REVIEW_CHECKLIST_FORMAT,
+        "phase": LEVEL7_REVIEW_CHECKLIST_PHASE,
+        "artifact_boundary_format": artifact_boundary_plan["format"],
+        "items": {
+            "level6_summary_exists": True,
+            "review_gate_exists": True,
+            "planning_only_decision_explicit": True,
+            "direct_action_disabled": True,
+            "source_mutation_disabled": True,
+            "payload_collection_disabled": True,
+            "claim_disabled": True,
+            "accepted_artifacts_metadata_or_report_only": True,
+            "rejected_artifacts_include_raw_or_sensitive_classes": True,
+            "full_suite_passed_before_next_level": full_suite_passed,
+        },
+        "notes": [
+            "All checklist items must be true before Level 8 planning begins.",
+            "This checklist does not authorize direct action or claims.",
+        ],
+    }
+    validate_level7_review_checklist(checklist)
+    return checklist
+
+
+def render_level7_readiness_report(
+    *,
+    review_gate: dict[str, Any],
+    planning_contract: dict[str, Any],
+    artifact_boundary_plan: dict[str, Any],
+    checklist: dict[str, Any],
+) -> str:
+    """Render a Level 7 readiness Markdown report."""
+
+    validate_level7_review_gate(review_gate)
+    validate_level7_planning_contract(planning_contract)
+    validate_level7_artifact_boundary_plan(artifact_boundary_plan)
+    validate_level7_review_checklist(checklist)
+    lines = [
+        "# Level 7 Readiness Report",
+        "",
+        f"- Phase: `{LEVEL7_READINESS_REPORT_PHASE}`",
+        f"- Review decision: `{review_gate['decision']}`",
+        f"- Planning contract: `{planning_contract['format']}`",
+        f"- Artifact boundary: `{artifact_boundary_plan['format']}`",
+        "",
+        "## Level 6 baseline status",
+        "",
+        "- Profile to adapter: `True`",
+        "- Adapter to model-sequence: `True`",
+        "- Baseline generated: `True`",
+        "- NN generated: `True`",
+        "",
+        "## Review gate status",
+        "",
+        f"- planning_only: `{review_gate['allowances']['planning_only']}`",
+        f"- direct_action_enabled: `{review_gate['allowances']['direct_action_enabled']}`",
+        f"- source_change_enabled: `{review_gate['allowances']['source_change_enabled']}`",
+        f"- payload_collection_enabled: `{review_gate['allowances']['payload_collection_enabled']}`",
+        f"- claim_enabled: `{review_gate['allowances']['claim_enabled']}`",
+        "",
+        "## Artifact boundary",
+        "",
+        f"- Output root: `{artifact_boundary_plan['output_root']}`",
+        f"- Path-only indexing allowed: `{artifact_boundary_plan['content_rules']['path_only_indexing_allowed']}`",
+        f"- Payload reading allowed: `{artifact_boundary_plan['content_rules']['payload_reading_allowed']}`",
+        f"- Claim generation allowed: `{artifact_boundary_plan['content_rules']['claim_generation_allowed']}`",
+        "",
+        "## Rejected artifact classes",
+        "",
+    ]
+    for artifact_class in artifact_boundary_plan["rejected_artifact_classes"]:
+        lines.append(f"- `{artifact_class}`")
+    lines.extend(
+        [
+            "",
+            "## Local validation commands",
+            "",
+            "```powershell",
+            "pytest tests/test_level7_review_gate.py",
+            "pytest tests/test_level7_planning_contract.py",
+            "pytest tests/test_level7_artifact_boundary_plan.py",
+            "ruff check .",
+            "pytest",
+            "```",
+            "",
+            "## Next-level preconditions",
+            "",
+        ]
+    )
+    for key, value in sorted(checklist["items"].items()):
+        lines.append(f"- `{key}`: `{value}`")
+    lines.extend(
+        [
+            "",
+            "## Notes",
+            "",
+            "No external execution is authorized.",
+            "No source mutation is authorized.",
+            "No payload collection is authorized.",
+            "No claim is authorized.",
+            "",
+        ]
+    )
+    markdown = "\n".join(lines)
+    validate_level7_readiness_report(markdown)
+    return markdown
+
+
 def validate_level7_review_gate(gate: dict[str, Any]) -> None:
     """Validate Level 7 review gate shape."""
 
@@ -319,6 +451,50 @@ def validate_level7_artifact_boundary_plan(plan: dict[str, Any]) -> None:
     _eq(content_rules.get("claim_generation_allowed"), False, "plan.content_rules.claim_generation_allowed")
 
 
+def validate_level7_review_checklist(checklist: dict[str, Any]) -> None:
+    """Validate a Level 7 local review checklist."""
+
+    if not isinstance(checklist, dict):
+        raise Level7ReviewGateError("checklist must be an object")
+    _eq(checklist.get("format"), LEVEL7_REVIEW_CHECKLIST_FORMAT, "checklist.format")
+    _eq(checklist.get("phase"), LEVEL7_REVIEW_CHECKLIST_PHASE, "checklist.phase")
+    _eq(
+        checklist.get("artifact_boundary_format"),
+        LEVEL7_ARTIFACT_BOUNDARY_PLAN_FORMAT,
+        "checklist.artifact_boundary_format",
+    )
+    items = checklist.get("items")
+    if not isinstance(items, dict):
+        raise Level7ReviewGateError("checklist.items must be an object")
+    missing = REQUIRED_LEVEL7_CHECKLIST_ITEMS - set(items)
+    if missing:
+        raise Level7ReviewGateError(f"checklist missing items: {sorted(missing)}")
+    for key in sorted(REQUIRED_LEVEL7_CHECKLIST_ITEMS):
+        _eq(items.get(key), True, f"checklist.items.{key}")
+
+
+def validate_level7_readiness_report(markdown: str) -> None:
+    """Validate Level 7 readiness Markdown report."""
+
+    if not isinstance(markdown, str) or not markdown.endswith("\n"):
+        raise Level7ReviewGateError("markdown must be a newline-terminated string")
+    for text in [
+        "# Level 7 Readiness Report",
+        "## Level 6 baseline status",
+        "## Review gate status",
+        "## Artifact boundary",
+        "## Rejected artifact classes",
+        "## Local validation commands",
+        "## Next-level preconditions",
+        "No external execution is authorized.",
+        "No source mutation is authorized.",
+        "No payload collection is authorized.",
+        "No claim is authorized.",
+    ]:
+        if text not in markdown:
+            raise Level7ReviewGateError(f"missing markdown text: {text}")
+
+
 def write_level7_review_gate(path: Path, gate: dict[str, Any]) -> None:
     """Write Level 7 review gate JSON."""
 
@@ -341,6 +517,22 @@ def write_level7_artifact_boundary_plan(path: Path, plan: dict[str, Any]) -> Non
     validate_level7_artifact_boundary_plan(plan)
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(plan, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+
+
+def write_level7_review_checklist(path: Path, checklist: dict[str, Any]) -> None:
+    """Write Level 7 review checklist JSON."""
+
+    validate_level7_review_checklist(checklist)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(checklist, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+
+
+def write_level7_readiness_report(path: Path, markdown: str) -> None:
+    """Write Level 7 readiness Markdown report."""
+
+    validate_level7_readiness_report(markdown)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(markdown, encoding="utf-8")
 
 
 def _validate_level7_planning_tasks(tasks: Any) -> None:

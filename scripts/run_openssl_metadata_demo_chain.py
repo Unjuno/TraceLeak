@@ -6,6 +6,12 @@ from __future__ import annotations
 import argparse
 from pathlib import Path
 
+from traceleak.metadata_demo_artifact_index import (
+    build_metadata_demo_artifact_index,
+    render_metadata_demo_artifact_index_markdown,
+    write_metadata_demo_artifact_index_json,
+    write_metadata_demo_artifact_index_markdown,
+)
 from traceleak.metadata_demo_markdown_summary import (
     render_metadata_demo_markdown_summary_from_artifacts,
     write_metadata_demo_markdown_summary,
@@ -30,6 +36,8 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--include-ranking", action="store_true")
     parser.add_argument("--write-metrics-json", action="store_true")
     parser.add_argument("--write-metrics-csv", action="store_true")
+    parser.add_argument("--write-artifact-index-json", action="store_true")
+    parser.add_argument("--write-artifact-index-markdown", action="store_true")
     return parser.parse_args()
 
 
@@ -56,6 +64,15 @@ def main() -> int:
                 write_metadata_demo_metrics_json(args.out_dir / "demo-metrics.json", metrics)
             if args.write_metrics_csv:
                 write_metadata_demo_metrics_csv(args.out_dir / "demo-metrics.csv", metrics)
+        if args.write_artifact_index_json or args.write_artifact_index_markdown:
+            index = build_metadata_demo_artifact_index(output_dir=args.out_dir)
+            if args.write_artifact_index_json:
+                write_metadata_demo_artifact_index_json(args.out_dir / "artifact-index.json", index)
+            if args.write_artifact_index_markdown:
+                write_metadata_demo_artifact_index_markdown(
+                    args.out_dir / "artifact-index.md",
+                    render_metadata_demo_artifact_index_markdown(index),
+                )
     except Exception as exc:
         print(f"invalid OpenSSL metadata demo chain request: {exc}")
         return 1

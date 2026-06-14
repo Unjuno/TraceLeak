@@ -10,6 +10,11 @@ from traceleak.metadata_demo_markdown_summary import (
     render_metadata_demo_markdown_summary_from_artifacts,
     write_metadata_demo_markdown_summary,
 )
+from traceleak.metadata_demo_metrics import (
+    build_metadata_demo_metrics_from_artifacts,
+    write_metadata_demo_metrics_csv,
+    write_metadata_demo_metrics_json,
+)
 from traceleak.openssl_metadata_demo_chain import (
     build_openssl_metadata_demo_chain,
     write_openssl_metadata_demo_chain,
@@ -23,6 +28,8 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--epochs", default=20, type=int)
     parser.add_argument("--write-markdown-summary", action="store_true")
     parser.add_argument("--include-ranking", action="store_true")
+    parser.add_argument("--write-metrics-json", action="store_true")
+    parser.add_argument("--write-metrics-csv", action="store_true")
     return parser.parse_args()
 
 
@@ -43,6 +50,12 @@ def main() -> int:
                 include_ranking=args.include_ranking,
             )
             write_metadata_demo_markdown_summary(args.out_dir / "demo-summary.md", markdown)
+        if args.write_metrics_json or args.write_metrics_csv:
+            metrics = build_metadata_demo_metrics_from_artifacts(artifacts)
+            if args.write_metrics_json:
+                write_metadata_demo_metrics_json(args.out_dir / "demo-metrics.json", metrics)
+            if args.write_metrics_csv:
+                write_metadata_demo_metrics_csv(args.out_dir / "demo-metrics.csv", metrics)
     except Exception as exc:
         print(f"invalid OpenSSL metadata demo chain request: {exc}")
         return 1

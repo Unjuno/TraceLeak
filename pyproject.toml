@@ -77,6 +77,7 @@ traceleak-validate-openssl-runtime-transition-gate = "scripts.validate_openssl_r
 traceleak-adapt-openssl-derived-metadata = "scripts.adapt_openssl_derived_metadata:main"
 traceleak-build-metadata-symbolic-input = "scripts.build_metadata_symbolic_input:main"
 traceleak-run-symbolic-metadata-demo-chain = "scripts.run_symbolic_metadata_demo_chain:main"
+traceleak-compare-demo-summaries = "scripts.compare_demo_summaries:main"
 traceleak-run-openssl-metadata-demo-chain = "scripts.run_openssl_metadata_demo_chain:main"
 traceleak-metadata-demo-markdown-summary = "scripts.metadata_demo_markdown_summary:main"
 traceleak-validate-openssl-preflight = "scripts.validate_openssl_preflight:main"

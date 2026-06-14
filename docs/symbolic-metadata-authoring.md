@@ -43,4 +43,12 @@ traceleak-validate-openssl-runtime-transition-gate --out reports/local/openssl_m
 traceleak-adapt-openssl-derived-metadata --metadata reports/local/openssl_metadata_demo/symbolic-metadata-input.json --runtime-gate reports/local/openssl_metadata_demo/runtime-gate.json --out reports/local/openssl_metadata_demo/symbolic-model-sequence.json
 ```
 
+## Run authored symbolic metadata demo chain
+
+This one-command path builds default symbolic metadata, adapts it into model-sequence shape, runs baseline and NN smoke checks, and writes a compact Markdown report.
+
+```powershell
+traceleak-run-symbolic-metadata-demo-chain --out-dir reports/local/symbolic_metadata_demo --epochs 20 --write-report
+```
+
 Generated local files should stay under `reports/local/`.

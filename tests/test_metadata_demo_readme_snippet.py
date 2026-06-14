@@ -16,6 +16,7 @@ def test_metadata_demo_readme_snippet_renders_command_block() -> None:
     assert f"- Phase: `{METADATA_DEMO_README_SNIPPET_PHASE}`" in markdown
     assert "traceleak-run-openssl-metadata-demo-chain" in markdown
     assert "--write-artifact-index-json" in markdown
+    assert "--write-command-snippet" in markdown
     assert markdown.endswith("\n")
     validate_metadata_demo_readme_snippet(markdown)
 
@@ -24,6 +25,12 @@ def test_metadata_demo_readme_snippet_uses_custom_output_dir() -> None:
     markdown = render_metadata_demo_readme_snippet(output_dir="reports/local/custom_demo")
 
     assert "--out-dir reports/local/custom_demo" in markdown
+
+
+def test_metadata_demo_readme_snippet_allows_absolute_temp_dir(tmp_path) -> None:
+    markdown = render_metadata_demo_readme_snippet(output_dir=tmp_path)
+
+    assert f"--out-dir {tmp_path.as_posix()}" in markdown
 
 
 def test_metadata_demo_readme_snippet_writes_file(tmp_path) -> None:
@@ -36,5 +43,5 @@ def test_metadata_demo_readme_snippet_writes_file(tmp_path) -> None:
 
 
 def test_metadata_demo_readme_snippet_rejects_unsafe_output_dir() -> None:
-    with pytest.raises(MetadataDemoReadmeSnippetError, match="relative"):
+    with pytest.raises(MetadataDemoReadmeSnippetError, match="parent traversal"):
         render_metadata_demo_readme_snippet(output_dir="../bad")

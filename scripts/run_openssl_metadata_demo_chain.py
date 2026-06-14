@@ -21,6 +21,10 @@ from traceleak.metadata_demo_metrics import (
     write_metadata_demo_metrics_csv,
     write_metadata_demo_metrics_json,
 )
+from traceleak.metadata_demo_readme_snippet import (
+    render_metadata_demo_readme_snippet,
+    write_metadata_demo_readme_snippet,
+)
 from traceleak.openssl_metadata_demo_chain import (
     build_openssl_metadata_demo_chain,
     write_openssl_metadata_demo_chain,
@@ -38,6 +42,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--write-metrics-csv", action="store_true")
     parser.add_argument("--write-artifact-index-json", action="store_true")
     parser.add_argument("--write-artifact-index-markdown", action="store_true")
+    parser.add_argument("--write-command-snippet", action="store_true")
     return parser.parse_args()
 
 
@@ -73,6 +78,11 @@ def main() -> int:
                     args.out_dir / "artifact-index.md",
                     render_metadata_demo_artifact_index_markdown(index),
                 )
+        if args.write_command_snippet:
+            write_metadata_demo_readme_snippet(
+                args.out_dir / "demo-commands.md",
+                render_metadata_demo_readme_snippet(output_dir=args.out_dir),
+            )
     except Exception as exc:
         print(f"invalid OpenSSL metadata demo chain request: {exc}")
         return 1

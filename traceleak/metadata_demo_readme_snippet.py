@@ -25,7 +25,8 @@ def render_metadata_demo_readme_snippet(*, output_dir: Path | str = "reports/loc
         "--write-metrics-json "
         "--write-metrics-csv "
         "--write-artifact-index-json "
-        "--write-artifact-index-markdown"
+        "--write-artifact-index-markdown "
+        "--write-command-snippet"
     )
     markdown = "\n".join(
         [
@@ -67,6 +68,7 @@ def validate_metadata_demo_readme_snippet(markdown: str) -> None:
         "traceleak-run-openssl-metadata-demo-chain",
         "--write-artifact-index-json",
         "--write-artifact-index-markdown",
+        "--write-command-snippet",
         "Generated files should stay under `reports/local/`.",
     ]:
         if required not in markdown:
@@ -75,8 +77,10 @@ def validate_metadata_demo_readme_snippet(markdown: str) -> None:
 
 def _safe_output_dir_text(output_dir: Path | str) -> str:
     value = str(output_dir).replace("\\", "/")
-    if not value or value.startswith("/") or ".." in Path(value).parts:
-        raise MetadataDemoReadmeSnippetError("output_dir must be a non-empty relative path")
+    if not value:
+        raise MetadataDemoReadmeSnippetError("output_dir must be non-empty")
+    if ".." in Path(value).parts:
+        raise MetadataDemoReadmeSnippetError("output_dir must not contain parent traversal")
     if any(char.isspace() for char in value):
         raise MetadataDemoReadmeSnippetError("output_dir must not contain whitespace")
     return value

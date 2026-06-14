@@ -39,6 +39,7 @@ pytest tests/test_openssl_metadata_demo_fixtures.py
 
 ```powershell
 pytest tests/test_metadata_demo_markdown_summary.py tests/test_metadata_demo_markdown_summary_cli.py
+pytest tests/test_run_openssl_metadata_demo_chain_cli.py
 ```
 
 ## Shared fixture validation
@@ -47,13 +48,25 @@ pytest tests/test_metadata_demo_markdown_summary.py tests/test_metadata_demo_mar
 pytest tests/test_openssl_model_sequence_metadata_demo_manifest.py tests/test_metadata_demo_token_ranking.py tests/test_openssl_metadata_demo_chain_outputs.py
 ```
 
-## Generate local demo artifacts
+## Generate local demo JSON artifacts
 
 ```powershell
 traceleak-run-openssl-metadata-demo-chain --out-dir reports/local/openssl_metadata_demo --record-count 4 --epochs 20
 ```
 
-## Render local Markdown summary
+## Generate local demo JSON artifacts and Markdown
+
+```powershell
+traceleak-run-openssl-metadata-demo-chain --out-dir reports/local/openssl_metadata_demo --record-count 4 --epochs 20 --write-markdown-summary
+```
+
+## Generate Markdown with ranking table
+
+```powershell
+traceleak-run-openssl-metadata-demo-chain --out-dir reports/local/openssl_metadata_demo --record-count 4 --epochs 20 --write-markdown-summary --include-ranking
+```
+
+## Render local Markdown summary from existing JSON
 
 ```powershell
 traceleak-metadata-demo-markdown-summary --summary reports/local/openssl_metadata_demo/demo-summary.json --manifest reports/local/openssl_metadata_demo/demo-manifest.json --out reports/local/openssl_metadata_demo/demo-summary.md

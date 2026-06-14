@@ -125,6 +125,12 @@ pytest tests/test_level8_artifact_intake_report.py
 pytest tests/test_write_level8_files_cli.py
 ```
 
+## Level 9 readiness validation
+
+```powershell
+pytest tests/test_level9_readiness_audit.py
+```
+
 ## Shared fixture validation
 
 ```powershell
@@ -216,6 +222,12 @@ traceleak-write-level7-artifacts --out-dir reports/local/level7_planning --appro
 
 ```powershell
 traceleak-write-level8-files --out-dir reports/local/level8_intake --root-dir .
+```
+
+## Generate Level 9 readiness files
+
+```powershell
+traceleak-write-level9-files --out-dir reports/local/level9_readiness --root-dir .
 ```
 
 ## Render local Markdown summary from existing JSON

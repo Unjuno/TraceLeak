@@ -42,6 +42,13 @@ pytest tests/test_metadata_demo_markdown_summary.py tests/test_metadata_demo_mar
 pytest tests/test_run_openssl_metadata_demo_chain_cli.py
 ```
 
+## Metrics export validation
+
+```powershell
+pytest tests/test_metadata_demo_metrics.py
+pytest tests/test_run_openssl_metadata_demo_chain_cli.py
+```
+
 ## Shared fixture validation
 
 ```powershell
@@ -64,6 +71,12 @@ traceleak-run-openssl-metadata-demo-chain --out-dir reports/local/openssl_metada
 
 ```powershell
 traceleak-run-openssl-metadata-demo-chain --out-dir reports/local/openssl_metadata_demo --record-count 4 --epochs 20 --write-markdown-summary --include-ranking
+```
+
+## Generate JSON, Markdown, and metrics exports
+
+```powershell
+traceleak-run-openssl-metadata-demo-chain --out-dir reports/local/openssl_metadata_demo --record-count 4 --epochs 20 --write-markdown-summary --include-ranking --write-metrics-json --write-metrics-csv
 ```
 
 ## Render local Markdown summary from existing JSON

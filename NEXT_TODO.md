@@ -1,8 +1,8 @@
 # TraceLeak NEXT TODO
 
-Current checkpoint: latest local validation reported all pass after the shared pytest fixture addition.
+Current checkpoint: metadata demo Markdown summary reporter added and latest local validation reported all pass.
 
-This list covers the next work block. The purpose is to reduce duplicated test setup, improve local reproducibility, and prepare a cleaner handoff into the next metadata sample stage.
+This list covers the next work block. The purpose is to improve the human-readable demo output, keep the generated Markdown stable, and connect the Markdown summary more tightly to the one-command metadata demo workflow.
 
 ## Validation baseline
 
@@ -15,90 +15,101 @@ ruff check .
 pytest
 ```
 
-## P46: migrate duplicated tests to shared fixtures
+Focused validation for the current reporter path:
 
-Goal: reduce repeated setup code in metadata-demo tests.
+```powershell
+pytest tests/test_metadata_demo_markdown_summary.py tests/test_metadata_demo_markdown_summary_cli.py
+pytest tests/test_openssl_metadata_demo_chain_outputs.py
+pytest tests/test_run_openssl_metadata_demo_chain_cli.py
+```
 
-- [ ] Update `tests/test_openssl_model_sequence_metadata_demo_manifest.py` to use `metadata_demo_artifacts`.
-- [ ] Update `tests/test_metadata_demo_token_ranking.py` to use `metadata_demo_artifacts`.
-- [ ] Update any safe P28 tests to use `runtime_transition_gate` where it keeps the test clearer.
-- [ ] Keep each test readable; do not over-abstract assertions.
-- [ ] Run focused tests and full pytest.
+## Completed recent block
 
-## P47: add lightweight chain-output consistency checks
+- [x] P46: migrated P26/P30 tests to shared metadata demo fixtures.
+- [x] P47: added lightweight chain-output consistency checks.
+- [x] P48: shared fixture path established in `tests/conftest.py`.
+- [x] P49: added metadata sample shape smoke checks.
+- [x] P50: added demo summary smoke checks.
+- [x] P51: refreshed local validation docs.
+- [x] P52: refreshed next-session handoff docs.
+- [x] P55-B: added metadata demo Markdown summary helper, CLI, tests, entry point, and docs.
 
-Goal: verify the one-command demo chain writes the expected set of JSON files.
+## P56: add Markdown summary golden-shape test
 
-- [ ] Add a helper function that lists expected demo output names.
-- [ ] Add a test that checks every expected file exists after the chain CLI runs.
-- [ ] Add a test that each generated file has a JSON object root.
-- [ ] Keep generated outputs under pytest temporary directories.
-- [ ] Do not commit generated local outputs.
+Goal: make the generated Markdown stable without freezing every numeric value.
 
-## P48: add a compact fixture usage test
+- [ ] Add a test that checks required headings appear in order.
+- [ ] Check required sections:
+  - Status,
+  - Safety flags,
+  - Baseline,
+  - Neural model,
+  - Manifest binding,
+  - Notes.
+- [ ] Check the Markdown ends with a newline or stable final notes block.
+- [ ] Avoid exact full-file snapshot testing for now.
 
-Goal: make `tests/conftest.py` usage explicit and stable.
+## P57: render Markdown summary from one-command chain outputs
 
-- [ ] Add a simple test file for shared fixtures if safe to add.
-- [ ] Confirm `metadata_demo_artifacts` includes the expected keys.
-- [ ] Confirm `runtime_transition_gate` has the expected format and phase.
-- [ ] Keep this test minimal to avoid duplicated validation logic.
+Goal: ensure the reporter works against files written by the chain helper, not only in-memory fixtures.
 
-## P49: add metadata sample shape smoke test
+- [ ] Use `write_openssl_metadata_demo_chain` in a pytest temp directory.
+- [ ] Read `demo-summary.json` and `demo-manifest.json` from disk.
+- [ ] Render Markdown.
+- [ ] Assert the output includes sample ID and record count.
 
-Goal: detect accidental schema drift in generated metadata samples.
+## P58: add optional ranking file flow to local docs
 
-- [ ] Check top-level sample fields:
-  - `format`,
-  - `artifact_format`,
-  - `run_count`,
-  - `records`,
-  - `sample_metadata`.
-- [ ] Check every record has:
-  - `run_id`,
-  - `target`,
-  - `view`,
-  - `sequence`,
-  - `token_counts`,
-  - `label`.
-- [ ] Keep the test independent of exact NN scores.
+Goal: document how to include a ranking JSON when one is available.
 
-## P50: add demo summary smoke test
-
-Goal: ensure P24 summary remains stable enough for later docs and local checks.
-
-- [ ] Verify summary format and phase.
-- [ ] Verify baseline and NN summary sections exist.
-- [ ] Verify public-safe flags stay true.
-- [ ] Verify non-demo claim flags stay false.
-
-## P51: add local command doc refresh
-
-Goal: make the next operator command set shorter.
-
-- [ ] Update `docs/local-validation.md` with the new focused test groups.
-- [ ] Add a section for shared fixture tests.
-- [ ] Add a section for one-command demo chain output checks.
+- [ ] Update `docs/local-validation.md` with a short optional `--ranking` example.
+- [ ] Keep generated files under `reports/local/`.
 - [ ] Keep wording short and neutral.
 
-## P52: add developer handoff refresh
+## P59: add Markdown summary chain helper
 
-Goal: keep long-session recovery easy.
+Goal: reduce repeated CLI usage by adding a helper that writes Markdown from already-built demo artifacts.
 
-- [ ] Update `docs/next-session-handoff.md` with P46-P51 status after implementation.
-- [ ] Include exact validation commands.
-- [ ] List known deferred items.
-- [ ] Keep the handoff concise.
+- [ ] Add helper function to build ranking and Markdown from `metadata_demo_artifacts`-style objects.
+- [ ] Suggested file: extend `traceleak/metadata_demo_markdown_summary.py`.
+- [ ] Add tests using `metadata_demo_artifacts`.
+- [ ] Keep helper pure and deterministic.
 
-## P53: inspect old TODO for completed items
+## P60: add chain CLI option to also write Markdown
 
-Goal: reduce confusion caused by older unchecked P31-P40 entries.
+Goal: let the one-command metadata demo chain optionally create `demo-summary.md`.
 
-- [ ] Either update `TODO.md` in a small safe patch or keep `NEXT_TODO.md` as the active list.
-- [ ] If updating `TODO.md` is blocked again, leave it untouched and reference `NEXT_TODO.md` in final handoff.
-- [ ] Do not delete `TODO.md`.
+- [ ] Add CLI argument to `scripts/run_openssl_metadata_demo_chain.py`:
+  - `--write-markdown-summary`
+- [ ] When enabled, write `demo-summary.md` in the same output directory.
+- [ ] Do not change default behavior.
+- [ ] Add CLI test for the option.
 
-## P54: full local validation checkpoint
+## P61: add Markdown summary validation helper
+
+Goal: make it easy to verify a generated Markdown summary file is structurally valid.
+
+- [ ] Add a small validator function for required headings.
+- [ ] Add a CLI only if necessary; default to helper tests first.
+- [ ] Add tests for valid and missing-heading Markdown.
+
+## P62: update handoff docs after Markdown integration
+
+Goal: keep next-session recovery accurate.
+
+- [ ] Update `docs/next-session-handoff.md` after P56-P61.
+- [ ] Include exact focused validation commands.
+- [ ] Include the local command to generate JSON + Markdown.
+
+## P63: keep NEXT_TODO active
+
+Goal: avoid confusion with older `TODO.md` entries.
+
+- [ ] Leave `TODO.md` untouched unless a small safe update is needed.
+- [ ] Use `NEXT_TODO.md` as the active short-term list.
+- [ ] Mention active TODO location in final handoff.
+
+## P64: full local validation checkpoint
 
 Goal: end the block cleanly.
 
@@ -107,14 +118,14 @@ Goal: end the block cleanly.
 - [ ] Run full `pytest`.
 - [ ] Fix any failures before starting new feature work.
 
-## P55: choose next technical direction
+## P65: choose next technical direction
 
-After P46-P54 are all pass, choose one path:
+After P56-P64 are all pass, choose one path:
 
-- [ ] Improve local metadata sample authoring.
+- [ ] Improve Markdown report quality further.
+- [ ] Add CSV or table export for summary metrics.
+- [ ] Improve local artifact generation ergonomics.
 - [ ] Improve model-sequence report rendering.
-- [ ] Improve fixture generation.
-- [ ] Improve docs and public demo onboarding.
-- [ ] Improve validation helpers.
+- [ ] Improve symbolic metadata authoring helpers.
 
-Recommended default: improve fixture generation and report rendering, because they increase confidence without expanding scope.
+Recommended default: add `--write-markdown-summary` to the one-command chain and keep report quality incremental.

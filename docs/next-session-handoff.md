@@ -1,6 +1,6 @@
 # Next session handoff
 
-Current checkpoint: P56-P64 metadata demo Markdown integration block implemented; local validation pending.
+Current checkpoint: P66-P75 compact metrics export block implemented; local validation pending.
 
 ## Local validation
 
@@ -14,6 +14,7 @@ pytest
 ## Focused checks
 
 ```powershell
+pytest tests/test_metadata_demo_metrics.py
 pytest tests/test_metadata_demo_markdown_summary.py tests/test_metadata_demo_markdown_summary_cli.py
 pytest tests/test_run_openssl_metadata_demo_chain_cli.py
 pytest tests/test_openssl_metadata_demo_chain_outputs.py
@@ -26,25 +27,22 @@ pytest tests/test_openssl_metadata_demo_fixtures.py
 
 ## What changed in this block
 
-- Markdown summaries now have required-heading validation.
-- Markdown can be rendered directly from metadata demo chain artifacts.
-- The chain CLI can write `demo-summary.md` with `--write-markdown-summary`.
-- Add `--include-ranking` with the chain CLI to include the demo token table.
-- Local validation docs include JSON-only and JSON-plus-Markdown commands.
+- Added compact metadata demo metrics helper.
+- Added one-row CSV rendering for compact metrics.
+- Added JSON and CSV write helpers for metrics exports.
+- The chain CLI can write `demo-metrics.json` with `--write-metrics-json`.
+- The chain CLI can write `demo-metrics.csv` with `--write-metrics-csv`.
+- Local validation docs include JSON + Markdown + metrics commands.
 
 ## Local demo commands
 
 ```powershell
-traceleak-run-openssl-metadata-demo-chain --out-dir reports/local/openssl_metadata_demo --record-count 4 --epochs 20 --write-markdown-summary
-```
-
-```powershell
-traceleak-run-openssl-metadata-demo-chain --out-dir reports/local/openssl_metadata_demo --record-count 4 --epochs 20 --write-markdown-summary --include-ranking
+traceleak-run-openssl-metadata-demo-chain --out-dir reports/local/openssl_metadata_demo --record-count 4 --epochs 20 --write-markdown-summary --include-ranking --write-metrics-json --write-metrics-csv
 ```
 
 ## Next likely work
 
 - Fix any local test failures first.
-- If all pass, improve Markdown table formatting or add a compact metric export.
+- If all pass, improve model-sequence report rendering or symbolic metadata authoring helpers.
 - Keep generated demo files under `reports/local/`.
 - Keep the next technical step small and validation-focused.

@@ -22,6 +22,7 @@ pytest tests/test_openssl_model_sequence_metadata_sample.py tests/test_build_ope
 pytest tests/test_openssl_model_sequence_metadata_sample_model_preflight.py tests/test_build_openssl_model_sequence_metadata_sample_model_preflight_cli.py
 pytest tests/test_run_openssl_model_sequence_metadata_sample_demo_cli.py
 pytest tests/test_run_openssl_metadata_demo_chain_cli.py
+pytest tests/test_openssl_metadata_demo_chain_outputs.py
 ```
 
 ## Focused hardening validation
@@ -32,6 +33,12 @@ pytest tests/test_openssl_runtime_transition_gate.py tests/test_validate_openssl
 pytest tests/test_openssl_derived_metadata_adapter.py tests/test_adapt_openssl_derived_metadata_cli.py
 pytest tests/test_metadata_demo_token_ranking.py
 pytest tests/test_openssl_metadata_demo_fixtures.py
+```
+
+## Shared fixture validation
+
+```powershell
+pytest tests/test_openssl_model_sequence_metadata_demo_manifest.py tests/test_metadata_demo_token_ranking.py tests/test_openssl_metadata_demo_chain_outputs.py
 ```
 
 ## Generate local demo artifacts

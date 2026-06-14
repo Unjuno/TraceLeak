@@ -1,8 +1,8 @@
 # TraceLeak NEXT TODO
 
-Current checkpoint: metadata demo Markdown summary reporter added and latest local validation reported all pass.
+Current checkpoint: P56-P64 metadata demo Markdown integration block implemented; local validation pending.
 
-This list covers the next work block. The purpose is to improve the human-readable demo output, keep the generated Markdown stable, and connect the Markdown summary more tightly to the one-command metadata demo workflow.
+This file is the active short-term TODO. `TODO.md` is kept as historical context and should not be deleted.
 
 ## Validation baseline
 
@@ -15,7 +15,7 @@ ruff check .
 pytest
 ```
 
-Focused validation for the current reporter path:
+Focused validation for the current Markdown path:
 
 ```powershell
 pytest tests/test_metadata_demo_markdown_summary.py tests/test_metadata_demo_markdown_summary_cli.py
@@ -33,94 +33,19 @@ pytest tests/test_run_openssl_metadata_demo_chain_cli.py
 - [x] P51: refreshed local validation docs.
 - [x] P52: refreshed next-session handoff docs.
 - [x] P55-B: added metadata demo Markdown summary helper, CLI, tests, entry point, and docs.
+- [x] P56: added Markdown required-heading shape validation and tests.
+- [x] P57: added test coverage for Markdown rendering from chain-written JSON files.
+- [x] P58: updated local validation docs with Markdown and ranking-enabled commands.
+- [x] P59: added helper to render Markdown directly from metadata demo artifacts.
+- [x] P60: added `--write-markdown-summary` and `--include-ranking` to the metadata demo chain CLI.
+- [x] P61: added Markdown summary validation helper and missing-heading test.
+- [x] P62: updated next-session handoff docs.
+- [x] P63: kept `NEXT_TODO.md` as the active short-term list.
+- [ ] P64: local focused tests, `ruff check .`, and full `pytest` still need to be run locally.
 
-## P56: add Markdown summary golden-shape test
+## P65: choose next technical direction after local all-pass
 
-Goal: make the generated Markdown stable without freezing every numeric value.
-
-- [ ] Add a test that checks required headings appear in order.
-- [ ] Check required sections:
-  - Status,
-  - Safety flags,
-  - Baseline,
-  - Neural model,
-  - Manifest binding,
-  - Notes.
-- [ ] Check the Markdown ends with a newline or stable final notes block.
-- [ ] Avoid exact full-file snapshot testing for now.
-
-## P57: render Markdown summary from one-command chain outputs
-
-Goal: ensure the reporter works against files written by the chain helper, not only in-memory fixtures.
-
-- [ ] Use `write_openssl_metadata_demo_chain` in a pytest temp directory.
-- [ ] Read `demo-summary.json` and `demo-manifest.json` from disk.
-- [ ] Render Markdown.
-- [ ] Assert the output includes sample ID and record count.
-
-## P58: add optional ranking file flow to local docs
-
-Goal: document how to include a ranking JSON when one is available.
-
-- [ ] Update `docs/local-validation.md` with a short optional `--ranking` example.
-- [ ] Keep generated files under `reports/local/`.
-- [ ] Keep wording short and neutral.
-
-## P59: add Markdown summary chain helper
-
-Goal: reduce repeated CLI usage by adding a helper that writes Markdown from already-built demo artifacts.
-
-- [ ] Add helper function to build ranking and Markdown from `metadata_demo_artifacts`-style objects.
-- [ ] Suggested file: extend `traceleak/metadata_demo_markdown_summary.py`.
-- [ ] Add tests using `metadata_demo_artifacts`.
-- [ ] Keep helper pure and deterministic.
-
-## P60: add chain CLI option to also write Markdown
-
-Goal: let the one-command metadata demo chain optionally create `demo-summary.md`.
-
-- [ ] Add CLI argument to `scripts/run_openssl_metadata_demo_chain.py`:
-  - `--write-markdown-summary`
-- [ ] When enabled, write `demo-summary.md` in the same output directory.
-- [ ] Do not change default behavior.
-- [ ] Add CLI test for the option.
-
-## P61: add Markdown summary validation helper
-
-Goal: make it easy to verify a generated Markdown summary file is structurally valid.
-
-- [ ] Add a small validator function for required headings.
-- [ ] Add a CLI only if necessary; default to helper tests first.
-- [ ] Add tests for valid and missing-heading Markdown.
-
-## P62: update handoff docs after Markdown integration
-
-Goal: keep next-session recovery accurate.
-
-- [ ] Update `docs/next-session-handoff.md` after P56-P61.
-- [ ] Include exact focused validation commands.
-- [ ] Include the local command to generate JSON + Markdown.
-
-## P63: keep NEXT_TODO active
-
-Goal: avoid confusion with older `TODO.md` entries.
-
-- [ ] Leave `TODO.md` untouched unless a small safe update is needed.
-- [ ] Use `NEXT_TODO.md` as the active short-term list.
-- [ ] Mention active TODO location in final handoff.
-
-## P64: full local validation checkpoint
-
-Goal: end the block cleanly.
-
-- [ ] Run focused tests.
-- [ ] Run `ruff check .`.
-- [ ] Run full `pytest`.
-- [ ] Fix any failures before starting new feature work.
-
-## P65: choose next technical direction
-
-After P56-P64 are all pass, choose one path:
+After P64 is all pass, choose one path:
 
 - [ ] Improve Markdown report quality further.
 - [ ] Add CSV or table export for summary metrics.
@@ -128,4 +53,41 @@ After P56-P64 are all pass, choose one path:
 - [ ] Improve model-sequence report rendering.
 - [ ] Improve symbolic metadata authoring helpers.
 
-Recommended default: add `--write-markdown-summary` to the one-command chain and keep report quality incremental.
+Recommended default: add a compact metrics export, because it complements the Markdown report without expanding scope.
+
+## Candidate next block: P66-P75
+
+### P66: add compact demo metrics object
+
+- [ ] Build a small metrics object from summary and manifest JSON.
+- [ ] Include record count, label count, baseline scores, NN score, attribution count, and sample digest.
+- [ ] Keep it deterministic and JSON-only.
+
+### P67: add CSV export for demo metrics
+
+- [ ] Render the compact metrics object to one-row CSV.
+- [ ] Add helper tests.
+- [ ] Add CLI tests only after helper tests pass.
+
+### P68: add chain CLI option for metrics CSV
+
+- [ ] Add an opt-in flag to write `demo-metrics.csv`.
+- [ ] Do not change default chain behavior.
+- [ ] Add CLI test.
+
+### P69: update local validation docs
+
+- [ ] Add metrics CSV validation commands.
+- [ ] Add local command for JSON + Markdown + CSV generation.
+
+### P70: update handoff docs
+
+- [ ] Reflect Markdown and CSV state after implementation.
+- [ ] Keep commands concise.
+
+### P71-P75: validation checkpoint
+
+- [ ] Run focused tests.
+- [ ] Run `ruff check .`.
+- [ ] Run full `pytest`.
+- [ ] Fix failures before adding new surface area.

@@ -66,6 +66,7 @@ traceleak-validate-openssl-model-sequence-input-manifest = "scripts.validate_ope
 traceleak-build-openssl-model-sequence-sample-contract = "scripts.build_openssl_model_sequence_sample_contract:main"
 traceleak-validate-openssl-model-sequence-sample-manifest = "scripts.validate_openssl_model_sequence_sample_manifest:main"
 traceleak-validate-openssl-model-sequence-sample-approval-gate = "scripts.validate_openssl_model_sequence_sample_approval_gate:main"
+traceleak-validate-openssl-model-sequence-sample-materialization-request-contract = "scripts.validate_openssl_model_sequence_sample_materialization_request_contract:main"
 traceleak-validate-openssl-preflight = "scripts.validate_openssl_preflight:main"
 traceleak-openssl-preflight-to-report = "scripts.openssl_preflight_to_report:main"
 traceleak-validate-openssl-trace-contract = "scripts.validate_openssl_trace_contract:main"

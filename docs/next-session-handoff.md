@@ -1,6 +1,6 @@
 # Next session handoff
 
-Current checkpoint: Level 8 approved local artifact intake implemented; local validation pending.
+Current checkpoint: Level 9 readiness audit implemented; local validation pending.
 
 ## Local validation
 
@@ -27,32 +27,36 @@ pytest tests/test_level8_artifact_intake_manifest.py
 pytest tests/test_level8_artifact_intake_index.py
 pytest tests/test_level8_artifact_intake_report.py
 pytest tests/test_write_level8_files_cli.py
+pytest tests/test_level9_readiness_audit.py
 ```
 
 ## What changed in the latest block
 
-- Added Level 1 to Level 8 roadmap summary in `NEXT_TODO.md`.
-- Added Level 8 artifact intake helper.
-- Added Level 8 approved manifest validation.
-- Added Level 8 path-only index.
-- Added Level 8 intake Markdown report.
-- Added Level 8 local file writer CLI.
-- Registered `traceleak-write-level8-files` entry point.
-- Updated local validation docs with Level 8 commands.
+- Level 8 was locally reported all pass.
+- Added Level 9 readiness audit helper.
+- Added Level 9 readiness Markdown report renderer.
+- Added Level 9 readiness writer CLI.
+- Registered `traceleak-write-level9-files` entry point.
+- Updated local validation docs with Level 9 commands.
+- Updated `NEXT_TODO.md` with Level 1 to Level 9 roadmap summary.
 
-## Level 8 generation command
+## Level 9 generation command
 
 ```powershell
-traceleak-write-level8-files --out-dir reports/local/level8_intake --root-dir .
+traceleak-write-level9-files --out-dir reports/local/level9_readiness --root-dir .
 ```
 
 ## Current boundary
 
-Level 8 remains path-only local metadata/report artifact intake. The implementation records artifact path, class, role, existence, and size only. It does not parse artifact contents or generate claims.
+Level 9 audits the Level 8 path-only index. It summarizes present and missing local artifact paths and does not parse artifact contents.
+
+## Known limitation
+
+The Level 9 CLI smoke test file could not be added because the GitHub write was blocked by safety checks. The CLI itself is registered and can be smoke-tested manually with the command above.
 
 ## Next likely work
 
-- Fix any local Level 8 focused test failures first.
+- Fix any local Level 9 focused test failures first.
 - Run `ruff check .`.
 - Run full `pytest`.
-- If all pass, mark Level 8 complete and create a Level 9 TODO before any further expansion.
+- If all pass, mark Level 9 complete and create a Level 10 TODO before any further expansion.

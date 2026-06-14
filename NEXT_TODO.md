@@ -1,6 +1,6 @@
 # TraceLeak NEXT TODO
 
-Current checkpoint: P87-P89 metadata/symbolic demo summary comparison implemented; local validation pending.
+Current checkpoint: P90-P92 combined local dashboard implemented; local validation pending.
 
 This file is the active short-term TODO. `TODO.md` is kept as historical context and should not be deleted.
 
@@ -15,13 +15,13 @@ ruff check .
 pytest
 ```
 
-Focused validation for the current demo comparison path:
+Focused validation for the current local dashboard path:
 
 ```powershell
-pytest tests/test_demo_summary_comparison.py
-pytest tests/test_compare_demo_summaries_cli.py
+pytest tests/test_local_demo_dashboard.py
+pytest tests/test_write_local_demo_dashboard_cli.py
+pytest tests/test_demo_summary_comparison.py tests/test_compare_demo_summaries_cli.py
 pytest tests/test_symbolic_metadata_demo_chain.py tests/test_run_symbolic_metadata_demo_chain_cli.py
-pytest tests/test_openssl_metadata_demo_chain_outputs.py tests/test_run_openssl_metadata_demo_chain_cli.py
 ```
 
 ## Completed recent block
@@ -63,26 +63,29 @@ pytest tests/test_openssl_metadata_demo_chain_outputs.py tests/test_run_openssl_
 - [x] P86: authored symbolic demo chain implemented; local validation pending at handoff time.
 - [x] P87: added metadata/symbolic demo summary comparison helper.
 - [x] P88: added comparison Markdown renderer and CLI.
-- [ ] P89: local focused tests, `ruff check .`, and full `pytest` still need to be run locally.
+- [x] P89: local validation reported all pass.
+- [x] P90: added combined local dashboard helper.
+- [x] P91: added dashboard Markdown renderer and CLI.
+- [ ] P92: local focused tests, `ruff check .`, and full `pytest` still need to be run locally.
 
 ## Candidate next block after local all-pass
 
-### P90: add combined local dashboard index
+### P93: add one-command local report bundle runner
 
-- [ ] Build a small JSON index spanning metadata demo, symbolic demo, and comparison outputs.
-- [ ] Include filenames, roles, present/missing state, and summary paths only.
-- [ ] Keep output metadata-only and local-report-oriented.
+- [ ] Run metadata demo generation, symbolic demo generation, comparison, and dashboard generation from one CLI.
+- [ ] Keep all outputs under `reports/local/`.
+- [ ] Keep it metadata-only and payload-free.
 
-### P91: add combined dashboard Markdown
+### P94: add bundle smoke tests
 
-- [ ] Render links/paths to the three report surfaces.
-- [ ] Include short instructions for regenerating all reports.
-- [ ] Keep generated files under `reports/local/`.
+- [ ] Verify all expected report surfaces are written.
+- [ ] Verify dashboard present count after bundle generation.
+- [ ] Verify failure mode for invalid epochs.
 
-### P92: validation checkpoint
+### P95: validation checkpoint
 
 - [ ] Run focused tests.
 - [ ] Run `ruff check .`.
 - [ ] Run full `pytest`.
 
-Recommended default: add a combined local dashboard/index next, because it makes the metadata demo, symbolic demo, and comparison outputs easier to inspect together before moving closer to OpenSSL-derived inputs.
+Recommended default: add a one-command local report bundle next, because it reduces manual steps and prepares a reproducible local demo surface.

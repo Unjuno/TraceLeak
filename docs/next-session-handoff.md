@@ -1,6 +1,6 @@
 # Next session handoff
 
-Current checkpoint: Level 7 planning layer implemented and locally reported all pass.
+Current checkpoint: Level 8 approved local artifact intake implemented; local validation pending.
 
 ## Local validation
 
@@ -23,44 +23,36 @@ pytest tests/test_level7_planning_contract.py
 pytest tests/test_level7_artifact_boundary_plan.py
 pytest tests/test_level7_readiness_artifacts.py
 pytest tests/test_write_level7_artifacts_cli.py
+pytest tests/test_level8_artifact_intake_manifest.py
+pytest tests/test_level8_artifact_intake_index.py
+pytest tests/test_level8_artifact_intake_report.py
+pytest tests/test_write_level8_files_cli.py
 ```
 
 ## What changed in the latest block
 
-- Level 6 was locally reported all pass.
-- Added Level 7 completion TODO.
-- Added Level 7 planning-only contract on top of the existing review gate.
-- Added Level 7 artifact boundary plan.
-- Added Level 7 review checklist and readiness report.
-- Added Level 7 planning artifact writer CLI.
-- Registered `traceleak-write-level7-artifacts` entry point.
-- Updated local validation docs with Level 6 and Level 7 commands.
+- Added Level 1 to Level 8 roadmap summary in `NEXT_TODO.md`.
+- Added Level 8 artifact intake helper.
+- Added Level 8 approved manifest validation.
+- Added Level 8 path-only index.
+- Added Level 8 intake Markdown report.
+- Added Level 8 local file writer CLI.
+- Registered `traceleak-write-level8-files` entry point.
+- Updated local validation docs with Level 8 commands.
 
-## Level 7 generation commands
-
-Review gate only:
+## Level 8 generation command
 
 ```powershell
-traceleak-write-level7-artifacts --out-dir reports/local/level7_planning
+traceleak-write-level8-files --out-dir reports/local/level8_intake --root-dir .
 ```
 
-Planning artifact set:
+## Current boundary
 
-```powershell
-traceleak-write-level7-artifacts --out-dir reports/local/level7_planning --approve-planning-only
-```
-
-## Current safety boundary
-
-Level 7 remains planning-only. The current artifacts explicitly keep these disabled:
-
-- direct action
-- source mutation
-- payload collection
-- claim generation
+Level 8 remains path-only local metadata/report artifact intake. The implementation records artifact path, class, role, existence, and size only. It does not parse artifact contents or generate claims.
 
 ## Next likely work
 
-- Add Level 8 TODO as approved metadata artifact intake.
-- Keep Level 8 restricted to already-approved local metadata/report artifact classes under `reports/local/`.
-- Do not introduce external build, external run, source mutation, raw capture, payload collection, or claims.
+- Fix any local Level 8 focused test failures first.
+- Run `ruff check .`.
+- Run full `pytest`.
+- If all pass, mark Level 8 complete and create a Level 9 TODO before any further expansion.

@@ -1,6 +1,6 @@
 # TraceLeak NEXT TODO
 
-Current checkpoint: Level 7 planning layer implemented and locally reported all pass.
+Current checkpoint: Level 8 approved artifact intake implemented; local validation pending.
 
 This file is the active short-term TODO. `TODO.md` is kept as historical context and should not be deleted.
 
@@ -15,14 +15,13 @@ ruff check .
 pytest
 ```
 
-Focused validation for the current Level 7 planning path:
+Focused validation for the current Level 8 artifact intake path:
 
 ```powershell
-pytest tests/test_level7_review_gate.py
-pytest tests/test_level7_planning_contract.py
-pytest tests/test_level7_artifact_boundary_plan.py
-pytest tests/test_level7_readiness_artifacts.py
-pytest tests/test_write_level7_artifacts_cli.py
+pytest tests/test_level8_artifact_intake_manifest.py
+pytest tests/test_level8_artifact_intake_index.py
+pytest tests/test_level8_artifact_intake_report.py
+pytest tests/test_write_level8_files_cli.py
 ```
 
 ## Completed recent blocks
@@ -48,55 +47,44 @@ pytest tests/test_write_level7_artifacts_cli.py
 - [x] P111: added Level 7 planning artifact writer CLI.
 - [x] P112: refreshed local validation and handoff docs.
 - [x] P113: Level 7 local validation reported all pass.
+- [x] P114: added Level 8 artifact intake manifest.
+- [x] P115: added Level 8 manifest validator hardening.
+- [x] P116: added Level 8 path-only intake index.
+- [x] P117: added Level 8 intake Markdown report.
+- [x] P118: added Level 8 file writer CLI.
+- [x] P119: updated local validation docs with Level 8 commands.
+- [ ] P120: run focused Level 8 tests, `ruff check .`, and full `pytest` locally.
 
-## Candidate next block
+## Level 1 to Level 8 roadmap summary
 
-### Level 8: approved metadata artifact intake
+- Level 1: core validation, feature extraction, baseline/report surface.
+- Level 2: model-sequence samples and lightweight model checks.
+- Level 3: MLP report chain and review summaries.
+- Level 4: contract and approval scaffolding.
+- Level 5: metadata demo bundle and local report surfaces.
+- Level 6: metadata profile ingress and adapter/model/report proof.
+- Level 7: review-gated planning, boundary plan, checklist, readiness report.
+- Level 8: approved local metadata/report artifact intake, path-only index, intake report.
 
-Level 8 should remain metadata/report only. It should accept only approved local artifacts under `reports/local/` that match the Level 7 artifact boundary plan.
+## Current Level 8 commands
 
-Do not introduce external builds, external runs, source mutation, raw capture collection, payload collection, private material collection, or claim generation.
+Generate Level 8 files:
 
-### P114: approved artifact intake manifest
+```powershell
+traceleak-write-level8-files --out-dir reports/local/level8_intake --root-dir .
+```
 
-- [ ] Define `traceleak.level8_artifact_intake_manifest.v1`.
-- [ ] Require a valid Level 7 artifact boundary plan.
-- [ ] Accept only artifact classes listed by the boundary plan.
-- [ ] Require all paths to be relative and under `reports/local/`.
-- [ ] Reject unknown, raw, sensitive, or claim-bearing artifact classes.
+Validate Level 8 focused tests:
 
-### P115: artifact intake validator
+```powershell
+pytest tests/test_level8_artifact_intake_manifest.py
+pytest tests/test_level8_artifact_intake_index.py
+pytest tests/test_level8_artifact_intake_report.py
+pytest tests/test_write_level8_files_cli.py
+```
 
-- [ ] Validate manifest shape.
-- [ ] Validate unique artifact keys.
-- [ ] Validate safe relative paths.
-- [ ] Validate accepted artifact classes.
-- [ ] Keep payload reading disabled.
+## Candidate next block after Level 8 all-pass
 
-### P116: path-only intake index
+Do not start Level 9 until P120 is complete. The next block should first create a Level 9 TODO and review gate rather than widening behavior directly.
 
-- [ ] Build an index that records path, class, role, existence, and size.
-- [ ] Do not read JSON or Markdown payload contents.
-- [ ] Record `payload_reading_allowed = false`.
-- [ ] Record `claim_generation_allowed = false`.
-
-### P117: Level 8 report
-
-- [ ] Render accepted artifact counts.
-- [ ] Render missing artifact counts.
-- [ ] Render rejected class policy.
-- [ ] State that no payload was read and no claim was generated.
-
-### P118: Level 8 writer CLI
-
-- [ ] Write manifest, path-only index, and report.
-- [ ] Keep output under `reports/local/level8_intake/`.
-- [ ] Reject unsafe paths and rejected classes.
-
-### P119: validation checkpoint
-
-- [ ] Run focused Level 8 tests.
-- [ ] Run `ruff check .`.
-- [ ] Run full `pytest`.
-
-Recommended default: start Level 8 with a path-only artifact intake manifest, not runtime work.
+Recommended default: finish Level 8 validation first.

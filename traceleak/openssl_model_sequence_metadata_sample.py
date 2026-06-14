@@ -17,7 +17,7 @@ OPENSSL_MODEL_SEQUENCE_METADATA_SAMPLE_ARTIFACT_FORMAT = (
 )
 MODEL_SEQUENCE_FORMAT = "traceleak.model_sequence.v1"
 OPENSSL_METADATA_SAMPLE_TARGET = "openssl-metadata-only"
-OPENSSL_METADATA_SAMPLE_VIEW = "metadata_only"
+OPENSSL_METADATA_SAMPLE_VIEW = "meta"
 FORBIDDEN_METADATA_SAMPLE_FIELDS = [
     "source_text",
     "diff_text",
@@ -105,6 +105,7 @@ def build_openssl_model_sequence_metadata_sample(
         "records": records,
         "notes": [
             "Metadata-only OpenSSL model-sequence sample generated for public pipeline checks.",
+            "The top-level view is 'meta' for compatibility with public-safe model result validators.",
             "This artifact contains no OpenSSL source text, command text, build output, execution output, raw capture, or runtime payload.",
             "Labels are synthetic lab-only metadata probe buckets; they are not evidence of OpenSSL leakage.",
         ],

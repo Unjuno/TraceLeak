@@ -130,6 +130,8 @@ def render_level9_readiness_report(audit: dict[str, Any]) -> str:
         ]
     )
     markdown = "\n".join(lines)
+    if not markdown.endswith("\n"):
+        markdown += "\n"
     validate_level9_readiness_report(markdown)
     return markdown
 

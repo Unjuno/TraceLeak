@@ -76,6 +76,7 @@ traceleak-validate-openssl-model-sequence-metadata-demo-manifest = "scripts.vali
 traceleak-validate-openssl-runtime-transition-gate = "scripts.validate_openssl_runtime_transition_gate:main"
 traceleak-adapt-openssl-derived-metadata = "scripts.adapt_openssl_derived_metadata:main"
 traceleak-run-openssl-metadata-demo-chain = "scripts.run_openssl_metadata_demo_chain:main"
+traceleak-metadata-demo-markdown-summary = "scripts.metadata_demo_markdown_summary:main"
 traceleak-validate-openssl-preflight = "scripts.validate_openssl_preflight:main"
 traceleak-openssl-preflight-to-report = "scripts.openssl_preflight_to_report:main"
 traceleak-validate-openssl-trace-contract = "scripts.validate_openssl_trace_contract:main"

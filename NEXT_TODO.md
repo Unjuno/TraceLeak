@@ -1,6 +1,6 @@
 # TraceLeak NEXT TODO
 
-Current checkpoint: P84-P86 authored symbolic baseline/NN demo chain implemented; local validation pending.
+Current checkpoint: P87-P89 metadata/symbolic demo summary comparison implemented; local validation pending.
 
 This file is the active short-term TODO. `TODO.md` is kept as historical context and should not be deleted.
 
@@ -15,15 +15,13 @@ ruff check .
 pytest
 ```
 
-Focused validation for the current authored symbolic demo path:
+Focused validation for the current demo comparison path:
 
 ```powershell
-pytest tests/test_symbolic_metadata_demo_chain.py
-pytest tests/test_run_symbolic_metadata_demo_chain_cli.py
-pytest tests/test_metadata_symbolic_authoring.py
-pytest tests/test_build_metadata_symbolic_input_cli.py
-pytest tests/test_openssl_derived_metadata_adapter.py tests/test_adapt_openssl_derived_metadata_cli.py
-pytest tests/test_openssl_runtime_transition_gate.py tests/test_validate_openssl_runtime_transition_gate_cli.py
+pytest tests/test_demo_summary_comparison.py
+pytest tests/test_compare_demo_summaries_cli.py
+pytest tests/test_symbolic_metadata_demo_chain.py tests/test_run_symbolic_metadata_demo_chain_cli.py
+pytest tests/test_openssl_metadata_demo_chain_outputs.py tests/test_run_openssl_metadata_demo_chain_cli.py
 ```
 
 ## Completed recent block
@@ -62,26 +60,29 @@ pytest tests/test_openssl_runtime_transition_gate.py tests/test_validate_openssl
 - [x] P83: symbolic authoring block implemented; local validation pending at handoff time.
 - [x] P84: connected authored symbolic metadata to adapter, baseline, NN, and JSON summary outputs.
 - [x] P85: added authored symbolic Markdown report summary.
-- [ ] P86: local focused tests, `ruff check .`, and full `pytest` still need to be run locally.
+- [x] P86: authored symbolic demo chain implemented; local validation pending at handoff time.
+- [x] P87: added metadata/symbolic demo summary comparison helper.
+- [x] P88: added comparison Markdown renderer and CLI.
+- [ ] P89: local focused tests, `ruff check .`, and full `pytest` still need to be run locally.
 
 ## Candidate next block after local all-pass
 
-### P87: compare metadata-demo and symbolic-demo summaries
+### P90: add combined local dashboard index
 
-- [ ] Add a small comparison helper for two demo summary JSON objects.
-- [ ] Compare record count, label distribution, baseline scores, NN scores, and attribution counts.
-- [ ] Keep output metadata-only and report-oriented.
+- [ ] Build a small JSON index spanning metadata demo, symbolic demo, and comparison outputs.
+- [ ] Include filenames, roles, present/missing state, and summary paths only.
+- [ ] Keep output metadata-only and local-report-oriented.
 
-### P88: add comparison Markdown report
+### P91: add combined dashboard Markdown
 
-- [ ] Render a compact Markdown comparison table.
-- [ ] Include notes that both sides are metadata-only local demo outputs.
-- [ ] Add CLI test coverage.
+- [ ] Render links/paths to the three report surfaces.
+- [ ] Include short instructions for regenerating all reports.
+- [ ] Keep generated files under `reports/local/`.
 
-### P89: validation checkpoint
+### P92: validation checkpoint
 
 - [ ] Run focused tests.
 - [ ] Run `ruff check .`.
 - [ ] Run full `pytest`.
 
-Recommended default: compare the generated metadata demo and authored symbolic demo outputs next, because it helps verify the two local demo surfaces are coherent before moving closer to OpenSSL-derived inputs.
+Recommended default: add a combined local dashboard/index next, because it makes the metadata demo, symbolic demo, and comparison outputs easier to inspect together before moving closer to OpenSSL-derived inputs.

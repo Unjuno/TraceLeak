@@ -121,6 +121,28 @@ def test_run_openssl_metadata_demo_chain_cli_writes_artifact_index_outputs(tmp_p
     assert "# Metadata Demo Artifact Index" in markdown
 
 
+def test_run_openssl_metadata_demo_chain_cli_writes_command_snippet(tmp_path, monkeypatch) -> None:
+    out_dir = tmp_path / "openssl_metadata_demo"
+    monkeypatch.setattr(
+        "sys.argv",
+        [
+            "run_openssl_metadata_demo_chain",
+            "--out-dir",
+            str(out_dir),
+            "--record-count",
+            "4",
+            "--epochs",
+            "20",
+            "--write-command-snippet",
+        ],
+    )
+
+    assert cli.main() == 0
+    markdown = (out_dir / "demo-commands.md").read_text(encoding="utf-8")
+    assert "# Metadata Demo Local Commands" in markdown
+    assert "--write-command-snippet" in markdown
+
+
 def test_run_openssl_metadata_demo_chain_cli_rejects_bad_record_count(tmp_path, monkeypatch) -> None:
     out_dir = tmp_path / "openssl_metadata_demo"
     monkeypatch.setattr(

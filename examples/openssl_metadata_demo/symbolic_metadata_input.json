@@ -1,0 +1,22 @@
+{
+  "format": "traceleak.openssl_derived_metadata_input.v1",
+  "source_pin_digest": "sha256:source-pin",
+  "target_decision": "constant_time_helper_misuse_path",
+  "metadata_only": true,
+  "payload_free": true,
+  "label_name": "metadata_bucket",
+  "records": [
+    {
+      "run_id": "r0",
+      "source_region_token": "ct_helper_family_a",
+      "transition_token": "branch_symbolic_a",
+      "label": "bucket_a"
+    },
+    {
+      "run_id": "r1",
+      "source_region_token": "ct_helper_family_b",
+      "transition_token": "branch_symbolic_b",
+      "label": "bucket_b"
+    }
+  ]
+}

@@ -41,6 +41,31 @@ def test_run_openssl_metadata_demo_chain_cli_writes_artifacts(tmp_path, monkeypa
     assert summary["flags"]["metadata_only"] is True
 
 
+def test_run_openssl_metadata_demo_chain_cli_writes_markdown_summary(tmp_path, monkeypatch) -> None:
+    out_dir = tmp_path / "openssl_metadata_demo"
+    monkeypatch.setattr(
+        "sys.argv",
+        [
+            "run_openssl_metadata_demo_chain",
+            "--out-dir",
+            str(out_dir),
+            "--record-count",
+            "4",
+            "--epochs",
+            "20",
+            "--write-markdown-summary",
+            "--include-ranking",
+        ],
+    )
+
+    assert cli.main() == 0
+    markdown_path = out_dir / "demo-summary.md"
+    assert markdown_path.exists()
+    markdown = markdown_path.read_text(encoding="utf-8")
+    assert "# Metadata Demo Summary" in markdown
+    assert "## Top ranked demo tokens" in markdown
+
+
 def test_run_openssl_metadata_demo_chain_cli_rejects_bad_record_count(tmp_path, monkeypatch) -> None:
     out_dir = tmp_path / "openssl_metadata_demo"
     monkeypatch.setattr(

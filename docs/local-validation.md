@@ -116,6 +116,15 @@ pytest tests/test_level7_readiness_artifacts.py
 pytest tests/test_write_level7_artifacts_cli.py
 ```
 
+## Level 8 artifact intake validation
+
+```powershell
+pytest tests/test_level8_artifact_intake_manifest.py
+pytest tests/test_level8_artifact_intake_index.py
+pytest tests/test_level8_artifact_intake_report.py
+pytest tests/test_write_level8_files_cli.py
+```
+
 ## Shared fixture validation
 
 ```powershell
@@ -201,6 +210,12 @@ Planning artifact set:
 
 ```powershell
 traceleak-write-level7-artifacts --out-dir reports/local/level7_planning --approve-planning-only
+```
+
+## Generate Level 8 artifact intake files
+
+```powershell
+traceleak-write-level8-files --out-dir reports/local/level8_intake --root-dir .
 ```
 
 ## Render local Markdown summary from existing JSON

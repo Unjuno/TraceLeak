@@ -15,6 +15,8 @@ LEVEL7_REVIEW_GATE_FORMAT = "traceleak.level7_review_gate.v1"
 LEVEL7_REVIEW_GATE_PHASE = "P106"
 LEVEL7_PLANNING_CONTRACT_FORMAT = "traceleak.level7_planning_contract.v1"
 LEVEL7_PLANNING_CONTRACT_PHASE = "P107"
+LEVEL7_ARTIFACT_BOUNDARY_PLAN_FORMAT = "traceleak.level7_artifact_boundary_plan.v1"
+LEVEL7_ARTIFACT_BOUNDARY_PLAN_PHASE = "P108"
 ALLOWED_LEVEL7_REVIEW_DECISIONS = {
     "defer",
     "approve_planning_only",
@@ -34,6 +36,24 @@ FORBIDDEN_LEVEL7_PLANNING_TASKS = {
     "raw_capture_collection",
     "payload_collection",
     "claim_making",
+}
+ACCEPTED_LEVEL7_ARTIFACT_CLASSES = {
+    "profile_json",
+    "adapter_input_json",
+    "model_sequence_json",
+    "baseline_result_json",
+    "nn_result_json",
+    "summary_json",
+    "markdown_report",
+}
+REJECTED_LEVEL7_ARTIFACT_CLASSES = {
+    "source_text",
+    "command_transcript",
+    "build_log",
+    "execution_log",
+    "raw_trace_bytes",
+    "payload_dump",
+    "private_material",
 }
 
 
@@ -140,6 +160,42 @@ def build_level7_planning_contract(
     return contract
 
 
+def build_level7_artifact_boundary_plan(
+    *,
+    planning_contract: dict[str, Any],
+    output_root: str = "reports/local",
+) -> dict[str, Any]:
+    """Build a path-only artifact boundary plan from a planning-only contract."""
+
+    validate_level7_planning_contract(planning_contract)
+    _relative_report_path(output_root, "output_root")
+    plan = {
+        "format": LEVEL7_ARTIFACT_BOUNDARY_PLAN_FORMAT,
+        "phase": LEVEL7_ARTIFACT_BOUNDARY_PLAN_PHASE,
+        "planning_contract_format": planning_contract["format"],
+        "planning_contract_phase": planning_contract["phase"],
+        "output_root": output_root,
+        "accepted_artifact_classes": sorted(ACCEPTED_LEVEL7_ARTIFACT_CLASSES),
+        "rejected_artifact_classes": sorted(REJECTED_LEVEL7_ARTIFACT_CLASSES),
+        "path_constraints": {
+            "must_be_under": output_root,
+            "absolute_paths_allowed": False,
+            "parent_traversal_allowed": False,
+        },
+        "content_rules": {
+            "path_only_indexing_allowed": True,
+            "payload_reading_allowed": False,
+            "claim_generation_allowed": False,
+        },
+        "notes": [
+            "This boundary plan is for planning artifacts only.",
+            "It allows metadata/report artifact classes and rejects raw or sensitive artifact classes.",
+        ],
+    }
+    validate_level7_artifact_boundary_plan(plan)
+    return plan
+
+
 def validate_level7_review_gate(gate: dict[str, Any]) -> None:
     """Validate Level 7 review gate shape."""
 
@@ -225,6 +281,44 @@ def validate_level7_planning_contract(contract: dict[str, Any]) -> None:
         _non_empty(note, f"contract.notes[{index}]")
 
 
+def validate_level7_artifact_boundary_plan(plan: dict[str, Any]) -> None:
+    """Validate a Level 7 artifact boundary plan."""
+
+    if not isinstance(plan, dict):
+        raise Level7ReviewGateError("plan must be an object")
+    _eq(plan.get("format"), LEVEL7_ARTIFACT_BOUNDARY_PLAN_FORMAT, "plan.format")
+    _eq(plan.get("phase"), LEVEL7_ARTIFACT_BOUNDARY_PLAN_PHASE, "plan.phase")
+    _eq(plan.get("planning_contract_format"), LEVEL7_PLANNING_CONTRACT_FORMAT, "plan.planning_contract_format")
+    _eq(plan.get("planning_contract_phase"), LEVEL7_PLANNING_CONTRACT_PHASE, "plan.planning_contract_phase")
+    _relative_report_path(plan.get("output_root"), "plan.output_root")
+    _eq(
+        plan.get("accepted_artifact_classes"),
+        sorted(ACCEPTED_LEVEL7_ARTIFACT_CLASSES),
+        "plan.accepted_artifact_classes",
+    )
+    _eq(
+        plan.get("rejected_artifact_classes"),
+        sorted(REJECTED_LEVEL7_ARTIFACT_CLASSES),
+        "plan.rejected_artifact_classes",
+    )
+    constraints = plan.get("path_constraints")
+    if not isinstance(constraints, dict):
+        raise Level7ReviewGateError("plan.path_constraints must be an object")
+    _eq(constraints.get("must_be_under"), plan["output_root"], "plan.path_constraints.must_be_under")
+    _eq(constraints.get("absolute_paths_allowed"), False, "plan.path_constraints.absolute_paths_allowed")
+    _eq(
+        constraints.get("parent_traversal_allowed"),
+        False,
+        "plan.path_constraints.parent_traversal_allowed",
+    )
+    content_rules = plan.get("content_rules")
+    if not isinstance(content_rules, dict):
+        raise Level7ReviewGateError("plan.content_rules must be an object")
+    _eq(content_rules.get("path_only_indexing_allowed"), True, "plan.content_rules.path_only_indexing_allowed")
+    _eq(content_rules.get("payload_reading_allowed"), False, "plan.content_rules.payload_reading_allowed")
+    _eq(content_rules.get("claim_generation_allowed"), False, "plan.content_rules.claim_generation_allowed")
+
+
 def write_level7_review_gate(path: Path, gate: dict[str, Any]) -> None:
     """Write Level 7 review gate JSON."""
 
@@ -241,6 +335,14 @@ def write_level7_planning_contract(path: Path, contract: dict[str, Any]) -> None
     path.write_text(json.dumps(contract, indent=2, sort_keys=True) + "\n", encoding="utf-8")
 
 
+def write_level7_artifact_boundary_plan(path: Path, plan: dict[str, Any]) -> None:
+    """Write Level 7 artifact boundary plan JSON."""
+
+    validate_level7_artifact_boundary_plan(plan)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(plan, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+
+
 def _validate_level7_planning_tasks(tasks: Any) -> None:
     if not isinstance(tasks, list) or not tasks:
         raise Level7ReviewGateError("tasks must be a non-empty list")
@@ -251,9 +353,20 @@ def _validate_level7_planning_tasks(tasks: Any) -> None:
             raise Level7ReviewGateError(f"task is not allowed: {task}")
 
 
-def _non_empty(value: Any, name: str) -> None:
+def _relative_report_path(value: Any, name: str) -> str:
+    text = _non_empty(value, name)
+    path = Path(text.replace("\\", "/"))
+    if path.is_absolute() or ".." in path.parts:
+        raise Level7ReviewGateError(f"{name} must be a safe relative path")
+    if path.parts[:2] != ("reports", "local"):
+        raise Level7ReviewGateError(f"{name} must be under reports/local")
+    return text
+
+
+def _non_empty(value: Any, name: str) -> str:
     if not isinstance(value, str) or not value.strip():
         raise Level7ReviewGateError(f"{name} must be a non-empty string")
+    return value.strip()
 
 
 def _eq(value: Any, expected: Any, name: str) -> None:

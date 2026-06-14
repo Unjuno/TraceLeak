@@ -1,6 +1,6 @@
 # TraceLeak NEXT TODO
 
-Current checkpoint: P93-P95 one-command local report bundle implemented; local validation pending.
+Current checkpoint: Level 7 planning layer implemented and locally reported all pass.
 
 This file is the active short-term TODO. `TODO.md` is kept as historical context and should not be deleted.
 
@@ -15,96 +15,88 @@ ruff check .
 pytest
 ```
 
-Focused validation for the current local report bundle path:
+Focused validation for the current Level 7 planning path:
 
 ```powershell
-pytest tests/test_local_report_bundle.py
-pytest tests/test_write_local_report_bundle_cli.py
-pytest tests/test_local_demo_dashboard.py tests/test_write_local_demo_dashboard_cli.py
-pytest tests/test_demo_summary_comparison.py tests/test_compare_demo_summaries_cli.py
+pytest tests/test_level7_review_gate.py
+pytest tests/test_level7_planning_contract.py
+pytest tests/test_level7_artifact_boundary_plan.py
+pytest tests/test_level7_readiness_artifacts.py
+pytest tests/test_write_level7_artifacts_cli.py
 ```
 
-## Level 5 completion checklist
+## Completed recent blocks
 
-- [x] Metadata demo report surfaces implemented.
-- [x] Symbolic metadata demo report surfaces implemented.
-- [x] Metadata/symbolic summary comparison implemented.
-- [x] Combined local dashboard implemented.
-- [x] One-command local report bundle implemented.
-- [ ] Focused bundle tests still need to be run locally.
-- [ ] `ruff check .` still needs to be run locally.
-- [ ] Full `pytest` still needs to be run locally.
-
-## Completed recent block
-
-- [x] P46: migrated P26/P30 tests to shared metadata demo fixtures.
-- [x] P47: added lightweight chain-output consistency checks.
-- [x] P48: shared fixture path established in `tests/conftest.py`.
-- [x] P49: added metadata sample shape smoke checks.
-- [x] P50: added demo summary smoke checks.
-- [x] P51: refreshed local validation docs.
-- [x] P52: refreshed next-session handoff docs.
-- [x] P55-B: added metadata demo Markdown summary helper, CLI, tests, entry point, and docs.
-- [x] P56: added Markdown required-heading shape validation and tests.
-- [x] P57: added test coverage for Markdown rendering from chain-written JSON files.
-- [x] P58: updated local validation docs with Markdown and ranking-enabled commands.
-- [x] P59: added helper to render Markdown directly from metadata demo artifacts.
-- [x] P60: added `--write-markdown-summary` and `--include-ranking` to the metadata demo chain CLI.
-- [x] P61: added Markdown summary validation helper and missing-heading test.
-- [x] P62: updated next-session handoff docs.
-- [x] P63: kept `NEXT_TODO.md` as the active short-term list.
-- [x] P64: local validation reported all pass.
-- [x] P65: selected compact metrics export as the next technical direction.
-- [x] P66: added compact demo metrics object.
-- [x] P67: added one-row CSV export for demo metrics.
-- [x] P68: added chain CLI options for metrics JSON and CSV.
-- [x] P69: updated local validation docs.
-- [x] P70: updated handoff docs.
-- [x] P71-P75: local validation reported all pass.
-- [x] P76: added local artifact index helper and Markdown renderer.
-- [x] P77: added artifact index CLI outputs.
-- [x] P78: added local command snippet generator and CLI output.
-- [x] P79: local validation reported all pass.
-- [x] P80: added symbolic metadata authoring helper.
-- [x] P81: added tests proving authored symbolic input adapts into model-sequence shape.
-- [x] P82: added docs and local commands for authored symbolic metadata.
-- [x] P83: symbolic authoring block implemented; local validation pending at handoff time.
-- [x] P84: connected authored symbolic metadata to adapter, baseline, NN, and JSON summary outputs.
-- [x] P85: added authored symbolic Markdown report summary.
-- [x] P86: authored symbolic demo chain implemented; local validation pending at handoff time.
-- [x] P87: added metadata/symbolic demo summary comparison helper.
-- [x] P88: added comparison Markdown renderer and CLI.
-- [x] P89: local validation reported all pass.
-- [x] P90: added combined local dashboard helper.
-- [x] P91: added dashboard Markdown renderer and CLI.
-- [x] P92: combined dashboard implemented; local validation pending at handoff time.
 - [x] P93: added one-command local report bundle helper.
 - [x] P94: added local report bundle smoke tests and CLI.
-- [ ] P95: local focused tests, `ruff check .`, and full `pytest` still need to be run locally.
+- [x] P95: local focused tests, `ruff check .`, and full `pytest` reported all pass.
+- [x] P96: added OpenSSL-derived metadata profile schema.
+- [x] P97: added profile validator hardening.
+- [x] P98: added profile-to-adapter bridge.
+- [x] P99: added Level 6 profile demo chain.
+- [x] P100: added Level 6 Markdown report.
+- [x] P101: added Level 6 artifact writer CLI.
+- [x] P102: dashboard direct integration deferred; Level 6 artifact CLI covers local generation.
+- [x] P103: updated local validation docs for Level 6.
+- [x] P104: Level 6 local validation reported all pass.
+- [x] P105: added Level 7 readiness review note.
+- [x] P106: added Level 7 review gate.
+- [x] P107: added Level 7 planning-only contract.
+- [x] P108: added Level 7 artifact boundary plan.
+- [x] P109: added Level 7 review checklist.
+- [x] P110: added Level 7 readiness report.
+- [x] P111: added Level 7 planning artifact writer CLI.
+- [x] P112: refreshed local validation and handoff docs.
+- [x] P113: Level 7 local validation reported all pass.
 
-## Candidate next block after local all-pass
+## Candidate next block
 
-### P96: OpenSSL-derived metadata ingestion profile
+### Level 8: approved metadata artifact intake
 
-- [ ] Define the minimal accepted metadata fields for OpenSSL-derived local inputs.
-- [ ] Add a profile object that states allowed fields, forbidden fields, and label requirements.
-- [ ] Keep the profile metadata-only and payload-free.
+Level 8 should remain metadata/report only. It should accept only approved local artifacts under `reports/local/` that match the Level 7 artifact boundary plan.
 
-### P97: ingestion profile validator
+Do not introduce external builds, external runs, source mutation, raw capture collection, payload collection, private material collection, or claim generation.
 
-- [ ] Add tests for valid metadata-only OpenSSL-derived records.
-- [ ] Reject source text, command text, raw payload, and private material fields.
-- [ ] Reject unbalanced labels and unstable run identifiers.
+### P114: approved artifact intake manifest
 
-### P98: profile-to-adapter bridge
+- [ ] Define `traceleak.level8_artifact_intake_manifest.v1`.
+- [ ] Require a valid Level 7 artifact boundary plan.
+- [ ] Accept only artifact classes listed by the boundary plan.
+- [ ] Require all paths to be relative and under `reports/local/`.
+- [ ] Reject unknown, raw, sensitive, or claim-bearing artifact classes.
 
-- [ ] Convert valid profile input into the existing derived metadata adapter input.
-- [ ] Prove it still reaches model-sequence, baseline, and NN smoke paths.
+### P115: artifact intake validator
 
-### P99: validation checkpoint
+- [ ] Validate manifest shape.
+- [ ] Validate unique artifact keys.
+- [ ] Validate safe relative paths.
+- [ ] Validate accepted artifact classes.
+- [ ] Keep payload reading disabled.
 
-- [ ] Run focused Level 6 tests.
+### P116: path-only intake index
+
+- [ ] Build an index that records path, class, role, existence, and size.
+- [ ] Do not read JSON or Markdown payload contents.
+- [ ] Record `payload_reading_allowed = false`.
+- [ ] Record `claim_generation_allowed = false`.
+
+### P117: Level 8 report
+
+- [ ] Render accepted artifact counts.
+- [ ] Render missing artifact counts.
+- [ ] Render rejected class policy.
+- [ ] State that no payload was read and no claim was generated.
+
+### P118: Level 8 writer CLI
+
+- [ ] Write manifest, path-only index, and report.
+- [ ] Keep output under `reports/local/level8_intake/`.
+- [ ] Reject unsafe paths and rejected classes.
+
+### P119: validation checkpoint
+
+- [ ] Run focused Level 8 tests.
 - [ ] Run `ruff check .`.
 - [ ] Run full `pytest`.
 
-Recommended default: after Level 5 all pass, start Level 6 with the ingestion profile before moving closer to OpenSSL-derived inputs.
+Recommended default: start Level 8 with a path-only artifact intake manifest, not runtime work.

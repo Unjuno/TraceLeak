@@ -89,6 +89,14 @@ pytest tests/test_write_local_demo_dashboard_cli.py
 pytest tests/test_demo_summary_comparison.py tests/test_compare_demo_summaries_cli.py
 ```
 
+## Local report bundle validation
+
+```powershell
+pytest tests/test_local_report_bundle.py
+pytest tests/test_write_local_report_bundle_cli.py
+pytest tests/test_local_demo_dashboard.py tests/test_write_local_demo_dashboard_cli.py
+```
+
 ## Shared fixture validation
 
 ```powershell
@@ -148,6 +156,12 @@ traceleak-compare-demo-summaries --metadata-summary reports/local/openssl_metada
 
 ```powershell
 traceleak-write-local-demo-dashboard --root-dir reports/local --out reports/local/local-demo-dashboard.json --markdown-out reports/local/local-demo-dashboard.md
+```
+
+## Build one-command local report bundle
+
+```powershell
+traceleak-write-local-report-bundle --root-dir reports/local --record-count 4 --epochs 20
 ```
 
 ## Render local Markdown summary from existing JSON

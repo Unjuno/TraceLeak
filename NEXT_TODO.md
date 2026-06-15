@@ -1,6 +1,6 @@
 # TraceLeak NEXT TODO
 
-Current checkpoint: Level 14 completion TODO created; implementation pending.
+Current checkpoint: Level 14 completeness layer implemented; local validation pending.
 
 This file is the active short-term TODO. `TODO.md` is kept as historical context and should not be deleted.
 
@@ -15,7 +15,7 @@ ruff check .
 pytest
 ```
 
-Focused validation for the current Level 14 planning path:
+Focused validation for the current Level 14 completeness path:
 
 ```powershell
 pytest tests/test_level14_completeness_audit.py
@@ -25,36 +25,34 @@ pytest tests/test_write_level14_files_cli.py
 
 ## Completed recent blocks
 
-- [x] P136: Level 12 local validation reported all pass.
-- [x] P137: added Level 13 completion TODO and closure manifest helper.
-- [x] P138: added Level 13 handoff inventory helper.
-- [x] P139: added Level 13 closure Markdown report.
-- [x] P140: added Level 13 closure writer CLI.
-- [x] P141: updated local validation docs with Level 13 commands.
 - [x] P142: Level 13 local validation reported all pass.
-- [x] P143: added Level 14 completion TODO.
+- [x] P143: added Level 14 completion TODO and completeness audit helper.
+- [x] P144: added Level 14 completeness Markdown report.
+- [x] P145: added Level 14 completeness writer CLI.
+- [x] P146: updated local validation docs with Level 14 commands.
+- [ ] P147: run focused Level 14 tests, `ruff check .`, and full `pytest` locally.
 
 ## Level roadmap summary
 
 - Level 13: checkpoint closure and handoff inventory.
-- Level 14: handoff completeness audit planning.
+- Level 14: handoff completeness audit.
 
-## Current Level 14 TODO
+## Current Level 14 commands
 
-See:
+Generate Level 14 files:
 
-```text
-docs/level14-completion-todo.md
+```powershell
+traceleak-write-level14-files --out-dir reports/local/level14_completeness --root-dir .
 ```
 
-Recommended next implementation order:
+Validate Level 14 focused tests:
 
-1. P143 completeness audit.
-2. P144 completeness report.
-3. P145 writer CLI.
-4. P146 docs and handoff update.
-5. P147 validation checkpoint.
+```powershell
+pytest tests/test_level14_completeness_audit.py
+pytest tests/test_level14_completeness_report.py
+pytest tests/test_write_level14_files_cli.py
+```
 
-## Candidate next block
+## Candidate next block after Level 14 all-pass
 
-Start P143 only. Keep Level 14 review-only and path-only.
+Do not start Level 15 until P147 is complete. The next block should first create a Level 15 TODO and review checkpoint rather than widening behavior directly.

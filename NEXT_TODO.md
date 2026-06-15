@@ -1,6 +1,6 @@
 # TraceLeak NEXT TODO
 
-Current checkpoint: Level 15 validation rollup implemented; local validation pending.
+Current checkpoint: Level 16 completion TODO created; Level 15 local validation pending.
 
 This file is the active short-term TODO. `TODO.md` is kept as historical context and should not be deleted.
 
@@ -15,12 +15,20 @@ ruff check .
 pytest
 ```
 
-Focused validation for the Level 15 validation rollup path:
+Focused validation for Level 15:
 
 ```powershell
 pytest tests/test_level15_validation_rollup.py
 pytest tests/test_level15_validation_rollup_report.py
 pytest tests/test_write_level15_files_cli.py
+```
+
+Focused validation for the Level 16 planning path:
+
+```powershell
+pytest tests/test_level16_pre_handoff_review.py
+pytest tests/test_level16_pre_handoff_review_report.py
+pytest tests/test_write_level16_files_cli.py
 ```
 
 ## Completed recent blocks
@@ -31,28 +39,29 @@ pytest tests/test_write_level15_files_cli.py
 - [x] P150: added Level 15 validation rollup writer CLI.
 - [x] P151: updated local validation docs with Level 15 commands.
 - [ ] P152: run focused Level 15 tests, `ruff check .`, and full `pytest` locally.
+- [x] P153: added Level 16 completion TODO.
 
 ## Level roadmap summary
 
-- Level 14: handoff completeness audit.
 - Level 15: validation rollup.
+- Level 16: pre-handoff review planning.
 
-## Current Level 15 commands
+## Current Level 16 TODO
 
-Generate Level 15 files:
+See:
 
-```powershell
-traceleak-write-level15-files --out-dir reports/local/level15_validation_rollup
+```text
+docs/level16-completion-todo.md
 ```
 
-Validate Level 15 focused tests:
+Recommended next implementation order:
 
-```powershell
-pytest tests/test_level15_validation_rollup.py
-pytest tests/test_level15_validation_rollup_report.py
-pytest tests/test_write_level15_files_cli.py
-```
+1. P153 pre-handoff review manifest.
+2. P154 pre-handoff review report.
+3. P155 writer CLI.
+4. P156 docs and handoff update.
+5. P157 validation checkpoint.
 
-## Candidate next block after Level 15 all-pass
+## Candidate next block
 
-Do not start Level 16 until P152 is complete. The next block should first create a Level 16 TODO and review checkpoint rather than widening behavior directly.
+Start P153 only after checking Level 15 validation status. Keep Level 16 review-only and path-only.

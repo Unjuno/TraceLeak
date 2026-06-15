@@ -1,6 +1,6 @@
 # TraceLeak NEXT TODO
 
-Current checkpoint: Level 12 review checkpoint implemented; local validation pending.
+Current checkpoint: Level 13 completion TODO created; implementation pending.
 
 This file is the active short-term TODO. `TODO.md` is kept as historical context and should not be deleted.
 
@@ -15,11 +15,13 @@ ruff check .
 pytest
 ```
 
-Focused validation for the current Level 12 review checkpoint path:
+Focused validation for the current Level 13 planning path:
 
 ```powershell
-pytest tests/test_level12_review_checkpoint.py
-pytest tests/test_write_level12_files_cli.py
+pytest tests/test_level13_closure_manifest.py
+pytest tests/test_level13_handoff_inventory.py
+pytest tests/test_level13_closure_report.py
+pytest tests/test_write_level13_files_cli.py
 ```
 
 ## Completed recent blocks
@@ -67,9 +69,10 @@ pytest tests/test_write_level12_files_cli.py
 - [x] P133: added Level 12 review checkpoint helper.
 - [x] P134: added Level 12 review checkpoint Markdown report.
 - [x] P135: added Level 12 review checkpoint writer CLI.
-- [ ] P136: run focused Level 12 tests, `ruff check .`, and full `pytest` locally.
+- [x] P136: Level 12 local validation reported all pass.
+- [x] P137: added Level 13 completion TODO.
 
-## Level 1 to Level 12 roadmap summary
+## Level 1 to Level 13 roadmap summary
 
 - Level 1: core validation, feature extraction, baseline/report surface.
 - Level 2: model-sequence samples and lightweight model checks.
@@ -83,22 +86,25 @@ pytest tests/test_write_level12_files_cli.py
 - Level 10: local review packet over the Level 9 readiness audit.
 - Level 11: next-TODO proposal over the Level 10 review packet.
 - Level 12: review checkpoint over the Level 11 next-TODO proposal.
+- Level 13: checkpoint closure and handoff manifest planning.
 
-## Current Level 12 commands
+## Current Level 13 TODO
 
-Generate Level 12 files:
+See:
 
-```powershell
-traceleak-write-level12-files --out-dir reports/local/level12_checkpoint --root-dir .
+```text
+docs/level13-completion-todo.md
 ```
 
-Validate Level 12 focused tests:
+Recommended next implementation order:
 
-```powershell
-pytest tests/test_level12_review_checkpoint.py
-pytest tests/test_write_level12_files_cli.py
-```
+1. P137 closure manifest.
+2. P138 handoff inventory.
+3. P139 closure report.
+4. P140 writer CLI.
+5. P141 docs and handoff update.
+6. P142 validation checkpoint.
 
-## Candidate next block after Level 12 all-pass
+## Candidate next block
 
-Do not start Level 13 until P136 is complete. The next block should first create a Level 13 TODO and review checkpoint rather than widening behavior directly.
+Start P137 only. Keep Level 13 review-only and do not widen behavior directly.

@@ -1,6 +1,6 @@
 # TraceLeak NEXT TODO
 
-Current checkpoint: Level 11 next-TODO proposal implemented; local validation pending.
+Current checkpoint: Level 12 review checkpoint implemented; local validation pending.
 
 This file is the active short-term TODO. `TODO.md` is kept as historical context and should not be deleted.
 
@@ -15,11 +15,11 @@ ruff check .
 pytest
 ```
 
-Focused validation for the current Level 11 next-TODO proposal path:
+Focused validation for the current Level 12 review checkpoint path:
 
 ```powershell
-pytest tests/test_level11_next_todo_proposal.py
-pytest tests/test_write_level11_files_cli.py
+pytest tests/test_level12_review_checkpoint.py
+pytest tests/test_write_level12_files_cli.py
 ```
 
 ## Completed recent blocks
@@ -63,9 +63,13 @@ pytest tests/test_write_level11_files_cli.py
 - [x] P129: added Level 11 next-TODO proposal helper.
 - [x] P130: added Level 11 next-TODO Markdown report.
 - [x] P131: added Level 11 next-TODO writer CLI.
-- [ ] P132: run focused Level 11 tests, `ruff check .`, and full `pytest` locally.
+- [x] P132: Level 11 implementation advanced; local validation pending.
+- [x] P133: added Level 12 review checkpoint helper.
+- [x] P134: added Level 12 review checkpoint Markdown report.
+- [x] P135: added Level 12 review checkpoint writer CLI.
+- [ ] P136: run focused Level 12 tests, `ruff check .`, and full `pytest` locally.
 
-## Level 1 to Level 11 roadmap summary
+## Level 1 to Level 12 roadmap summary
 
 - Level 1: core validation, feature extraction, baseline/report surface.
 - Level 2: model-sequence samples and lightweight model checks.
@@ -78,22 +82,23 @@ pytest tests/test_write_level11_files_cli.py
 - Level 9: readiness audit over the Level 8 path-only index.
 - Level 10: local review packet over the Level 9 readiness audit.
 - Level 11: next-TODO proposal over the Level 10 review packet.
+- Level 12: review checkpoint over the Level 11 next-TODO proposal.
 
-## Current Level 11 commands
+## Current Level 12 commands
 
-Generate Level 11 files:
-
-```powershell
-traceleak-write-level11-files --out-dir reports/local/level11_next_todo --root-dir .
-```
-
-Validate Level 11 focused tests:
+Generate Level 12 files:
 
 ```powershell
-pytest tests/test_level11_next_todo_proposal.py
-pytest tests/test_write_level11_files_cli.py
+traceleak-write-level12-files --out-dir reports/local/level12_checkpoint --root-dir .
 ```
 
-## Candidate next block after Level 11 all-pass
+Validate Level 12 focused tests:
 
-Do not start Level 12 until P132 is complete. The next block should first create a Level 12 TODO and review checkpoint rather than widening behavior directly.
+```powershell
+pytest tests/test_level12_review_checkpoint.py
+pytest tests/test_write_level12_files_cli.py
+```
+
+## Candidate next block after Level 12 all-pass
+
+Do not start Level 13 until P136 is complete. The next block should first create a Level 13 TODO and review checkpoint rather than widening behavior directly.

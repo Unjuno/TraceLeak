@@ -1,6 +1,6 @@
 # TraceLeak NEXT TODO
 
-Current checkpoint: Level 13 completion TODO created; implementation pending.
+Current checkpoint: Level 13 closure layer implemented; local validation pending.
 
 This file is the active short-term TODO. `TODO.md` is kept as historical context and should not be deleted.
 
@@ -15,7 +15,7 @@ ruff check .
 pytest
 ```
 
-Focused validation for the current Level 13 planning path:
+Focused validation for the current Level 13 closure path:
 
 ```powershell
 pytest tests/test_level13_closure_manifest.py
@@ -70,7 +70,12 @@ pytest tests/test_write_level13_files_cli.py
 - [x] P134: added Level 12 review checkpoint Markdown report.
 - [x] P135: added Level 12 review checkpoint writer CLI.
 - [x] P136: Level 12 local validation reported all pass.
-- [x] P137: added Level 13 completion TODO.
+- [x] P137: added Level 13 completion TODO and closure manifest helper.
+- [x] P138: added Level 13 handoff inventory helper.
+- [x] P139: added Level 13 closure Markdown report.
+- [x] P140: added Level 13 closure writer CLI.
+- [x] P141: updated local validation docs with Level 13 commands.
+- [ ] P142: run focused Level 13 tests, `ruff check .`, and full `pytest` locally.
 
 ## Level 1 to Level 13 roadmap summary
 
@@ -86,25 +91,25 @@ pytest tests/test_write_level13_files_cli.py
 - Level 10: local review packet over the Level 9 readiness audit.
 - Level 11: next-TODO proposal over the Level 10 review packet.
 - Level 12: review checkpoint over the Level 11 next-TODO proposal.
-- Level 13: checkpoint closure and handoff manifest planning.
+- Level 13: checkpoint closure and handoff inventory.
 
-## Current Level 13 TODO
+## Current Level 13 commands
 
-See:
+Generate Level 13 files:
 
-```text
-docs/level13-completion-todo.md
+```powershell
+traceleak-write-level13-files --out-dir reports/local/level13_closure --root-dir .
 ```
 
-Recommended next implementation order:
+Validate Level 13 focused tests:
 
-1. P137 closure manifest.
-2. P138 handoff inventory.
-3. P139 closure report.
-4. P140 writer CLI.
-5. P141 docs and handoff update.
-6. P142 validation checkpoint.
+```powershell
+pytest tests/test_level13_closure_manifest.py
+pytest tests/test_level13_handoff_inventory.py
+pytest tests/test_level13_closure_report.py
+pytest tests/test_write_level13_files_cli.py
+```
 
-## Candidate next block
+## Candidate next block after Level 13 all-pass
 
-Start P137 only. Keep Level 13 review-only and do not widen behavior directly.
+Do not start Level 14 until P142 is complete. The next block should first create a Level 14 TODO and review checkpoint rather than widening behavior directly.

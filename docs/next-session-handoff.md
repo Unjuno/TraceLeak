@@ -1,6 +1,6 @@
 # Next session handoff
 
-Current checkpoint: Level 14 completeness layer implemented; local validation pending.
+Current checkpoint: Level 15 completion TODO created; Level 14 local validation pending.
 
 ## Local validation
 
@@ -14,10 +14,6 @@ pytest
 ## Focused checks
 
 ```powershell
-pytest tests/test_level13_closure_manifest.py
-pytest tests/test_level13_handoff_inventory.py
-pytest tests/test_level13_closure_report.py
-pytest tests/test_write_level13_files_cli.py
 pytest tests/test_level14_completeness_audit.py
 pytest tests/test_level14_completeness_report.py
 pytest tests/test_write_level14_files_cli.py
@@ -25,12 +21,9 @@ pytest tests/test_write_level14_files_cli.py
 
 ## What changed in the latest block
 
-- Added Level 14 completeness audit helper.
-- Added Level 14 completeness Markdown report renderer.
-- Added Level 14 completeness writer CLI.
-- Registered `traceleak-write-level14-files` entry point.
-- Updated local validation docs with Level 14 commands.
-- Updated `NEXT_TODO.md` with Level 14 implementation state.
+- Level 14 completeness layer was implemented.
+- Added `docs/level15-completion-todo.md`.
+- Updated `NEXT_TODO.md` with Level 15 planning state.
 
 ## Level 14 generation command
 
@@ -38,13 +31,18 @@ pytest tests/test_write_level14_files_cli.py
 traceleak-write-level14-files --out-dir reports/local/level14_completeness --root-dir .
 ```
 
+## Level 15 TODO
+
+```text
+docs/level15-completion-todo.md
+```
+
 ## Current boundary
 
-Level 14 remains review-only and path-only. It audits handoff family completeness and does not read artifact contents, perform direct action, or enable claims.
+Level 15 is planned as a review-only, path-only validation rollup. Level 14 local validation should be checked before implementation.
 
 ## Next likely work
 
-- Fix any local Level 14 focused test failures first.
-- Run `ruff check .`.
-- Run full `pytest`.
-- If all pass, mark Level 14 complete and create a Level 15 TODO before any further expansion.
+- Check Level 14 focused tests first.
+- Then start P148 validation rollup manifest.
+- Keep Level 15 review-only and path-only.

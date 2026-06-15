@@ -1,6 +1,6 @@
 # Next session handoff
 
-Current checkpoint: Level 11 next-TODO proposal implemented; local validation pending.
+Current checkpoint: Level 12 review checkpoint implemented; local validation pending.
 
 ## Local validation
 
@@ -32,31 +32,33 @@ pytest tests/test_level10_review_packet.py
 pytest tests/test_write_level10_files_cli.py
 pytest tests/test_level11_next_todo_proposal.py
 pytest tests/test_write_level11_files_cli.py
+pytest tests/test_level12_review_checkpoint.py
+pytest tests/test_write_level12_files_cli.py
 ```
 
 ## What changed in the latest block
 
-- Advanced Level 11 as a next-TODO proposal checkpoint.
-- Added Level 11 next-TODO proposal helper.
-- Added Level 11 next-TODO Markdown report renderer.
-- Added Level 11 next-TODO writer CLI.
-- Registered `traceleak-write-level11-files` entry point.
-- Updated local validation docs with Level 11 commands.
-- Updated `NEXT_TODO.md` with Level 1 to Level 11 roadmap summary.
+- Advanced Level 12 as a review checkpoint over the Level 11 proposal.
+- Added Level 12 review checkpoint helper.
+- Added Level 12 review checkpoint Markdown report renderer.
+- Added Level 12 review checkpoint writer CLI.
+- Registered `traceleak-write-level12-files` entry point.
+- Updated local validation docs with Level 12 commands.
+- Updated `NEXT_TODO.md` with Level 1 to Level 12 roadmap summary.
 
-## Level 11 generation command
+## Level 12 generation command
 
 ```powershell
-traceleak-write-level11-files --out-dir reports/local/level11_next_todo --root-dir .
+traceleak-write-level12-files --out-dir reports/local/level12_checkpoint --root-dir .
 ```
 
 ## Current boundary
 
-Level 11 proposes the next TODO from the Level 10 review packet. It remains proposal-only and does not read artifact contents, perform direct action, or enable claims.
+Level 12 records whether the next TODO may be drafted from the Level 11 proposal. It remains checkpoint-only and does not read artifact contents, perform direct action, or enable claims.
 
 ## Next likely work
 
-- Fix any local Level 11 focused test failures first.
+- Fix any local Level 12 focused test failures first.
 - Run `ruff check .`.
 - Run full `pytest`.
-- If all pass, mark Level 11 complete and create a Level 12 TODO before any further expansion.
+- If all pass, mark Level 12 complete and create a Level 13 TODO before any further expansion.

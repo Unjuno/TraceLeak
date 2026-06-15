@@ -131,6 +131,13 @@ pytest tests/test_write_level8_files_cli.py
 pytest tests/test_level9_readiness_audit.py
 ```
 
+## Level 10 review packet validation
+
+```powershell
+pytest tests/test_level10_review_packet.py
+pytest tests/test_write_level10_files_cli.py
+```
+
 ## Shared fixture validation
 
 ```powershell
@@ -228,6 +235,12 @@ traceleak-write-level8-files --out-dir reports/local/level8_intake --root-dir .
 
 ```powershell
 traceleak-write-level9-files --out-dir reports/local/level9_readiness --root-dir .
+```
+
+## Generate Level 10 review packet files
+
+```powershell
+traceleak-write-level10-files --out-dir reports/local/level10_review --root-dir .
 ```
 
 ## Render local Markdown summary from existing JSON

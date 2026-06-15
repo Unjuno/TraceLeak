@@ -145,6 +145,13 @@ pytest tests/test_level11_next_todo_proposal.py
 pytest tests/test_write_level11_files_cli.py
 ```
 
+## Level 12 review checkpoint validation
+
+```powershell
+pytest tests/test_level12_review_checkpoint.py
+pytest tests/test_write_level12_files_cli.py
+```
+
 ## Shared fixture validation
 
 ```powershell
@@ -254,6 +261,12 @@ traceleak-write-level10-files --out-dir reports/local/level10_review --root-dir 
 
 ```powershell
 traceleak-write-level11-files --out-dir reports/local/level11_next_todo --root-dir .
+```
+
+## Generate Level 12 review checkpoint files
+
+```powershell
+traceleak-write-level12-files --out-dir reports/local/level12_checkpoint --root-dir .
 ```
 
 ## Render local Markdown summary from existing JSON

@@ -2,7 +2,7 @@
 
 Level 13 is checkpoint closure and handoff manifest planning after Level 12.
 
-Current baseline: Level 12 is locally reported all pass. Level 13 remains review-only. It summarizes checkpoint state and prepares handoff artifacts without widening behavior.
+Current baseline: Level 12 and Level 13 are locally reported all pass. Level 13 remains review-only. It summarizes checkpoint state and prepares handoff artifacts without widening behavior.
 
 ## Level 13 goal
 
@@ -44,9 +44,9 @@ Level 13 is complete when all of the following are true:
 - [x] The handoff inventory is path-only.
 - [x] A closure Markdown report exists.
 - [x] A writer CLI exists for Level 13 closure artifacts.
-- [ ] Focused Level 13 tests pass.
-- [ ] `ruff check .` passes.
-- [ ] Full `pytest` passes.
+- [x] Focused Level 13 tests pass.
+- [x] `ruff check .` passes.
+- [x] Full `pytest` passes.
 
 ## P137: closure manifest
 
@@ -129,26 +129,13 @@ Level 13 is complete when all of the following are true:
 
 ## P142: Level 13 validation checkpoint
 
-### Commands
+### Status
 
-```powershell
-cd C:\Users\junny\Desktop\traceLeak\TraceLeak
-git pull --ff-only
-pytest tests/test_level13_closure_manifest.py
-pytest tests/test_level13_handoff_inventory.py
-pytest tests/test_level13_closure_report.py
-pytest tests/test_write_level13_files_cli.py
-ruff check .
-pytest
-```
-
-### Completion criteria
-
-- [ ] Focused Level 13 tests pass.
-- [ ] `ruff check .` passes.
-- [ ] Full `pytest` passes.
-- [ ] Level 13 output artifacts stay under `reports/local/`.
+- [x] Focused Level 13 tests reported all pass locally.
+- [x] `ruff check .` reported pass locally.
+- [x] Full `pytest` reported pass locally.
+- [x] Level 13 output artifacts stay under `reports/local/`.
 
 ## Stop condition
 
-Stop before Level 14 unless Level 13 focused tests, `ruff check .`, and full `pytest` all pass locally.
+Level 13 is complete. Start Level 14 only from a review-only TODO and do not widen behavior directly.

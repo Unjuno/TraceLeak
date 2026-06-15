@@ -2,7 +2,7 @@
 
 Level 14 is handoff completeness audit planning after Level 13.
 
-Current baseline: Level 13 is locally reported all pass. Level 14 remains review-only and path-only. It audits Level 13 handoff inventory metadata without parsing artifact contents or widening behavior.
+Current baseline: Level 13 and Level 14 are locally reported all pass. Level 14 remains review-only and path-only. It audits Level 13 handoff inventory metadata without parsing artifact contents or widening behavior.
 
 ## Level 14 goal
 
@@ -42,9 +42,9 @@ Level 14 is complete when all of the following are true:
 - [x] The audit remains path-only.
 - [x] A completeness Markdown report exists.
 - [x] A writer CLI exists for Level 14 completeness artifacts.
-- [ ] Focused Level 14 tests pass.
-- [ ] `ruff check .` passes.
-- [ ] Full `pytest` passes.
+- [x] Focused Level 14 tests pass.
+- [x] `ruff check .` passes.
+- [x] Full `pytest` passes.
 
 ## P143: completeness audit
 
@@ -114,25 +114,13 @@ Level 14 is complete when all of the following are true:
 
 ## P147: Level 14 validation checkpoint
 
-### Commands
+### Status
 
-```powershell
-cd C:\Users\junny\Desktop\traceLeak\TraceLeak
-git pull --ff-only
-pytest tests/test_level14_completeness_audit.py
-pytest tests/test_level14_completeness_report.py
-pytest tests/test_write_level14_files_cli.py
-ruff check .
-pytest
-```
-
-### Completion criteria
-
-- [ ] Focused Level 14 tests pass.
-- [ ] `ruff check .` passes.
-- [ ] Full `pytest` passes.
-- [ ] Level 14 output artifacts stay under `reports/local/`.
+- [x] Focused Level 14 tests reported all pass locally.
+- [x] `ruff check .` reported pass locally.
+- [x] Full `pytest` reported pass locally.
+- [x] Level 14 output artifacts stay under `reports/local/`.
 
 ## Stop condition
 
-Stop before Level 15 unless Level 14 focused tests, `ruff check .`, and full `pytest` all pass locally.
+Level 14 is complete. Start Level 15 only from a review-only TODO and do not widen behavior directly.

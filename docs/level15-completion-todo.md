@@ -2,7 +2,7 @@
 
 Level 15 is validation rollup planning after Level 14.
 
-Current baseline: Level 14 implementation exists, but local Level 14 all-pass validation has not been explicitly reported in this turn. Level 15 must remain review-only and path-only.
+Current baseline: Level 14 is locally reported all pass. Level 15 remains review-only and path-only.
 
 ## Level 15 goal
 
@@ -31,109 +31,76 @@ Level 14 completeness audit
 
 Level 15 is complete when all of the following are true:
 
-- [ ] A versioned validation rollup manifest exists.
-- [ ] The rollup requires a valid Level 14 completeness audit.
-- [ ] The rollup records completeness status.
-- [ ] The rollup records required validation command names.
-- [ ] The rollup records validation status without executing commands.
-- [ ] The rollup remains path-only and review-only.
-- [ ] A rollup Markdown report exists.
-- [ ] A writer CLI exists for Level 15 rollup artifacts.
+- [x] A versioned validation rollup manifest exists.
+- [x] The rollup requires a valid Level 14 completeness audit.
+- [x] The rollup records completeness status.
+- [x] The rollup records required validation command names.
+- [x] The rollup records validation status without executing commands.
+- [x] The rollup remains path-only and review-only.
+- [x] A rollup Markdown report exists.
+- [x] A writer CLI exists for Level 15 rollup artifacts.
 - [ ] Focused Level 15 tests pass.
 - [ ] `ruff check .` passes.
 - [ ] Full `pytest` passes.
 
 ## P148: validation rollup manifest
 
-### Purpose
+### Status
 
-Define a validation rollup manifest over the Level 14 completeness audit.
-
-### Implementation tasks
-
-- [ ] Add Level 15 validation rollup helper.
-- [ ] Define `traceleak.level15_validation_rollup.v1`.
-- [ ] Require a valid Level 14 completeness audit.
-- [ ] Record source audit format and phase.
-- [ ] Record completeness status.
-- [ ] Record expected local validation commands:
-  - [ ] focused Level 15 tests.
-  - [ ] `ruff check .`.
-  - [ ] full `pytest`.
-- [ ] Record validation state as pending by default.
-- [ ] Keep flags:
-  - [ ] review only true.
-  - [ ] path only true.
-  - [ ] content read false.
-  - [ ] command executed false.
-  - [ ] claim generated false.
-
-### Tests
-
-- [ ] Build rollup from complete audit.
-- [ ] Build rollup from incomplete audit.
-- [ ] Reject invalid source audit format.
-- [ ] Reject content read enabled.
-- [ ] Reject command executed enabled.
-- [ ] Reject claim generated enabled.
-- [ ] Validate JSON writer.
+- [x] Added Level 15 validation rollup helper.
+- [x] Defined `traceleak.level15_validation_rollup.v1`.
+- [x] Required a valid Level 14 completeness audit.
+- [x] Recorded source audit format and phase.
+- [x] Recorded completeness status.
+- [x] Recorded expected local validation commands:
+  - [x] focused Level 15 tests.
+  - [x] `ruff check .`.
+  - [x] full `pytest`.
+- [x] Recorded validation state as pending by default.
+- [x] Kept flags:
+  - [x] review only true.
+  - [x] path only true.
+  - [x] content read false.
+  - [x] command executed false.
+  - [x] claim generated false.
+- [x] Added focused tests.
 
 ## P149: validation rollup report
 
-### Purpose
+### Status
 
-Render a Markdown report for Level 15 validation rollup.
-
-### Required sections
-
-- [ ] Rollup status.
-- [ ] Source completeness status.
-- [ ] Expected validation commands.
-- [ ] Pending validation state.
-- [ ] Review-only boundary.
-- [ ] Next-level preconditions.
-
-### Tests
-
-- [ ] Report contains required headings.
-- [ ] Report states review-only boundary.
-- [ ] Report states no commands were executed.
-- [ ] Report states no content was read.
-- [ ] Report states no claim was generated.
+- [x] Added Markdown report renderer.
+- [x] Rendered rollup status.
+- [x] Rendered source completeness status.
+- [x] Rendered expected validation commands.
+- [x] Rendered pending validation state.
+- [x] Rendered review-only boundary.
+- [x] Rendered next-level preconditions.
+- [x] Added focused tests.
 
 ## P150: Level 15 writer CLI
 
-### Purpose
+### Status
 
-Expose Level 15 rollup artifact generation.
-
-### Implementation tasks
-
-- [ ] Add neutral writer CLI name.
-- [ ] Build Level 14 completeness artifacts.
-- [ ] Build Level 15 validation rollup.
-- [ ] Render rollup report.
-- [ ] Write JSON and Markdown under `reports/local/level15_validation_rollup/`.
-- [ ] Do not read artifact contents.
-- [ ] Do not execute validation commands.
-- [ ] Do not mutate source trees.
-- [ ] Do not generate claims.
-
-### Tests
-
-- [ ] CLI writes validation rollup manifest.
-- [ ] CLI writes validation rollup report.
-- [ ] CLI rejects bad reviewer or unsafe output path.
+- [x] Added neutral writer CLI name: `traceleak-write-level15-files`.
+- [x] Built Level 15 validation rollup.
+- [x] Rendered rollup report.
+- [x] Wrote JSON and Markdown under `reports/local/level15_validation_rollup/`.
+- [x] Did not read artifact contents.
+- [x] Did not execute validation commands.
+- [x] Did not mutate source trees.
+- [x] Did not generate claims.
+- [x] Added focused tests.
 
 ## P151: docs and handoff update
 
-### Documentation tasks
+### Status
 
-- [ ] Update `docs/local-validation.md` with Level 15 focused commands.
-- [ ] Update `docs/next-session-handoff.md` with Level 15 status.
-- [ ] Update `NEXT_TODO.md` with Level 15 checkpoint.
-- [ ] Add Level 15 generation command.
-- [ ] Add Level 15 validation command group.
+- [x] Updated `docs/local-validation.md` with Level 15 focused commands.
+- [x] Updated `docs/next-session-handoff.md` with Level 15 status.
+- [x] Updated `NEXT_TODO.md` with Level 15 checkpoint.
+- [x] Added Level 15 generation command.
+- [x] Added Level 15 validation command group.
 
 ## P152: Level 15 validation checkpoint
 
@@ -155,14 +122,6 @@ pytest
 - [ ] `ruff check .` passes.
 - [ ] Full `pytest` passes.
 - [ ] Level 15 output artifacts stay under `reports/local/`.
-
-## Recommended implementation order
-
-1. P148 validation rollup manifest.
-2. P149 validation rollup report.
-3. P150 writer CLI.
-4. P151 docs and handoff update.
-5. P152 validation checkpoint.
 
 ## Stop condition
 

@@ -1,6 +1,6 @@
 # Next session handoff
 
-Current checkpoint: Level 13 completion TODO created; implementation pending.
+Current checkpoint: Level 13 closure layer implemented; local validation pending.
 
 ## Local validation
 
@@ -34,29 +34,35 @@ pytest tests/test_level11_next_todo_proposal.py
 pytest tests/test_write_level11_files_cli.py
 pytest tests/test_level12_review_checkpoint.py
 pytest tests/test_write_level12_files_cli.py
+pytest tests/test_level13_closure_manifest.py
+pytest tests/test_level13_handoff_inventory.py
+pytest tests/test_level13_closure_report.py
+pytest tests/test_write_level13_files_cli.py
 ```
 
 ## What changed in the latest block
 
-- Level 12 was locally reported all pass.
-- Added `docs/level13-completion-todo.md`.
-- Updated `NEXT_TODO.md` with Level 13 planning state.
-- Level 13 is scoped to checkpoint closure and handoff manifest planning.
+- Added Level 13 closure manifest helper.
+- Added Level 13 handoff inventory helper.
+- Added Level 13 closure Markdown report renderer.
+- Added Level 13 closure writer CLI.
+- Registered `traceleak-write-level13-files` entry point.
+- Updated local validation docs with Level 13 commands.
+- Updated `NEXT_TODO.md` with Level 13 implementation state.
 
-## Level 13 TODO
+## Level 13 generation command
 
-```text
-docs/level13-completion-todo.md
+```powershell
+traceleak-write-level13-files --out-dir reports/local/level13_closure --root-dir .
 ```
 
 ## Current boundary
 
-Level 13 remains review-only. It may summarize checkpoint state and prepare handoff artifacts, but it must not read artifact contents, perform direct action, or enable claims.
+Level 13 remains review-only. It summarizes checkpoint state and prepares path-only handoff inventory artifacts. It does not read artifact contents, perform direct action, or enable claims.
 
 ## Next likely work
 
-- Start P137 closure manifest.
-- Then implement P138 handoff inventory.
-- Then implement P139 closure report.
-- Add writer CLI only after focused helpers are stable.
-- Run focused Level 13 tests, `ruff check .`, and full `pytest` before Level 14.
+- Fix any local Level 13 focused test failures first.
+- Run `ruff check .`.
+- Run full `pytest`.
+- If all pass, mark Level 13 complete and create a Level 14 TODO before any further expansion.

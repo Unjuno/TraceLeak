@@ -1,6 +1,6 @@
 # Next session handoff
 
-Current checkpoint: Level 15 validation rollup implemented; local validation pending.
+Current checkpoint: Level 16 completion TODO created; Level 15 local validation pending.
 
 ## Local validation
 
@@ -21,12 +21,9 @@ pytest tests/test_write_level15_files_cli.py
 
 ## What changed in the latest block
 
-- Added Level 15 validation rollup helper.
-- Added Level 15 validation rollup Markdown report renderer.
-- Added Level 15 validation rollup writer CLI.
-- Registered `traceleak-write-level15-files` entry point.
-- Updated local validation docs with Level 15 commands.
-- Updated `NEXT_TODO.md` with Level 15 implementation state.
+- Level 15 validation rollup was implemented.
+- Added `docs/level16-completion-todo.md`.
+- Updated `NEXT_TODO.md` with Level 16 planning state.
 
 ## Level 15 generation command
 
@@ -34,13 +31,18 @@ pytest tests/test_write_level15_files_cli.py
 traceleak-write-level15-files --out-dir reports/local/level15_validation_rollup
 ```
 
+## Level 16 TODO
+
+```text
+docs/level16-completion-todo.md
+```
+
 ## Current boundary
 
-Level 15 remains review-only and path-only. It records pending local validation state and does not execute validation commands, read artifact contents, perform direct action, or enable claims.
+Level 16 is planned as a review-only, path-only pre-handoff review. Level 15 local validation should be checked before implementation.
 
 ## Next likely work
 
-- Fix any local Level 15 focused test failures first.
-- Run `ruff check .`.
-- Run full `pytest`.
-- If all pass, mark Level 15 complete and create a Level 16 TODO before any further expansion.
+- Check Level 15 focused tests first.
+- Then start P153 pre-handoff review manifest.
+- Keep Level 16 review-only and path-only.

@@ -1,6 +1,6 @@
 # TraceLeak NEXT TODO
 
-Current checkpoint: Level 15 completion TODO created; Level 14 local validation pending.
+Current checkpoint: Level 15 completion TODO created; implementation pending.
 
 This file is the active short-term TODO. `TODO.md` is kept as historical context and should not be deleted.
 
@@ -13,14 +13,6 @@ cd C:\Users\junny\Desktop\traceLeak\TraceLeak
 git pull --ff-only
 ruff check .
 pytest
-```
-
-Focused validation for Level 14:
-
-```powershell
-pytest tests/test_level14_completeness_audit.py
-pytest tests/test_level14_completeness_report.py
-pytest tests/test_write_level14_files_cli.py
 ```
 
 Focused validation for the Level 15 planning path:
@@ -38,7 +30,7 @@ pytest tests/test_write_level15_files_cli.py
 - [x] P144: added Level 14 completeness Markdown report.
 - [x] P145: added Level 14 completeness writer CLI.
 - [x] P146: updated local validation docs with Level 14 commands.
-- [ ] P147: run focused Level 14 tests, `ruff check .`, and full `pytest` locally.
+- [x] P147: Level 14 local validation reported all pass.
 - [x] P148: added Level 15 completion TODO.
 
 ## Level roadmap summary
@@ -64,4 +56,4 @@ Recommended next implementation order:
 
 ## Candidate next block
 
-Start P148 only after checking Level 14 validation status. Keep Level 15 review-only and path-only.
+Start P148. Keep Level 15 review-only and path-only.

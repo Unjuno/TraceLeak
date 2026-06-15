@@ -152,6 +152,15 @@ pytest tests/test_level12_review_checkpoint.py
 pytest tests/test_write_level12_files_cli.py
 ```
 
+## Level 13 closure validation
+
+```powershell
+pytest tests/test_level13_closure_manifest.py
+pytest tests/test_level13_handoff_inventory.py
+pytest tests/test_level13_closure_report.py
+pytest tests/test_write_level13_files_cli.py
+```
+
 ## Shared fixture validation
 
 ```powershell
@@ -267,6 +276,12 @@ traceleak-write-level11-files --out-dir reports/local/level11_next_todo --root-d
 
 ```powershell
 traceleak-write-level12-files --out-dir reports/local/level12_checkpoint --root-dir .
+```
+
+## Generate Level 13 closure files
+
+```powershell
+traceleak-write-level13-files --out-dir reports/local/level13_closure --root-dir .
 ```
 
 ## Render local Markdown summary from existing JSON

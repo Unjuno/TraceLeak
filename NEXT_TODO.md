@@ -1,6 +1,6 @@
 # TraceLeak NEXT TODO
 
-Current checkpoint: Level 15 completion TODO created; implementation pending.
+Current checkpoint: Level 15 validation rollup implemented; local validation pending.
 
 This file is the active short-term TODO. `TODO.md` is kept as historical context and should not be deleted.
 
@@ -15,7 +15,7 @@ ruff check .
 pytest
 ```
 
-Focused validation for the Level 15 planning path:
+Focused validation for the Level 15 validation rollup path:
 
 ```powershell
 pytest tests/test_level15_validation_rollup.py
@@ -25,35 +25,34 @@ pytest tests/test_write_level15_files_cli.py
 
 ## Completed recent blocks
 
-- [x] P142: Level 13 local validation reported all pass.
-- [x] P143: added Level 14 completion TODO and completeness audit helper.
-- [x] P144: added Level 14 completeness Markdown report.
-- [x] P145: added Level 14 completeness writer CLI.
-- [x] P146: updated local validation docs with Level 14 commands.
 - [x] P147: Level 14 local validation reported all pass.
-- [x] P148: added Level 15 completion TODO.
+- [x] P148: added Level 15 validation rollup helper.
+- [x] P149: added Level 15 validation rollup Markdown report.
+- [x] P150: added Level 15 validation rollup writer CLI.
+- [x] P151: updated local validation docs with Level 15 commands.
+- [ ] P152: run focused Level 15 tests, `ruff check .`, and full `pytest` locally.
 
 ## Level roadmap summary
 
 - Level 14: handoff completeness audit.
-- Level 15: validation rollup planning.
+- Level 15: validation rollup.
 
-## Current Level 15 TODO
+## Current Level 15 commands
 
-See:
+Generate Level 15 files:
 
-```text
-docs/level15-completion-todo.md
+```powershell
+traceleak-write-level15-files --out-dir reports/local/level15_validation_rollup
 ```
 
-Recommended next implementation order:
+Validate Level 15 focused tests:
 
-1. P148 validation rollup manifest.
-2. P149 validation rollup report.
-3. P150 writer CLI.
-4. P151 docs and handoff update.
-5. P152 validation checkpoint.
+```powershell
+pytest tests/test_level15_validation_rollup.py
+pytest tests/test_level15_validation_rollup_report.py
+pytest tests/test_write_level15_files_cli.py
+```
 
-## Candidate next block
+## Candidate next block after Level 15 all-pass
 
-Start P148. Keep Level 15 review-only and path-only.
+Do not start Level 16 until P152 is complete. The next block should first create a Level 16 TODO and review checkpoint rather than widening behavior directly.

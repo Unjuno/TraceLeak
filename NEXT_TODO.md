@@ -1,6 +1,6 @@
 # TraceLeak NEXT TODO
 
-Current checkpoint: Level 9 readiness audit implemented; local validation pending.
+Current checkpoint: Level 10 review packet implemented; local validation pending.
 
 This file is the active short-term TODO. `TODO.md` is kept as historical context and should not be deleted.
 
@@ -15,10 +15,11 @@ ruff check .
 pytest
 ```
 
-Focused validation for the current Level 9 readiness path:
+Focused validation for the current Level 10 review packet path:
 
 ```powershell
-pytest tests/test_level9_readiness_audit.py
+pytest tests/test_level10_review_packet.py
+pytest tests/test_write_level10_files_cli.py
 ```
 
 ## Completed recent blocks
@@ -54,9 +55,13 @@ pytest tests/test_level9_readiness_audit.py
 - [x] P121: added Level 9 readiness audit helper.
 - [x] P122: added Level 9 readiness Markdown report.
 - [x] P123: added Level 9 readiness writer CLI.
-- [ ] P124: run focused Level 9 tests, `ruff check .`, and full `pytest` locally.
+- [x] P124: Level 9 local validation reported all pass.
+- [x] P125: added Level 10 review packet helper.
+- [x] P126: added Level 10 review packet Markdown report.
+- [x] P127: added Level 10 review packet writer CLI.
+- [ ] P128: run focused Level 10 tests, `ruff check .`, and full `pytest` locally.
 
-## Level 1 to Level 9 roadmap summary
+## Level 1 to Level 10 roadmap summary
 
 - Level 1: core validation, feature extraction, baseline/report surface.
 - Level 2: model-sequence samples and lightweight model checks.
@@ -67,21 +72,23 @@ pytest tests/test_level9_readiness_audit.py
 - Level 7: review-gated planning, boundary plan, checklist, readiness report.
 - Level 8: approved local metadata/report artifact intake, path-only index, intake report.
 - Level 9: readiness audit over the Level 8 path-only index.
+- Level 10: local review packet over the Level 9 readiness audit.
 
-## Current Level 9 commands
+## Current Level 10 commands
 
-Generate Level 9 files:
-
-```powershell
-traceleak-write-level9-files --out-dir reports/local/level9_readiness --root-dir .
-```
-
-Validate Level 9 focused tests:
+Generate Level 10 files:
 
 ```powershell
-pytest tests/test_level9_readiness_audit.py
+traceleak-write-level10-files --out-dir reports/local/level10_review --root-dir .
 ```
 
-## Candidate next block after Level 9 all-pass
+Validate Level 10 focused tests:
 
-Do not start Level 10 until P124 is complete. The next block should first create a Level 10 TODO and review checkpoint rather than widening behavior directly.
+```powershell
+pytest tests/test_level10_review_packet.py
+pytest tests/test_write_level10_files_cli.py
+```
+
+## Candidate next block after Level 10 all-pass
+
+Do not start Level 11 until P128 is complete. The next block should first create a Level 11 TODO and review checkpoint rather than widening behavior directly.

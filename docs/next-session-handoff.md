@@ -1,6 +1,6 @@
 # Next session handoff
 
-Current checkpoint: Level 12 review checkpoint implemented; local validation pending.
+Current checkpoint: Level 13 completion TODO created; implementation pending.
 
 ## Local validation
 
@@ -38,27 +38,25 @@ pytest tests/test_write_level12_files_cli.py
 
 ## What changed in the latest block
 
-- Advanced Level 12 as a review checkpoint over the Level 11 proposal.
-- Added Level 12 review checkpoint helper.
-- Added Level 12 review checkpoint Markdown report renderer.
-- Added Level 12 review checkpoint writer CLI.
-- Registered `traceleak-write-level12-files` entry point.
-- Updated local validation docs with Level 12 commands.
-- Updated `NEXT_TODO.md` with Level 1 to Level 12 roadmap summary.
+- Level 12 was locally reported all pass.
+- Added `docs/level13-completion-todo.md`.
+- Updated `NEXT_TODO.md` with Level 13 planning state.
+- Level 13 is scoped to checkpoint closure and handoff manifest planning.
 
-## Level 12 generation command
+## Level 13 TODO
 
-```powershell
-traceleak-write-level12-files --out-dir reports/local/level12_checkpoint --root-dir .
+```text
+docs/level13-completion-todo.md
 ```
 
 ## Current boundary
 
-Level 12 records whether the next TODO may be drafted from the Level 11 proposal. It remains checkpoint-only and does not read artifact contents, perform direct action, or enable claims.
+Level 13 remains review-only. It may summarize checkpoint state and prepare handoff artifacts, but it must not read artifact contents, perform direct action, or enable claims.
 
 ## Next likely work
 
-- Fix any local Level 12 focused test failures first.
-- Run `ruff check .`.
-- Run full `pytest`.
-- If all pass, mark Level 12 complete and create a Level 13 TODO before any further expansion.
+- Start P137 closure manifest.
+- Then implement P138 handoff inventory.
+- Then implement P139 closure report.
+- Add writer CLI only after focused helpers are stable.
+- Run focused Level 13 tests, `ruff check .`, and full `pytest` before Level 14.

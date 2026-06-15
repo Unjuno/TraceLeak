@@ -129,7 +129,7 @@ def render_level16_pre_handoff_review_report(review: dict[str, Any]) -> str:
             "",
             "```powershell",
             "pytest tests/test_level16_pre_handoff_review.py",
-            "pytest tests/test_level16_pre_handoff_review_report.py",
+            "pytest tests/test_level16_review_report.py",
             "pytest tests/test_write_level16_files_cli.py",
             "ruff check .",
             "pytest",

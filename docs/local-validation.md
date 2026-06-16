@@ -201,6 +201,14 @@ pytest tests/test_level18_archive_index_report.py
 pytest tests/test_write_level18_files_cli.py
 ```
 
+## Level 19 summary validation
+
+```powershell
+pytest tests/test_level19_handoff_summary.py
+pytest tests/test_level19_handoff_summary_report.py
+pytest tests/test_write_level19_files_cli.py
+```
+
 ## Shared fixture validation
 
 ```powershell
@@ -352,6 +360,12 @@ traceleak-write-level17-files --out-dir reports/local/level17_release_readiness
 
 ```powershell
 traceleak-write-level18-files --out-dir reports/local/level18_archive_index
+```
+
+## Generate Level 19 summary files
+
+```powershell
+traceleak-write-level19-files --out-dir reports/local/level19_handoff_summary
 ```
 
 ## Render local Markdown summary from existing JSON

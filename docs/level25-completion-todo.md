@@ -55,6 +55,7 @@ Create a path-only index for Level 24 output paths.
 
 ### Status
 
+- [x] Updated `docs/local-validation.md` with Level 25 focused commands.
 - [x] Updated `docs/next-session-handoff.md` with Level 25 status.
 - [x] Updated `NEXT_TODO.md` with Level 25 checkpoint.
 - [x] Added Level 25 generation command.

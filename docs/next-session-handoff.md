@@ -1,6 +1,6 @@
 # Next session handoff
 
-Current checkpoint: Level 20 completion TODO created; implementation pending.
+Current checkpoint: Level 20 implemented; local validation pending.
 
 ## Local validation
 
@@ -19,32 +19,14 @@ pytest tests/test_level20_closure_index_report.py
 pytest tests/test_write_level20_files_cli.py
 ```
 
-## What changed in the latest block
+## Latest changes
 
-- Level 19 was locally reported all pass.
-- Marked Level 19 validation complete.
-- Added `docs/level20-completion-todo.md`.
-- Updated `NEXT_TODO.md` with Level 20 planning state.
+- Added Level 20 helper.
+- Added Level 20 report.
+- Added Level 20 writer CLI.
+- Registered Level 20 writer entry point.
+- Updated local validation docs.
 
-## Level 19 generation command
+## Next work
 
-```powershell
-traceleak-write-level19-files --out-dir reports/local/level19_handoff_summary
-```
-
-## Level 20 TODO
-
-```text
-docs/level20-completion-todo.md
-```
-
-## Current boundary
-
-Level 20 is planned as a review-only, path-only closure index. It must not read output contents, execute validation commands, perform direct action, or enable claims.
-
-## Next likely work
-
-- Start P173 closure index.
-- Then implement P174 closure-index report.
-- Then implement P175 writer CLI.
-- Run focused Level 20 tests, `ruff check .`, and full `pytest` before Level 21.
+Run focused Level 20 tests, `ruff check .`, and full `pytest` locally.

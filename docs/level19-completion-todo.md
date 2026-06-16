@@ -2,7 +2,7 @@
 
 Level 19 is summary planning after Level 18.
 
-Current baseline: Level 18 is locally reported all pass. Level 19 remains review-only and path-only.
+Current baseline: Level 19 is locally reported all pass. Level 19 remains review-only and path-only.
 
 ## Level 19 goal
 
@@ -27,9 +27,9 @@ Level 18 archive index
 - [x] The summary remains review-only and path-only.
 - [x] A summary Markdown report exists.
 - [x] A writer CLI exists for Level 19 outputs.
-- [ ] Focused Level 19 tests pass.
-- [ ] `ruff check .` passes.
-- [ ] Full `pytest` passes.
+- [x] Focused Level 19 tests pass.
+- [x] `ruff check .` passes.
+- [x] Full `pytest` passes.
 
 ## P168: summary
 
@@ -85,25 +85,13 @@ Level 18 archive index
 
 ## P172: Level 19 validation checkpoint
 
-### Commands
+### Status
 
-```powershell
-cd C:\Users\junny\Desktop\traceLeak\TraceLeak
-git pull --ff-only
-pytest tests/test_level19_handoff_summary.py
-pytest tests/test_level19_handoff_summary_report.py
-pytest tests/test_write_level19_files_cli.py
-ruff check .
-pytest
-```
-
-### Completion criteria
-
-- [ ] Focused Level 19 tests pass.
-- [ ] `ruff check .` passes.
-- [ ] Full `pytest` passes.
-- [ ] Level 19 outputs stay under `reports/local/`.
+- [x] Focused Level 19 tests reported all pass locally.
+- [x] `ruff check .` reported pass locally.
+- [x] Full `pytest` reported pass locally.
+- [x] Level 19 outputs stay under `reports/local/`.
 
 ## Stop condition
 
-Stop before Level 20 unless Level 19 focused tests, `ruff check .`, and full `pytest` all pass locally.
+Level 19 is complete. Start Level 20 only from a review-only TODO and do not widen behavior directly.

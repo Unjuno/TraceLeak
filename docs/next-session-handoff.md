@@ -1,6 +1,6 @@
 # Next session handoff
 
-Current checkpoint: Level 16 completion TODO created; Level 15 local validation pending.
+Current checkpoint: Level 16 review layer implemented; local validation pending.
 
 ## Local validation
 
@@ -17,32 +17,33 @@ pytest
 pytest tests/test_level15_validation_rollup.py
 pytest tests/test_level15_validation_rollup_report.py
 pytest tests/test_write_level15_files_cli.py
+pytest tests/test_level16_pre_handoff_review.py
+pytest tests/test_level16_review_report.py
+pytest tests/test_write_level16_files_cli.py
 ```
 
 ## What changed in the latest block
 
-- Level 15 validation rollup was implemented.
-- Added `docs/level16-completion-todo.md`.
-- Updated `NEXT_TODO.md` with Level 16 planning state.
+- Added Level 16 review helper.
+- Added Level 16 review report tests.
+- Replaced Level 16 writer placeholder with a working local writer.
+- Added Level 16 writer CLI tests.
+- Registered `traceleak-write-level16-files` entry point.
+- Updated `NEXT_TODO.md` with Level 16 implementation state.
 
-## Level 15 generation command
+## Level 16 generation command
 
 ```powershell
-traceleak-write-level15-files --out-dir reports/local/level15_validation_rollup
-```
-
-## Level 16 TODO
-
-```text
-docs/level16-completion-todo.md
+traceleak-write-level16-files --out-dir reports/local/level16_review
 ```
 
 ## Current boundary
 
-Level 16 is planned as a review-only, path-only pre-handoff review. Level 15 local validation should be checked before implementation.
+Level 16 remains review-only and path-only. It records pending local validation state and does not read artifact contents, execute validation commands, perform direct action, or enable claims.
 
 ## Next likely work
 
-- Check Level 15 focused tests first.
-- Then start P153 pre-handoff review manifest.
-- Keep Level 16 review-only and path-only.
+- Fix any local Level 16 focused test failures first.
+- Run `ruff check .`.
+- Run full `pytest`.
+- If all pass, mark Level 16 complete and create a Level 17 TODO before any further expansion.

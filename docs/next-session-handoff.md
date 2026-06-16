@@ -1,6 +1,6 @@
 # Next session handoff
 
-Current checkpoint: Level 22 TODO created; implementation pending.
+Current checkpoint: Level 22 implemented; local validation pending.
 
 ## Local validation
 
@@ -21,11 +21,12 @@ pytest tests/test_write_level22_files_cli.py
 
 ## Latest changes
 
-- Level 21 local validation was reported all pass.
-- Marked Level 21 validation complete.
-- Added `docs/level22-completion-todo.md`.
-- Updated `NEXT_TODO.md`.
+- Added Level 22 helper.
+- Added Level 22 report.
+- Added Level 22 writer CLI.
+- Registered Level 22 writer entry point.
+- Updated local validation docs.
 
 ## Next work
 
-Start P183 index.
+Run focused Level 22 tests, `ruff check .`, and full `pytest` locally.

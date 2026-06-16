@@ -1,120 +1,87 @@
 # Level 19 Completion TODO
 
-Level 19 is final handoff-summary planning after Level 18.
+Level 19 is summary planning after Level 18.
 
-Current baseline: Level 18 is locally reported all pass. Level 19 must remain review-only and path-only.
+Current baseline: Level 18 is locally reported all pass. Level 19 remains review-only and path-only.
 
 ## Level 19 goal
 
-Create a final handoff-summary layer that references the Level 18 archive index and summarizes the local review chain status.
+Create a final summary layer that references the Level 18 archive index and summarizes the local review chain status.
 
 ## Level 19 flow
 
 ```text
 Level 18 archive index
-  -> handoff summary
-  -> handoff summary report
+  -> summary
+  -> summary report
   -> writer CLI
   -> validation checkpoint
 ```
 
 ## Level 19 done definition
 
-- [ ] A versioned handoff summary exists.
-- [ ] The summary references the Level 18 archive index format.
-- [ ] The summary records reviewed levels from 13 through 18.
-- [ ] The summary records final local status as pending validation by default.
-- [ ] The summary remains review-only and path-only.
-- [ ] A handoff-summary Markdown report exists.
-- [ ] A writer CLI exists for Level 19 outputs.
+- [x] A versioned summary exists.
+- [x] The summary references the Level 18 archive index format.
+- [x] The summary records reviewed levels from 13 through 18.
+- [x] The summary records final local status as pending validation by default.
+- [x] The summary remains review-only and path-only.
+- [x] A summary Markdown report exists.
+- [x] A writer CLI exists for Level 19 outputs.
 - [ ] Focused Level 19 tests pass.
 - [ ] `ruff check .` passes.
 - [ ] Full `pytest` passes.
 
-## P168: handoff summary
+## P168: summary
 
-### Purpose
+### Status
 
-Define a path-only handoff summary over the Level 18 archive index.
+- [x] Added Level 19 summary helper.
+- [x] Defined `traceleak.level19_summary.v1`.
+- [x] Required a valid Level 18 archive index.
+- [x] Recorded source index format and phase.
+- [x] Recorded reviewed levels:
+  - [x] level13.
+  - [x] level14.
+  - [x] level15.
+  - [x] level16.
+  - [x] level17.
+  - [x] level18.
+- [x] Recorded summary status as pending local validation.
+- [x] Kept review-only and path-only flags.
+- [x] Added focused tests.
 
-### Implementation tasks
+## P169: summary report
 
-- [ ] Add Level 19 handoff-summary helper.
-- [ ] Define `traceleak.level19_handoff_summary.v1`.
-- [ ] Require a valid Level 18 archive index.
-- [ ] Record source index format and phase.
-- [ ] Record reviewed levels:
-  - [ ] level13.
-  - [ ] level14.
-  - [ ] level15.
-  - [ ] level16.
-  - [ ] level17.
-  - [ ] level18.
-- [ ] Record summary status as pending local validation.
-- [ ] Keep review-only and path-only flags.
+### Status
 
-### Tests
-
-- [ ] Build summary from valid Level 18 index.
-- [ ] Reject invalid source index format.
-- [ ] Reject content read enabled.
-- [ ] Reject command executed enabled.
-- [ ] Validate JSON writer.
-
-## P169: handoff-summary report
-
-### Purpose
-
-Render a Markdown report for Level 19 handoff summary.
-
-### Required sections
-
-- [ ] Summary status.
-- [ ] Source archive index.
-- [ ] Reviewed levels.
-- [ ] Review-only boundary.
-- [ ] Expected validation commands.
-- [ ] Next-level preconditions.
-
-### Tests
-
-- [ ] Report contains required headings.
-- [ ] Report states review-only boundary.
-- [ ] Report states path-only boundary.
-- [ ] Report states no commands were executed.
-- [ ] Report states no content was read.
+- [x] Added Markdown report renderer.
+- [x] Rendered summary status.
+- [x] Rendered source archive index.
+- [x] Rendered reviewed levels.
+- [x] Rendered review-only boundary.
+- [x] Rendered expected validation commands.
+- [x] Rendered next-level preconditions.
+- [x] Added focused tests.
 
 ## P170: Level 19 writer CLI
 
-### Purpose
+### Status
 
-Expose Level 19 handoff-summary output generation.
-
-### Implementation tasks
-
-- [ ] Add writer CLI name.
-- [ ] Build Level 19 handoff summary.
-- [ ] Render handoff-summary report.
-- [ ] Write JSON and Markdown under `reports/local/level19_handoff_summary/`.
-- [ ] Do not read output contents.
-- [ ] Do not execute validation commands.
-- [ ] Do not mutate source trees.
-
-### Tests
-
-- [ ] CLI writes handoff summary.
-- [ ] CLI writes handoff-summary report.
-- [ ] CLI rejects bad reviewer or unsafe output path.
+- [x] Added writer CLI name: `traceleak-write-level19-files`.
+- [x] Built Level 19 summary.
+- [x] Rendered summary report.
+- [x] Wrote JSON and Markdown under `reports/local/level19_handoff_summary/`.
+- [x] Added focused tests.
 
 ## P171: docs and handoff update
 
-### Documentation tasks
+### Status
 
-- [ ] Update `docs/local-validation.md` with Level 19 focused commands.
-- [ ] Update `docs/next-session-handoff.md` with Level 19 status.
-- [ ] Update `NEXT_TODO.md` with Level 19 checkpoint.
-- [ ] Add Level 19 generation command.
-- [ ] Add Level 19 validation command group.
+- [x] Updated `docs/local-validation.md` with Level 19 focused commands.
+- [x] Updated `docs/next-session-handoff.md` with Level 19 status.
+- [x] Updated `NEXT_TODO.md` with Level 19 checkpoint.
+- [x] Added Level 19 generation command.
+- [x] Added Level 19 validation command group.
 
 ## P172: Level 19 validation checkpoint
 
@@ -136,14 +103,6 @@ pytest
 - [ ] `ruff check .` passes.
 - [ ] Full `pytest` passes.
 - [ ] Level 19 outputs stay under `reports/local/`.
-
-## Recommended implementation order
-
-1. P168 handoff summary.
-2. P169 handoff-summary report.
-3. P170 writer CLI.
-4. P171 docs and handoff update.
-5. P172 validation checkpoint.
 
 ## Stop condition
 

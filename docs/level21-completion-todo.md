@@ -2,7 +2,7 @@
 
 Level 21 is status-index planning after Level 20.
 
-Current baseline: Level 20 is locally reported all pass. Level 21 remains review-only and path-only.
+Current baseline: Level 21 is locally reported all pass. Level 21 remains review-only and path-only.
 
 ## Level 21 goal
 
@@ -16,9 +16,9 @@ Create a path-only status index that records Level 20 output paths and local val
 - [x] The index remains review-only and path-only.
 - [x] A Markdown report exists.
 - [x] A writer CLI exists for Level 21 outputs.
-- [ ] Focused Level 21 tests pass.
-- [ ] `ruff check .` passes.
-- [ ] Full `pytest` passes.
+- [x] Focused Level 21 tests pass.
+- [x] `ruff check .` passes.
+- [x] Full `pytest` passes.
 
 ## P178: status index
 
@@ -65,25 +65,13 @@ Create a path-only status index that records Level 20 output paths and local val
 
 ## P182: Level 21 validation checkpoint
 
-### Commands
+### Status
 
-```powershell
-cd C:\Users\junny\Desktop\traceLeak\TraceLeak
-git pull --ff-only
-pytest tests/test_level21_status_index.py
-pytest tests/test_level21_status_index_report.py
-pytest tests/test_write_level21_files_cli.py
-ruff check .
-pytest
-```
-
-### Completion criteria
-
-- [ ] Focused Level 21 tests pass.
-- [ ] `ruff check .` passes.
-- [ ] Full `pytest` passes.
-- [ ] Level 21 outputs stay under `reports/local/`.
+- [x] Focused Level 21 tests reported all pass locally.
+- [x] `ruff check .` reported pass locally.
+- [x] Full `pytest` reported pass locally.
+- [x] Level 21 outputs stay under `reports/local/`.
 
 ## Stop condition
 
-Stop before Level 22 unless Level 21 focused tests, `ruff check .`, and full `pytest` all pass locally.
+Level 21 is complete. Start Level 22 only from a review-only TODO and do not widen behavior directly.

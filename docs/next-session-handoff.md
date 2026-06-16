@@ -1,6 +1,6 @@
 # Next session handoff
 
-Current checkpoint: Level 20 implemented; local validation pending.
+Current checkpoint: Level 21 TODO created; implementation pending.
 
 ## Local validation
 
@@ -14,19 +14,18 @@ pytest
 ## Focused checks
 
 ```powershell
-pytest tests/test_level20_closure_index.py
-pytest tests/test_level20_closure_index_report.py
-pytest tests/test_write_level20_files_cli.py
+pytest tests/test_level21_status_index.py
+pytest tests/test_level21_status_index_report.py
+pytest tests/test_write_level21_files_cli.py
 ```
 
 ## Latest changes
 
-- Added Level 20 helper.
-- Added Level 20 report.
-- Added Level 20 writer CLI.
-- Registered Level 20 writer entry point.
-- Updated local validation docs.
+- Level 20 local validation was reported all pass.
+- Marked Level 20 validation complete.
+- Added `docs/level21-completion-todo.md`.
+- Updated `NEXT_TODO.md`.
 
 ## Next work
 
-Run focused Level 20 tests, `ruff check .`, and full `pytest` locally.
+Start P178 status index.

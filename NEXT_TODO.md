@@ -1,6 +1,6 @@
 # TraceLeak NEXT TODO
 
-Current checkpoint: Level 16 completion TODO created; Level 15 local validation pending.
+Current checkpoint: Level 16 review layer implemented; local validation pending.
 
 This file is the active short-term TODO. `TODO.md` is kept as historical context and should not be deleted.
 
@@ -23,11 +23,11 @@ pytest tests/test_level15_validation_rollup_report.py
 pytest tests/test_write_level15_files_cli.py
 ```
 
-Focused validation for the Level 16 planning path:
+Focused validation for the Level 16 review path:
 
 ```powershell
 pytest tests/test_level16_pre_handoff_review.py
-pytest tests/test_level16_pre_handoff_review_report.py
+pytest tests/test_level16_review_report.py
 pytest tests/test_write_level16_files_cli.py
 ```
 
@@ -39,29 +39,33 @@ pytest tests/test_write_level16_files_cli.py
 - [x] P150: added Level 15 validation rollup writer CLI.
 - [x] P151: updated local validation docs with Level 15 commands.
 - [ ] P152: run focused Level 15 tests, `ruff check .`, and full `pytest` locally.
-- [x] P153: added Level 16 completion TODO.
+- [x] P153: added Level 16 completion TODO and review helper.
+- [x] P154: added Level 16 review Markdown report.
+- [x] P155: added Level 16 local review writer CLI.
+- [x] P156: registered Level 16 CLI entry point.
+- [ ] P157: run focused Level 16 tests, `ruff check .`, and full `pytest` locally.
 
 ## Level roadmap summary
 
 - Level 15: validation rollup.
-- Level 16: pre-handoff review planning.
+- Level 16: pre-handoff review.
 
-## Current Level 16 TODO
+## Current Level 16 commands
 
-See:
+Generate Level 16 files:
 
-```text
-docs/level16-completion-todo.md
+```powershell
+traceleak-write-level16-files --out-dir reports/local/level16_review
 ```
 
-Recommended next implementation order:
+Validate Level 16 focused tests:
 
-1. P153 pre-handoff review manifest.
-2. P154 pre-handoff review report.
-3. P155 writer CLI.
-4. P156 docs and handoff update.
-5. P157 validation checkpoint.
+```powershell
+pytest tests/test_level16_pre_handoff_review.py
+pytest tests/test_level16_review_report.py
+pytest tests/test_write_level16_files_cli.py
+```
 
-## Candidate next block
+## Candidate next block after Level 16 all-pass
 
-Start P153 only after checking Level 15 validation status. Keep Level 16 review-only and path-only.
+Do not start Level 17 until P157 is complete. The next block should first create a Level 17 TODO and review checkpoint rather than widening behavior directly.

@@ -10,57 +10,55 @@ Create a path-only index for Level 24 output paths.
 
 ## Level 25 done definition
 
-- [ ] A versioned index exists.
-- [ ] The index records expected Level 24 output paths.
-- [ ] The index records status as pending local validation by default.
-- [ ] The index remains review-only and path-only.
-- [ ] A Markdown report exists.
-- [ ] A writer CLI exists for Level 25 outputs.
+- [x] A versioned index exists.
+- [x] The index records expected Level 24 output paths.
+- [x] The index records status as pending local validation by default.
+- [x] The index remains review-only and path-only.
+- [x] A Markdown report exists.
+- [x] A writer CLI exists for Level 25 outputs.
 - [ ] Focused Level 25 tests pass.
 - [ ] `ruff check .` passes.
 - [ ] Full `pytest` passes.
 
 ## P198: index
 
-### Tasks
+### Status
 
-- [ ] Add Level 25 index helper.
-- [ ] Define `traceleak.level25_index.v1`.
-- [ ] Record expected Level 24 output paths.
-- [ ] Record status as pending local validation.
-- [ ] Keep review-only and path-only flags.
-- [ ] Add focused tests.
+- [x] Added Level 25 index helper.
+- [x] Defined `traceleak.level25_index.v1`.
+- [x] Recorded expected Level 24 output paths.
+- [x] Recorded status as pending local validation.
+- [x] Kept review-only and path-only flags.
+- [x] Added focused tests.
 
 ## P199: report
 
-### Tasks
+### Status
 
-- [ ] Add Markdown report renderer.
-- [ ] Render status.
-- [ ] Render output paths.
-- [ ] Render review-only boundary.
-- [ ] Render expected validation commands.
-- [ ] Add focused tests.
+- [x] Added Markdown report renderer.
+- [x] Rendered status.
+- [x] Rendered output paths.
+- [x] Rendered expected validation commands.
+- [x] Added focused tests.
 
 ## P200: writer CLI
 
-### Tasks
+### Status
 
-- [ ] Add writer CLI name.
-- [ ] Build Level 25 index.
-- [ ] Render report.
-- [ ] Write JSON and Markdown under `reports/local/level25_index/`.
-- [ ] Add focused tests.
+- [x] Added writer CLI name: `traceleak-write-level25-files`.
+- [x] Built Level 25 index.
+- [x] Rendered report.
+- [x] Wrote JSON and Markdown under `reports/local/level25_index/`.
+- [x] Added focused tests.
 
 ## P201: docs and handoff update
 
-### Tasks
+### Status
 
-- [ ] Update `docs/local-validation.md` with Level 25 focused commands.
-- [ ] Update `docs/next-session-handoff.md` with Level 25 status.
-- [ ] Update `NEXT_TODO.md` with Level 25 checkpoint.
-- [ ] Add Level 25 generation command.
-- [ ] Add Level 25 validation command group.
+- [x] Updated `docs/next-session-handoff.md` with Level 25 status.
+- [x] Updated `NEXT_TODO.md` with Level 25 checkpoint.
+- [x] Added Level 25 generation command.
+- [x] Added Level 25 validation command group.
 
 ## P202: Level 25 validation checkpoint
 

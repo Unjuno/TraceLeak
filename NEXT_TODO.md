@@ -1,6 +1,6 @@
 # TraceLeak NEXT TODO
 
-Current checkpoint: Level 17 completion TODO created; implementation pending.
+Current checkpoint: Level 17 release-readiness layer implemented; local validation pending.
 
 This file is the active short-term TODO. `TODO.md` is kept as historical context and should not be deleted.
 
@@ -25,40 +25,35 @@ pytest tests/test_write_level17_files_cli.py
 
 ## Completed recent blocks
 
-- [x] P147: Level 14 local validation reported all pass.
-- [x] P148: added Level 15 validation rollup helper.
-- [x] P149: added Level 15 validation rollup Markdown report.
-- [x] P150: added Level 15 validation rollup writer CLI.
-- [x] P151: updated local validation docs with Level 15 commands.
 - [x] P152: Level 15 local validation reported all pass.
-- [x] P153: added Level 16 completion TODO and review helper.
-- [x] P154: added Level 16 review Markdown report.
-- [x] P155: added Level 16 local review writer CLI.
-- [x] P156: registered Level 16 CLI entry point.
 - [x] P157: Level 16 local validation reported all pass.
-- [x] P158: added Level 17 completion TODO.
+- [x] P158: added Level 17 release-readiness helper.
+- [x] P159: added Level 17 release-readiness Markdown report.
+- [x] P160: added Level 17 release-readiness writer CLI.
+- [x] P161: updated local validation docs with Level 17 commands.
+- [ ] P162: run focused Level 17 tests, `ruff check .`, and full `pytest` locally.
 
 ## Level roadmap summary
 
 - Level 16: pre-handoff review.
-- Level 17: release-readiness checklist planning.
+- Level 17: release-readiness checklist.
 
-## Current Level 17 TODO
+## Current Level 17 commands
 
-See:
+Generate Level 17 files:
 
-```text
-docs/level17-completion-todo.md
+```powershell
+traceleak-write-level17-files --out-dir reports/local/level17_release_readiness
 ```
 
-Recommended next implementation order:
+Validate Level 17 focused tests:
 
-1. P158 release-readiness checklist.
-2. P159 release-readiness report.
-3. P160 writer CLI.
-4. P161 docs and handoff update.
-5. P162 validation checkpoint.
+```powershell
+pytest tests/test_level17_release_readiness.py
+pytest tests/test_level17_release_readiness_report.py
+pytest tests/test_write_level17_files_cli.py
+```
 
-## Candidate next block
+## Candidate next block after Level 17 all-pass
 
-Start P158 only. Keep Level 17 review-only and path-only.
+Do not start Level 18 until P162 is complete. The next block should first create a Level 18 TODO and review checkpoint rather than widening behavior directly.

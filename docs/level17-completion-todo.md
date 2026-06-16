@@ -2,7 +2,7 @@
 
 Level 17 is release-readiness checklist planning after Level 16.
 
-Current baseline: Level 16 is locally reported all pass. Level 17 must remain review-only and path-only.
+Current baseline: Level 16 is locally reported all pass. Level 17 remains review-only and path-only.
 
 ## Level 17 goal
 
@@ -32,108 +32,77 @@ Level 16 review artifacts
 
 Level 17 is complete when all of the following are true:
 
-- [ ] A versioned release-readiness checklist exists.
-- [ ] The checklist requires a valid Level 16 review artifact.
-- [ ] The checklist records review disposition.
-- [ ] The checklist records expected validation commands.
-- [ ] The checklist records readiness items with pending local validation by default.
-- [ ] The checklist remains review-only and path-only.
-- [ ] A release-readiness Markdown report exists.
-- [ ] A writer CLI exists for Level 17 artifacts.
+- [x] A versioned release-readiness checklist exists.
+- [x] The checklist requires a valid Level 16 review artifact.
+- [x] The checklist records review disposition.
+- [x] The checklist records expected validation commands.
+- [x] The checklist records readiness items with pending local validation by default.
+- [x] The checklist remains review-only and path-only.
+- [x] A release-readiness Markdown report exists.
+- [x] A writer CLI exists for Level 17 artifacts.
 - [ ] Focused Level 17 tests pass.
 - [ ] `ruff check .` passes.
 - [ ] Full `pytest` passes.
 
 ## P158: release-readiness checklist
 
-### Purpose
+### Status
 
-Define a release-readiness checklist over Level 16 review artifacts.
-
-### Implementation tasks
-
-- [ ] Add Level 17 release-readiness helper.
-- [ ] Define `traceleak.level17_release_readiness.v1`.
-- [ ] Require a valid Level 16 review artifact.
-- [ ] Record source review format and phase.
-- [ ] Record review disposition.
-- [ ] Record expected validation commands.
-- [ ] Record readiness items:
-  - [ ] focused tests pending.
-  - [ ] ruff pending.
-  - [ ] full pytest pending.
-  - [ ] docs updated pending.
-- [ ] Keep flags:
-  - [ ] review only true.
-  - [ ] path only true.
-  - [ ] content read false.
-  - [ ] command executed false.
-  - [ ] claim generated false.
-
-### Tests
-
-- [ ] Build checklist from valid Level 16 review.
-- [ ] Reject invalid source review format.
-- [ ] Reject content read enabled.
-- [ ] Reject command executed enabled.
-- [ ] Reject claim generated enabled.
-- [ ] Validate JSON writer.
+- [x] Added Level 17 release-readiness helper.
+- [x] Defined `traceleak.level17_release_readiness.v1`.
+- [x] Required a valid Level 16 review artifact.
+- [x] Recorded source review format and phase.
+- [x] Recorded review disposition.
+- [x] Recorded expected validation commands.
+- [x] Recorded readiness items:
+  - [x] focused tests pending.
+  - [x] ruff pending.
+  - [x] full pytest pending.
+  - [x] docs updated pending.
+- [x] Kept flags:
+  - [x] review only true.
+  - [x] path only true.
+  - [x] content read false.
+  - [x] command executed false.
+  - [x] claim generated false.
+- [x] Added focused tests.
 
 ## P159: release-readiness report
 
-### Purpose
+### Status
 
-Render a Markdown report for Level 17 release-readiness checklist.
-
-### Required sections
-
-- [ ] Readiness status.
-- [ ] Source review disposition.
-- [ ] Readiness items.
-- [ ] Expected validation commands.
-- [ ] Review-only boundary.
-- [ ] Next-level preconditions.
-
-### Tests
-
-- [ ] Report contains required headings.
-- [ ] Report states review-only boundary.
-- [ ] Report states no commands were executed.
-- [ ] Report states no content was read.
-- [ ] Report states no claim was generated.
+- [x] Added Markdown report renderer.
+- [x] Rendered readiness status.
+- [x] Rendered source review status.
+- [x] Rendered readiness items.
+- [x] Rendered expected validation commands.
+- [x] Rendered review-only boundary.
+- [x] Rendered next-level preconditions.
+- [x] Added focused tests.
 
 ## P160: Level 17 writer CLI
 
-### Purpose
+### Status
 
-Expose Level 17 release-readiness artifact generation.
-
-### Implementation tasks
-
-- [ ] Add neutral writer CLI name.
-- [ ] Build Level 17 release-readiness checklist.
-- [ ] Render release-readiness report.
-- [ ] Write JSON and Markdown under `reports/local/level17_release_readiness/`.
-- [ ] Do not read artifact contents.
-- [ ] Do not execute validation commands.
-- [ ] Do not mutate source trees.
-- [ ] Do not generate claims.
-
-### Tests
-
-- [ ] CLI writes release-readiness checklist.
-- [ ] CLI writes release-readiness report.
-- [ ] CLI rejects bad reviewer or unsafe output path.
+- [x] Added neutral writer CLI name: `traceleak-write-level17-files`.
+- [x] Built Level 17 release-readiness checklist.
+- [x] Rendered release-readiness report.
+- [x] Wrote JSON and Markdown under `reports/local/level17_release_readiness/`.
+- [x] Did not read artifact contents.
+- [x] Did not execute validation commands.
+- [x] Did not mutate source trees.
+- [x] Did not generate claims.
+- [x] Added focused tests.
 
 ## P161: docs and handoff update
 
-### Documentation tasks
+### Status
 
-- [ ] Update `docs/local-validation.md` with Level 17 focused commands.
-- [ ] Update `docs/next-session-handoff.md` with Level 17 status.
-- [ ] Update `NEXT_TODO.md` with Level 17 checkpoint.
-- [ ] Add Level 17 generation command.
-- [ ] Add Level 17 validation command group.
+- [x] Updated `docs/local-validation.md` with Level 17 focused commands.
+- [x] Updated `docs/next-session-handoff.md` with Level 17 status.
+- [x] Updated `NEXT_TODO.md` with Level 17 checkpoint.
+- [x] Added Level 17 generation command.
+- [x] Added Level 17 validation command group.
 
 ## P162: Level 17 validation checkpoint
 
@@ -155,14 +124,6 @@ pytest
 - [ ] `ruff check .` passes.
 - [ ] Full `pytest` passes.
 - [ ] Level 17 output artifacts stay under `reports/local/`.
-
-## Recommended implementation order
-
-1. P158 release-readiness checklist.
-2. P159 release-readiness report.
-3. P160 writer CLI.
-4. P161 docs and handoff update.
-5. P162 validation checkpoint.
 
 ## Stop condition
 

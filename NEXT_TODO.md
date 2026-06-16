@@ -1,6 +1,6 @@
 # TraceLeak NEXT TODO
 
-Current checkpoint: Level 17 release-readiness layer implemented; local validation pending.
+Current checkpoint: Level 18 completion TODO created; implementation pending.
 
 This file is the active short-term TODO. `TODO.md` is kept as historical context and should not be deleted.
 
@@ -15,45 +15,42 @@ ruff check .
 pytest
 ```
 
-Focused validation for Level 17:
+Focused validation for Level 18:
 
 ```powershell
-pytest tests/test_level17_release_readiness.py
-pytest tests/test_level17_release_readiness_report.py
-pytest tests/test_write_level17_files_cli.py
+pytest tests/test_level18_archive_index.py
+pytest tests/test_level18_archive_index_report.py
+pytest tests/test_write_level18_files_cli.py
 ```
 
 ## Completed recent blocks
 
 - [x] P152: Level 15 local validation reported all pass.
 - [x] P157: Level 16 local validation reported all pass.
-- [x] P158: added Level 17 release-readiness helper.
-- [x] P159: added Level 17 release-readiness Markdown report.
-- [x] P160: added Level 17 release-readiness writer CLI.
-- [x] P161: updated local validation docs with Level 17 commands.
-- [ ] P162: run focused Level 17 tests, `ruff check .`, and full `pytest` locally.
+- [x] P162: Level 17 local validation reported all pass.
+- [x] P163: added Level 18 completion TODO.
 
 ## Level roadmap summary
 
-- Level 16: pre-handoff review.
 - Level 17: release-readiness checklist.
+- Level 18: archive-index planning.
 
-## Current Level 17 commands
+## Current Level 18 TODO
 
-Generate Level 17 files:
+See:
 
-```powershell
-traceleak-write-level17-files --out-dir reports/local/level17_release_readiness
+```text
+docs/level18-completion-todo.md
 ```
 
-Validate Level 17 focused tests:
+Recommended next implementation order:
 
-```powershell
-pytest tests/test_level17_release_readiness.py
-pytest tests/test_level17_release_readiness_report.py
-pytest tests/test_write_level17_files_cli.py
-```
+1. P163 archive index.
+2. P164 archive-index report.
+3. P165 writer CLI.
+4. P166 docs and handoff update.
+5. P167 validation checkpoint.
 
-## Candidate next block after Level 17 all-pass
+## Candidate next block
 
-Do not start Level 18 until P162 is complete. The next block should first create a Level 18 TODO and review checkpoint rather than widening behavior directly.
+Start P163 only. Keep Level 18 review-only and path-only.

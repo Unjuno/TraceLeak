@@ -1,6 +1,6 @@
 # Next session handoff
 
-Current checkpoint: Level 18 completion TODO created; implementation pending.
+Current checkpoint: Level 18 archive-index layer implemented; local validation pending.
 
 ## Local validation
 
@@ -21,30 +21,26 @@ pytest tests/test_write_level18_files_cli.py
 
 ## What changed in the latest block
 
-- Level 17 was locally reported all pass.
-- Marked Level 17 validation complete.
-- Added `docs/level18-completion-todo.md`.
-- Updated `NEXT_TODO.md` with Level 18 planning state.
+- Added Level 18 archive-index helper.
+- Added Level 18 archive-index Markdown report renderer.
+- Added Level 18 archive-index writer CLI.
+- Registered `traceleak-write-level18-files` entry point.
+- Updated local validation docs with Level 18 commands.
+- Updated `NEXT_TODO.md` with Level 18 implementation state.
 
-## Level 17 generation command
+## Level 18 generation command
 
 ```powershell
-traceleak-write-level17-files --out-dir reports/local/level17_release_readiness
-```
-
-## Level 18 TODO
-
-```text
-docs/level18-completion-todo.md
+traceleak-write-level18-files --out-dir reports/local/level18_archive_index
 ```
 
 ## Current boundary
 
-Level 18 is planned as a review-only, path-only archive index. It must not read artifact contents, execute validation commands, perform direct action, or enable claims.
+Level 18 remains review-only and path-only. It records local artifact paths only and does not read artifact contents, execute validation commands, perform direct action, or enable claims.
 
 ## Next likely work
 
-- Start P163 archive index.
-- Then implement P164 archive-index report.
-- Then implement P165 writer CLI.
-- Run focused Level 18 tests, `ruff check .`, and full `pytest` before Level 19.
+- Fix any local Level 18 focused test failures first.
+- Run `ruff check .`.
+- Run full `pytest`.
+- If all pass, mark Level 18 complete and create a Level 19 TODO before any further expansion.

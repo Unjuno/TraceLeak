@@ -1,6 +1,6 @@
 # TraceLeak NEXT TODO
 
-Current checkpoint: Level 16 review layer implemented; local validation pending.
+Current checkpoint: Level 17 completion TODO created; implementation pending.
 
 This file is the active short-term TODO. `TODO.md` is kept as historical context and should not be deleted.
 
@@ -15,20 +15,12 @@ ruff check .
 pytest
 ```
 
-Focused validation for Level 15:
+Focused validation for Level 17:
 
 ```powershell
-pytest tests/test_level15_validation_rollup.py
-pytest tests/test_level15_validation_rollup_report.py
-pytest tests/test_write_level15_files_cli.py
-```
-
-Focused validation for the Level 16 review path:
-
-```powershell
-pytest tests/test_level16_pre_handoff_review.py
-pytest tests/test_level16_review_report.py
-pytest tests/test_write_level16_files_cli.py
+pytest tests/test_level17_release_readiness.py
+pytest tests/test_level17_release_readiness_report.py
+pytest tests/test_write_level17_files_cli.py
 ```
 
 ## Completed recent blocks
@@ -38,34 +30,35 @@ pytest tests/test_write_level16_files_cli.py
 - [x] P149: added Level 15 validation rollup Markdown report.
 - [x] P150: added Level 15 validation rollup writer CLI.
 - [x] P151: updated local validation docs with Level 15 commands.
-- [ ] P152: run focused Level 15 tests, `ruff check .`, and full `pytest` locally.
+- [x] P152: Level 15 local validation reported all pass.
 - [x] P153: added Level 16 completion TODO and review helper.
 - [x] P154: added Level 16 review Markdown report.
 - [x] P155: added Level 16 local review writer CLI.
 - [x] P156: registered Level 16 CLI entry point.
-- [ ] P157: run focused Level 16 tests, `ruff check .`, and full `pytest` locally.
+- [x] P157: Level 16 local validation reported all pass.
+- [x] P158: added Level 17 completion TODO.
 
 ## Level roadmap summary
 
-- Level 15: validation rollup.
 - Level 16: pre-handoff review.
+- Level 17: release-readiness checklist planning.
 
-## Current Level 16 commands
+## Current Level 17 TODO
 
-Generate Level 16 files:
+See:
 
-```powershell
-traceleak-write-level16-files --out-dir reports/local/level16_review
+```text
+docs/level17-completion-todo.md
 ```
 
-Validate Level 16 focused tests:
+Recommended next implementation order:
 
-```powershell
-pytest tests/test_level16_pre_handoff_review.py
-pytest tests/test_level16_review_report.py
-pytest tests/test_write_level16_files_cli.py
-```
+1. P158 release-readiness checklist.
+2. P159 release-readiness report.
+3. P160 writer CLI.
+4. P161 docs and handoff update.
+5. P162 validation checkpoint.
 
-## Candidate next block after Level 16 all-pass
+## Candidate next block
 
-Do not start Level 17 until P157 is complete. The next block should first create a Level 17 TODO and review checkpoint rather than widening behavior directly.
+Start P158 only. Keep Level 17 review-only and path-only.

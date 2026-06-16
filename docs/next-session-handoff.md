@@ -1,6 +1,6 @@
 # Next session handoff
 
-Current checkpoint: Level 19 completion TODO created; implementation pending.
+Current checkpoint: Level 19 summary layer implemented; local validation pending.
 
 ## Local validation
 
@@ -21,30 +21,26 @@ pytest tests/test_write_level19_files_cli.py
 
 ## What changed in the latest block
 
-- Level 18 was locally reported all pass.
-- Marked Level 18 validation complete.
-- Added `docs/level19-completion-todo.md`.
-- Updated `NEXT_TODO.md` with Level 19 planning state.
+- Added Level 19 summary helper.
+- Added Level 19 summary Markdown report renderer.
+- Added Level 19 summary writer CLI.
+- Registered `traceleak-write-level19-files` entry point.
+- Updated local validation docs with Level 19 commands.
+- Updated `NEXT_TODO.md` with Level 19 implementation state.
 
-## Level 18 generation command
+## Level 19 generation command
 
 ```powershell
-traceleak-write-level18-files --out-dir reports/local/level18_archive_index
-```
-
-## Level 19 TODO
-
-```text
-docs/level19-completion-todo.md
+traceleak-write-level19-files --out-dir reports/local/level19_handoff_summary
 ```
 
 ## Current boundary
 
-Level 19 is planned as a review-only, path-only handoff summary. It must not read output contents, execute validation commands, perform direct action, or enable claims.
+Level 19 remains review-only and path-only. It records pending local validation state and does not read output contents, execute validation commands, perform direct action, or enable claims.
 
 ## Next likely work
 
-- Start P168 handoff summary.
-- Then implement P169 handoff-summary report.
-- Then implement P170 writer CLI.
-- Run focused Level 19 tests, `ruff check .`, and full `pytest` before Level 20.
+- Fix any local Level 19 focused test failures first.
+- Run `ruff check .`.
+- Run full `pytest`.
+- If all pass, mark Level 19 complete and create a Level 20 TODO before any further expansion.

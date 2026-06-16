@@ -1,6 +1,6 @@
 # Next session handoff
 
-Current checkpoint: Level 18 archive-index layer implemented; local validation pending.
+Current checkpoint: Level 19 completion TODO created; implementation pending.
 
 ## Local validation
 
@@ -14,19 +14,17 @@ pytest
 ## Focused checks
 
 ```powershell
-pytest tests/test_level18_archive_index.py
-pytest tests/test_level18_archive_index_report.py
-pytest tests/test_write_level18_files_cli.py
+pytest tests/test_level19_handoff_summary.py
+pytest tests/test_level19_handoff_summary_report.py
+pytest tests/test_write_level19_files_cli.py
 ```
 
 ## What changed in the latest block
 
-- Added Level 18 archive-index helper.
-- Added Level 18 archive-index Markdown report renderer.
-- Added Level 18 archive-index writer CLI.
-- Registered `traceleak-write-level18-files` entry point.
-- Updated local validation docs with Level 18 commands.
-- Updated `NEXT_TODO.md` with Level 18 implementation state.
+- Level 18 was locally reported all pass.
+- Marked Level 18 validation complete.
+- Added `docs/level19-completion-todo.md`.
+- Updated `NEXT_TODO.md` with Level 19 planning state.
 
 ## Level 18 generation command
 
@@ -34,13 +32,19 @@ pytest tests/test_write_level18_files_cli.py
 traceleak-write-level18-files --out-dir reports/local/level18_archive_index
 ```
 
+## Level 19 TODO
+
+```text
+docs/level19-completion-todo.md
+```
+
 ## Current boundary
 
-Level 18 remains review-only and path-only. It records local artifact paths only and does not read artifact contents, execute validation commands, perform direct action, or enable claims.
+Level 19 is planned as a review-only, path-only handoff summary. It must not read output contents, execute validation commands, perform direct action, or enable claims.
 
 ## Next likely work
 
-- Fix any local Level 18 focused test failures first.
-- Run `ruff check .`.
-- Run full `pytest`.
-- If all pass, mark Level 18 complete and create a Level 19 TODO before any further expansion.
+- Start P168 handoff summary.
+- Then implement P169 handoff-summary report.
+- Then implement P170 writer CLI.
+- Run focused Level 19 tests, `ruff check .`, and full `pytest` before Level 20.

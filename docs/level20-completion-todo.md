@@ -2,7 +2,7 @@
 
 Level 20 is final index planning after Level 19.
 
-Current baseline: Level 19 is locally reported all pass. Level 20 remains review-only and path-only.
+Current baseline: Level 20 is locally reported all pass. Level 20 remains review-only and path-only.
 
 ## Level 20 goal
 
@@ -16,9 +16,9 @@ Create a final path-only index that records Level 19 summary output paths and va
 - [x] The index remains review-only and path-only.
 - [x] A Markdown report exists.
 - [x] A writer CLI exists for Level 20 outputs.
-- [ ] Focused Level 20 tests pass.
-- [ ] `ruff check .` passes.
-- [ ] Full `pytest` passes.
+- [x] Focused Level 20 tests pass.
+- [x] `ruff check .` passes.
+- [x] Full `pytest` passes.
 
 ## P173: index
 
@@ -65,25 +65,13 @@ Create a final path-only index that records Level 19 summary output paths and va
 
 ## P177: Level 20 validation checkpoint
 
-### Commands
+### Status
 
-```powershell
-cd C:\Users\junny\Desktop\traceLeak\TraceLeak
-git pull --ff-only
-pytest tests/test_level20_closure_index.py
-pytest tests/test_level20_closure_index_report.py
-pytest tests/test_write_level20_files_cli.py
-ruff check .
-pytest
-```
-
-### Completion criteria
-
-- [ ] Focused Level 20 tests pass.
-- [ ] `ruff check .` passes.
-- [ ] Full `pytest` passes.
-- [ ] Level 20 outputs stay under `reports/local/`.
+- [x] Focused Level 20 tests reported all pass locally.
+- [x] `ruff check .` reported pass locally.
+- [x] Full `pytest` reported pass locally.
+- [x] Level 20 outputs stay under `reports/local/`.
 
 ## Stop condition
 
-Stop before Level 21 unless Level 20 focused tests, `ruff check .`, and full `pytest` all pass locally.
+Level 20 is complete. Start Level 21 only from a review-only TODO and do not widen behavior directly.

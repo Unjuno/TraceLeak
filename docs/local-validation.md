@@ -209,6 +209,14 @@ pytest tests/test_level19_handoff_summary_report.py
 pytest tests/test_write_level19_files_cli.py
 ```
 
+## Level 20 closure-index validation
+
+```powershell
+pytest tests/test_level20_closure_index.py
+pytest tests/test_level20_closure_index_report.py
+pytest tests/test_write_level20_files_cli.py
+```
+
 ## Shared fixture validation
 
 ```powershell
@@ -366,6 +374,12 @@ traceleak-write-level18-files --out-dir reports/local/level18_archive_index
 
 ```powershell
 traceleak-write-level19-files --out-dir reports/local/level19_handoff_summary
+```
+
+## Generate Level 20 closure-index files
+
+```powershell
+traceleak-write-level20-files --out-dir reports/local/level20_closure_index
 ```
 
 ## Render local Markdown summary from existing JSON

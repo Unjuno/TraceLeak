@@ -1,6 +1,6 @@
 # TraceLeak NEXT TODO
 
-Current checkpoint: Level 19 summary layer implemented; local validation pending.
+Current checkpoint: Level 20 completion TODO created; implementation pending.
 
 This file is the active short-term TODO. `TODO.md` is kept as historical context and should not be deleted.
 
@@ -15,12 +15,12 @@ ruff check .
 pytest
 ```
 
-Focused validation for Level 19:
+Focused validation for Level 20:
 
 ```powershell
-pytest tests/test_level19_handoff_summary.py
-pytest tests/test_level19_handoff_summary_report.py
-pytest tests/test_write_level19_files_cli.py
+pytest tests/test_level20_closure_index.py
+pytest tests/test_level20_closure_index_report.py
+pytest tests/test_write_level20_files_cli.py
 ```
 
 ## Completed recent blocks
@@ -29,33 +29,30 @@ pytest tests/test_write_level19_files_cli.py
 - [x] P157: Level 16 local validation reported all pass.
 - [x] P162: Level 17 local validation reported all pass.
 - [x] P167: Level 18 local validation reported all pass.
-- [x] P168: added Level 19 summary helper.
-- [x] P169: added Level 19 summary Markdown report.
-- [x] P170: added Level 19 summary writer CLI.
-- [x] P171: updated local validation docs with Level 19 commands.
-- [ ] P172: run focused Level 19 tests, `ruff check .`, and full `pytest` locally.
+- [x] P172: Level 19 local validation reported all pass.
+- [x] P173: added Level 20 completion TODO.
 
 ## Level roadmap summary
 
-- Level 18: archive index.
 - Level 19: summary layer.
+- Level 20: closure-index planning.
 
-## Current Level 19 commands
+## Current Level 20 TODO
 
-Generate Level 19 files:
+See:
 
-```powershell
-traceleak-write-level19-files --out-dir reports/local/level19_handoff_summary
+```text
+docs/level20-completion-todo.md
 ```
 
-Validate Level 19 focused tests:
+Recommended next implementation order:
 
-```powershell
-pytest tests/test_level19_handoff_summary.py
-pytest tests/test_level19_handoff_summary_report.py
-pytest tests/test_write_level19_files_cli.py
-```
+1. P173 closure index.
+2. P174 closure-index report.
+3. P175 writer CLI.
+4. P176 docs and handoff update.
+5. P177 validation checkpoint.
 
-## Candidate next block after Level 19 all-pass
+## Candidate next block
 
-Do not start Level 20 until P172 is complete. The next block should first create a Level 20 TODO and review checkpoint rather than widening behavior directly.
+Start P173 only. Keep Level 20 review-only and path-only.

@@ -2,7 +2,7 @@
 
 Level 16 is final pre-handoff review planning after Level 15.
 
-Current baseline: Level 15 is implemented but local Level 15 all-pass validation has not been explicitly reported. Level 16 remains review-only and path-only.
+Current baseline: Level 15 and Level 16 are locally reported all pass. Level 16 remains review-only and path-only.
 
 ## Level 16 goal
 
@@ -40,9 +40,9 @@ Level 16 is complete when all of the following are true:
 - [x] The manifest remains path-only and review-only.
 - [x] A pre-handoff Markdown report exists.
 - [x] A writer CLI exists for Level 16 review artifacts.
-- [ ] Focused Level 16 tests pass.
-- [ ] `ruff check .` passes.
-- [ ] Full `pytest` passes.
+- [x] Focused Level 16 tests pass.
+- [x] `ruff check .` passes.
+- [x] Full `pytest` passes.
 
 ## P153: pre-handoff review manifest
 
@@ -103,25 +103,13 @@ Level 16 is complete when all of the following are true:
 
 ## P157: Level 16 validation checkpoint
 
-### Commands
+### Status
 
-```powershell
-cd C:\Users\junny\Desktop\traceLeak\TraceLeak
-git pull --ff-only
-pytest tests/test_level16_pre_handoff_review.py
-pytest tests/test_level16_review_report.py
-pytest tests/test_write_level16_files_cli.py
-ruff check .
-pytest
-```
-
-### Completion criteria
-
-- [ ] Focused Level 16 tests pass.
-- [ ] `ruff check .` passes.
-- [ ] Full `pytest` passes.
-- [ ] Level 16 output artifacts stay under `reports/local/`.
+- [x] Focused Level 16 tests reported all pass locally.
+- [x] `ruff check .` reported pass locally.
+- [x] Full `pytest` reported pass locally.
+- [x] Level 16 output artifacts stay under `reports/local/`.
 
 ## Stop condition
 
-Stop before Level 17 unless Level 16 focused tests, `ruff check .`, and full `pytest` all pass locally.
+Level 16 is complete. Start Level 17 only from a review-only TODO and do not widen behavior directly.

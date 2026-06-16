@@ -2,7 +2,7 @@
 
 Level 17 is release-readiness checklist planning after Level 16.
 
-Current baseline: Level 16 is locally reported all pass. Level 17 remains review-only and path-only.
+Current baseline: Level 17 is locally reported all pass. Level 17 remains review-only and path-only.
 
 ## Level 17 goal
 
@@ -40,9 +40,9 @@ Level 17 is complete when all of the following are true:
 - [x] The checklist remains review-only and path-only.
 - [x] A release-readiness Markdown report exists.
 - [x] A writer CLI exists for Level 17 artifacts.
-- [ ] Focused Level 17 tests pass.
-- [ ] `ruff check .` passes.
-- [ ] Full `pytest` passes.
+- [x] Focused Level 17 tests pass.
+- [x] `ruff check .` passes.
+- [x] Full `pytest` passes.
 
 ## P158: release-readiness checklist
 
@@ -106,25 +106,13 @@ Level 17 is complete when all of the following are true:
 
 ## P162: Level 17 validation checkpoint
 
-### Commands
+### Status
 
-```powershell
-cd C:\Users\junny\Desktop\traceLeak\TraceLeak
-git pull --ff-only
-pytest tests/test_level17_release_readiness.py
-pytest tests/test_level17_release_readiness_report.py
-pytest tests/test_write_level17_files_cli.py
-ruff check .
-pytest
-```
-
-### Completion criteria
-
-- [ ] Focused Level 17 tests pass.
-- [ ] `ruff check .` passes.
-- [ ] Full `pytest` passes.
-- [ ] Level 17 output artifacts stay under `reports/local/`.
+- [x] Focused Level 17 tests reported all pass locally.
+- [x] `ruff check .` reported pass locally.
+- [x] Full `pytest` reported pass locally.
+- [x] Level 17 output artifacts stay under `reports/local/`.
 
 ## Stop condition
 
-Stop before Level 18 unless Level 17 focused tests, `ruff check .`, and full `pytest` all pass locally.
+Level 17 is complete. Start Level 18 only from a review-only TODO and do not widen behavior directly.

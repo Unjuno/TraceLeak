@@ -193,6 +193,14 @@ pytest tests/test_level17_release_readiness_report.py
 pytest tests/test_write_level17_files_cli.py
 ```
 
+## Level 18 archive-index validation
+
+```powershell
+pytest tests/test_level18_archive_index.py
+pytest tests/test_level18_archive_index_report.py
+pytest tests/test_write_level18_files_cli.py
+```
+
 ## Shared fixture validation
 
 ```powershell
@@ -338,6 +346,12 @@ traceleak-write-level16-files --out-dir reports/local/level16_review
 
 ```powershell
 traceleak-write-level17-files --out-dir reports/local/level17_release_readiness
+```
+
+## Generate Level 18 archive-index files
+
+```powershell
+traceleak-write-level18-files --out-dir reports/local/level18_archive_index
 ```
 
 ## Render local Markdown summary from existing JSON

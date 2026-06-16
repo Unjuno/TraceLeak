@@ -2,7 +2,7 @@
 
 Level 16 is final pre-handoff review planning after Level 15.
 
-Current baseline: Level 15 is implemented but local Level 15 all-pass validation has not been explicitly reported. Level 16 must remain review-only and path-only.
+Current baseline: Level 15 is implemented but local Level 15 all-pass validation has not been explicitly reported. Level 16 remains review-only and path-only.
 
 ## Level 16 goal
 
@@ -32,107 +32,74 @@ Level 15 validation rollup
 
 Level 16 is complete when all of the following are true:
 
-- [ ] A versioned pre-handoff review manifest exists.
-- [ ] The manifest requires a valid Level 15 validation rollup.
-- [ ] The manifest records validation rollup status.
-- [ ] The manifest records expected validation commands.
-- [ ] The manifest records review disposition.
-- [ ] The manifest remains path-only and review-only.
-- [ ] A pre-handoff Markdown report exists.
-- [ ] A writer CLI exists for Level 16 pre-handoff artifacts.
+- [x] A versioned pre-handoff review manifest exists.
+- [x] The manifest requires a valid Level 15 validation rollup.
+- [x] The manifest records validation rollup status.
+- [x] The manifest records expected validation commands.
+- [x] The manifest records review disposition.
+- [x] The manifest remains path-only and review-only.
+- [x] A pre-handoff Markdown report exists.
+- [x] A writer CLI exists for Level 16 review artifacts.
 - [ ] Focused Level 16 tests pass.
 - [ ] `ruff check .` passes.
 - [ ] Full `pytest` passes.
 
 ## P153: pre-handoff review manifest
 
-### Purpose
+### Status
 
-Define a pre-handoff review manifest over the Level 15 validation rollup.
-
-### Implementation tasks
-
-- [ ] Add Level 16 pre-handoff review helper.
-- [ ] Define `traceleak.level16_pre_handoff_review.v1`.
-- [ ] Require a valid Level 15 validation rollup.
-- [ ] Record source rollup format and phase.
-- [ ] Record source validation status.
-- [ ] Record expected validation commands.
-- [ ] Record review disposition:
-  - [ ] `ready_after_local_validation` when source validation is pending.
-  - [ ] `blocked_by_validation_state` for any unsupported state.
-- [ ] Keep flags:
-  - [ ] review only true.
-  - [ ] path only true.
-  - [ ] content read false.
-  - [ ] command executed false.
-  - [ ] claim generated false.
-
-### Tests
-
-- [ ] Build manifest from pending Level 15 rollup.
-- [ ] Reject invalid source rollup format.
-- [ ] Reject content read enabled.
-- [ ] Reject command executed enabled.
-- [ ] Reject claim generated enabled.
-- [ ] Validate JSON writer.
+- [x] Added Level 16 pre-handoff review helper.
+- [x] Defined `traceleak.level16_pre_handoff_review.v1`.
+- [x] Required a valid Level 15 validation rollup.
+- [x] Recorded source rollup format and phase.
+- [x] Recorded source validation status.
+- [x] Recorded expected validation commands.
+- [x] Recorded review disposition:
+  - [x] `ready_after_local_validation` when source validation is pending.
+  - [x] `blocked_by_validation_state` for any unsupported state.
+- [x] Kept flags:
+  - [x] review only true.
+  - [x] path only true.
+  - [x] content read false.
+  - [x] command executed false.
+  - [x] claim generated false.
+- [x] Added focused tests.
 
 ## P154: pre-handoff review report
 
-### Purpose
+### Status
 
-Render a Markdown report for Level 16 pre-handoff review.
-
-### Required sections
-
-- [ ] Review disposition.
-- [ ] Source validation status.
-- [ ] Expected validation commands.
-- [ ] Review-only boundary.
-- [ ] Local validation commands.
-- [ ] Next-level preconditions.
-
-### Tests
-
-- [ ] Report contains required headings.
-- [ ] Report states review-only boundary.
-- [ ] Report states no commands were executed.
-- [ ] Report states no content was read.
-- [ ] Report states no claim was generated.
+- [x] Added Markdown report renderer.
+- [x] Rendered review disposition.
+- [x] Rendered source validation status.
+- [x] Rendered expected validation commands.
+- [x] Rendered review-only boundary.
+- [x] Rendered local validation commands.
+- [x] Rendered next-level preconditions.
+- [x] Added focused tests.
 
 ## P155: Level 16 writer CLI
 
-### Purpose
+### Status
 
-Expose Level 16 pre-handoff review artifact generation.
-
-### Implementation tasks
-
-- [ ] Add neutral writer CLI name.
-- [ ] Build Level 15 validation rollup fixture.
-- [ ] Build Level 16 pre-handoff review.
-- [ ] Render pre-handoff report.
-- [ ] Write JSON and Markdown under `reports/local/level16_pre_handoff/`.
-- [ ] Do not read artifact contents.
-- [ ] Do not execute validation commands.
-- [ ] Do not mutate source trees.
-- [ ] Do not generate claims.
-
-### Tests
-
-- [ ] CLI writes pre-handoff review manifest.
-- [ ] CLI writes pre-handoff review report.
-- [ ] CLI rejects bad reviewer or unsafe output path.
+- [x] Added neutral writer CLI name: `traceleak-write-level16-files`.
+- [x] Built Level 16 local review artifact.
+- [x] Rendered local review report.
+- [x] Wrote JSON and Markdown under `reports/local/level16_review/`.
+- [x] Did not read artifact contents.
+- [x] Did not execute validation commands.
+- [x] Did not mutate source trees.
+- [x] Did not generate claims.
+- [x] Added focused tests.
 
 ## P156: docs and handoff update
 
-### Documentation tasks
+### Status
 
-- [ ] Update `docs/local-validation.md` with Level 16 focused commands.
-- [ ] Update `docs/next-session-handoff.md` with Level 16 status.
-- [ ] Update `NEXT_TODO.md` with Level 16 checkpoint.
-- [ ] Add Level 16 generation command.
-- [ ] Add Level 16 validation command group.
+- [x] Updated `docs/next-session-handoff.md` with Level 16 status.
+- [x] Updated `NEXT_TODO.md` with Level 16 checkpoint.
+- [x] Added Level 16 generation command.
+- [x] Added Level 16 validation command group.
 
 ## P157: Level 16 validation checkpoint
 
@@ -142,7 +109,7 @@ Expose Level 16 pre-handoff review artifact generation.
 cd C:\Users\junny\Desktop\traceLeak\TraceLeak
 git pull --ff-only
 pytest tests/test_level16_pre_handoff_review.py
-pytest tests/test_level16_pre_handoff_review_report.py
+pytest tests/test_level16_review_report.py
 pytest tests/test_write_level16_files_cli.py
 ruff check .
 pytest
@@ -154,14 +121,6 @@ pytest
 - [ ] `ruff check .` passes.
 - [ ] Full `pytest` passes.
 - [ ] Level 16 output artifacts stay under `reports/local/`.
-
-## Recommended implementation order
-
-1. P153 pre-handoff review manifest.
-2. P154 pre-handoff review report.
-3. P155 writer CLI.
-4. P156 docs and handoff update.
-5. P157 validation checkpoint.
 
 ## Stop condition
 

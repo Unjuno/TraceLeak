@@ -177,6 +177,14 @@ pytest tests/test_level15_validation_rollup_report.py
 pytest tests/test_write_level15_files_cli.py
 ```
 
+## Level 16 review validation
+
+```powershell
+pytest tests/test_level16_pre_handoff_review.py
+pytest tests/test_level16_review_report.py
+pytest tests/test_write_level16_files_cli.py
+```
+
 ## Shared fixture validation
 
 ```powershell
@@ -310,6 +318,12 @@ traceleak-write-level14-files --out-dir reports/local/level14_completeness --roo
 
 ```powershell
 traceleak-write-level15-files --out-dir reports/local/level15_validation_rollup
+```
+
+## Generate Level 16 review files
+
+```powershell
+traceleak-write-level16-files --out-dir reports/local/level16_review
 ```
 
 ## Render local Markdown summary from existing JSON

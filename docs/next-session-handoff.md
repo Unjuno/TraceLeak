@@ -1,6 +1,6 @@
 # Next session handoff
 
-Current checkpoint: Level 17 completion TODO created; implementation pending.
+Current checkpoint: Level 17 release-readiness layer implemented; local validation pending.
 
 ## Local validation
 
@@ -21,30 +21,26 @@ pytest tests/test_write_level17_files_cli.py
 
 ## What changed in the latest block
 
-- Level 16 was locally reported all pass.
-- Marked Level 16 validation complete.
-- Added `docs/level17-completion-todo.md`.
-- Updated `NEXT_TODO.md` with Level 17 planning state.
+- Added Level 17 release-readiness helper.
+- Added Level 17 release-readiness Markdown report renderer.
+- Added Level 17 release-readiness writer CLI.
+- Registered `traceleak-write-level17-files` entry point.
+- Updated local validation docs with Level 17 commands.
+- Updated `NEXT_TODO.md` with Level 17 implementation state.
 
-## Level 16 generation command
+## Level 17 generation command
 
 ```powershell
-traceleak-write-level16-files --out-dir reports/local/level16_review
-```
-
-## Level 17 TODO
-
-```text
-docs/level17-completion-todo.md
+traceleak-write-level17-files --out-dir reports/local/level17_release_readiness
 ```
 
 ## Current boundary
 
-Level 17 is planned as a review-only, path-only release-readiness checklist. It must not read artifact contents, execute validation commands, perform direct action, or enable claims.
+Level 17 remains review-only and path-only. It records pending local validation state and does not read artifact contents, execute validation commands, perform direct action, or enable claims.
 
 ## Next likely work
 
-- Start P158 release-readiness checklist.
-- Then implement P159 release-readiness report.
-- Then implement P160 writer CLI.
-- Run focused Level 17 tests, `ruff check .`, and full `pytest` before Level 18.
+- Fix any local Level 17 focused test failures first.
+- Run `ruff check .`.
+- Run full `pytest`.
+- If all pass, mark Level 17 complete and create a Level 18 TODO before any further expansion.

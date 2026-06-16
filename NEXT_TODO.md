@@ -1,6 +1,6 @@
 # TraceLeak NEXT TODO
 
-Current checkpoint: Level 18 completion TODO created; implementation pending.
+Current checkpoint: Level 18 archive-index layer implemented; local validation pending.
 
 This file is the active short-term TODO. `TODO.md` is kept as historical context and should not be deleted.
 
@@ -28,29 +28,33 @@ pytest tests/test_write_level18_files_cli.py
 - [x] P152: Level 15 local validation reported all pass.
 - [x] P157: Level 16 local validation reported all pass.
 - [x] P162: Level 17 local validation reported all pass.
-- [x] P163: added Level 18 completion TODO.
+- [x] P163: added Level 18 archive-index helper.
+- [x] P164: added Level 18 archive-index Markdown report.
+- [x] P165: added Level 18 archive-index writer CLI.
+- [x] P166: updated local validation docs with Level 18 commands.
+- [ ] P167: run focused Level 18 tests, `ruff check .`, and full `pytest` locally.
 
 ## Level roadmap summary
 
 - Level 17: release-readiness checklist.
-- Level 18: archive-index planning.
+- Level 18: archive index.
 
-## Current Level 18 TODO
+## Current Level 18 commands
 
-See:
+Generate Level 18 files:
 
-```text
-docs/level18-completion-todo.md
+```powershell
+traceleak-write-level18-files --out-dir reports/local/level18_archive_index
 ```
 
-Recommended next implementation order:
+Validate Level 18 focused tests:
 
-1. P163 archive index.
-2. P164 archive-index report.
-3. P165 writer CLI.
-4. P166 docs and handoff update.
-5. P167 validation checkpoint.
+```powershell
+pytest tests/test_level18_archive_index.py
+pytest tests/test_level18_archive_index_report.py
+pytest tests/test_write_level18_files_cli.py
+```
 
-## Candidate next block
+## Candidate next block after Level 18 all-pass
 
-Start P163 only. Keep Level 18 review-only and path-only.
+Do not start Level 19 until P167 is complete. The next block should first create a Level 19 TODO and review checkpoint rather than widening behavior directly.

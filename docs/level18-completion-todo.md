@@ -2,7 +2,7 @@
 
 Level 18 is archive-index planning after Level 17.
 
-Current baseline: Level 17 is locally reported all pass. Level 18 remains review-only and path-only.
+Current baseline: Level 18 is locally reported all pass. Level 18 remains review-only and path-only.
 
 ## Level 18 goal
 
@@ -27,9 +27,9 @@ Level 17 release-readiness outputs
 - [x] The index remains review-only and path-only.
 - [x] An archive-index Markdown report exists.
 - [x] A writer CLI exists for Level 18 outputs.
-- [ ] Focused Level 18 tests pass.
-- [ ] `ruff check .` passes.
-- [ ] Full `pytest` passes.
+- [x] Focused Level 18 tests pass.
+- [x] `ruff check .` passes.
+- [x] Full `pytest` passes.
 
 ## P163: archive index
 
@@ -83,25 +83,13 @@ Level 17 release-readiness outputs
 
 ## P167: Level 18 validation checkpoint
 
-### Commands
+### Status
 
-```powershell
-cd C:\Users\junny\Desktop\traceLeak\TraceLeak
-git pull --ff-only
-pytest tests/test_level18_archive_index.py
-pytest tests/test_level18_archive_index_report.py
-pytest tests/test_write_level18_files_cli.py
-ruff check .
-pytest
-```
-
-### Completion criteria
-
-- [ ] Focused Level 18 tests pass.
-- [ ] `ruff check .` passes.
-- [ ] Full `pytest` passes.
-- [ ] Level 18 outputs stay under `reports/local/`.
+- [x] Focused Level 18 tests reported all pass locally.
+- [x] `ruff check .` reported pass locally.
+- [x] Full `pytest` reported pass locally.
+- [x] Level 18 outputs stay under `reports/local/`.
 
 ## Stop condition
 
-Stop before Level 19 unless Level 18 focused tests, `ruff check .`, and full `pytest` all pass locally.
+Level 18 is complete. Start Level 19 only from a review-only TODO and do not widen behavior directly.

@@ -1,6 +1,6 @@
 # TraceLeak NEXT TODO
 
-Current checkpoint: Level 20 implemented; local validation pending.
+Current checkpoint: Level 21 TODO created; implementation pending.
 
 ## Validation baseline
 
@@ -11,25 +11,21 @@ ruff check .
 pytest
 ```
 
-## Focused validation for Level 20
+## Focused validation for Level 21
 
 ```powershell
-pytest tests/test_level20_closure_index.py
-pytest tests/test_level20_closure_index_report.py
-pytest tests/test_write_level20_files_cli.py
+pytest tests/test_level21_status_index.py
+pytest tests/test_level21_status_index_report.py
+pytest tests/test_write_level21_files_cli.py
 ```
 
 ## Completed recent blocks
 
-- [x] P172: Level 19 local validation reported all pass.
-- [x] P173: added Level 20 helper.
-- [x] P174: added Level 20 report.
-- [x] P175: added Level 20 writer CLI.
-- [x] P176: updated docs.
-- [ ] P177: run local validation.
+- [x] P177: Level 20 local validation reported all pass.
+- [x] P178: added Level 21 TODO.
 
-## Generate Level 20 files
+## Current Level 21 TODO
 
-```powershell
-traceleak-write-level20-files --out-dir reports/local/level20_closure_index
+```text
+docs/level21-completion-todo.md
 ```

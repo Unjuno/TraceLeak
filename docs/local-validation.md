@@ -241,6 +241,22 @@ pytest tests/test_level23_index_report.py
 pytest tests/test_write_level23_files_cli.py
 ```
 
+## Level 24 index validation
+
+```powershell
+pytest tests/test_level24_index.py
+pytest tests/test_level24_index_report.py
+pytest tests/test_write_level24_files_cli.py
+```
+
+## Level 25 index validation
+
+```powershell
+pytest tests/test_level25_index.py
+pytest tests/test_level25_index_report.py
+pytest tests/test_write_level25_files_cli.py
+```
+
 ## Shared fixture validation
 
 ```powershell
@@ -422,6 +438,18 @@ traceleak-write-level22-files --out-dir reports/local/level22_index
 
 ```powershell
 traceleak-write-level23-files --out-dir reports/local/level23_index
+```
+
+## Generate Level 24 index files
+
+```powershell
+traceleak-write-level24-files --out-dir reports/local/level24_index
+```
+
+## Generate Level 25 index files
+
+```powershell
+traceleak-write-level25-files --out-dir reports/local/level25_index
 ```
 
 ## Render local Markdown summary from existing JSON

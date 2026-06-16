@@ -10,57 +10,57 @@ Create a path-only index for Level 22 output paths.
 
 ## Level 23 done definition
 
-- [ ] A versioned index exists.
-- [ ] The index records expected Level 22 output paths.
-- [ ] The index records status as pending local validation by default.
-- [ ] The index remains review-only and path-only.
-- [ ] A Markdown report exists.
-- [ ] A writer CLI exists for Level 23 outputs.
+- [x] A versioned index exists.
+- [x] The index records expected Level 22 output paths.
+- [x] The index records status as pending local validation by default.
+- [x] The index remains review-only and path-only.
+- [x] A Markdown report exists.
+- [x] A writer CLI exists for Level 23 outputs.
 - [ ] Focused Level 23 tests pass.
 - [ ] `ruff check .` passes.
 - [ ] Full `pytest` passes.
 
 ## P188: index
 
-### Tasks
+### Status
 
-- [ ] Add Level 23 index helper.
-- [ ] Define `traceleak.level23_index.v1`.
-- [ ] Record expected Level 22 output paths.
-- [ ] Record status as pending local validation.
-- [ ] Keep review-only and path-only flags.
-- [ ] Add focused tests.
+- [x] Added Level 23 index helper.
+- [x] Defined `traceleak.level23_index.v1`.
+- [x] Recorded expected Level 22 output paths.
+- [x] Recorded status as pending local validation.
+- [x] Kept review-only and path-only flags.
+- [x] Added focused tests.
 
 ## P189: report
 
-### Tasks
+### Status
 
-- [ ] Add Markdown report renderer.
-- [ ] Render status.
-- [ ] Render output paths.
-- [ ] Render review-only boundary.
-- [ ] Render expected validation commands.
-- [ ] Add focused tests.
+- [x] Added Markdown report renderer.
+- [x] Rendered status.
+- [x] Rendered output paths.
+- [x] Rendered review-only boundary.
+- [x] Rendered expected validation commands.
+- [x] Added focused tests.
 
 ## P190: writer CLI
 
-### Tasks
+### Status
 
-- [ ] Add writer CLI name.
-- [ ] Build Level 23 index.
-- [ ] Render report.
-- [ ] Write JSON and Markdown under `reports/local/level23_index/`.
-- [ ] Add focused tests.
+- [x] Added writer CLI name: `traceleak-write-level23-files`.
+- [x] Built Level 23 index.
+- [x] Rendered report.
+- [x] Wrote JSON and Markdown under `reports/local/level23_index/`.
+- [x] Added focused tests.
 
 ## P191: docs and handoff update
 
-### Tasks
+### Status
 
-- [ ] Update `docs/local-validation.md` with Level 23 focused commands.
-- [ ] Update `docs/next-session-handoff.md` with Level 23 status.
-- [ ] Update `NEXT_TODO.md` with Level 23 checkpoint.
-- [ ] Add Level 23 generation command.
-- [ ] Add Level 23 validation command group.
+- [x] Updated `docs/local-validation.md` with Level 23 focused commands.
+- [x] Updated `docs/next-session-handoff.md` with Level 23 status.
+- [x] Updated `NEXT_TODO.md` with Level 23 checkpoint.
+- [x] Added Level 23 generation command.
+- [x] Added Level 23 validation command group.
 
 ## P192: Level 23 validation checkpoint
 

@@ -45,6 +45,16 @@ OBSERVED_VALUE_SAFE_TAINT_CLASSES: set[str] = {
     "public",
 }
 
+STATE_CLASS_SORT_ORDER: dict[str, int] = {
+    "read": 0,
+    "write": 1,
+    "update": 2,
+    "observe": 3,
+    "control": 4,
+    "metadata": 5,
+    "unknown": 6,
+}
+
 
 class VariableStateSequenceError(ValueError):
     """Raised when a variable state record or sequence is invalid."""
@@ -187,7 +197,7 @@ def validate_variable_state_sequence(
 
 
 def sort_variable_state_sequence(records: list[dict[str, Any]]) -> list[dict[str, Any]]:
-    """Return state records sorted by sequence/time/variable/state/source event."""
+    """Return state records sorted by sequence/time/read-write order/variable/source event."""
 
     validate_variable_state_sequence(records)
     return sorted(
@@ -195,9 +205,9 @@ def sort_variable_state_sequence(records: list[dict[str, Any]]) -> list[dict[str
         key=lambda record: (
             str(record["sequence_id"]),
             int(record["time_step"]),
-            str(record["variable_id"]),
-            str(record["state_class"]),
             str(record["source_event_id"]),
+            _state_class_sort_rank(str(record["state_class"])),
+            str(record["variable_id"]),
         ),
     )
 
@@ -366,6 +376,10 @@ def _reject_forbidden_public_fields(value: Any, path: str) -> None:
     elif isinstance(value, list):
         for index, child in enumerate(value):
             _reject_forbidden_public_fields(child, f"{path}[{index}]")
+
+
+def _state_class_sort_rank(state_class: str) -> int:
+    return STATE_CLASS_SORT_ORDER.get(state_class, STATE_CLASS_SORT_ORDER["unknown"])
 
 
 def _allowed_error(name: str, value: str, allowed: set[str]) -> str:

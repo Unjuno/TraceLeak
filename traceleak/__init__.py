@@ -8,6 +8,21 @@ from traceleak.comparison import (
     comparison_report_dict,
 )
 from traceleak.config import validate_config
+from traceleak.dependency_graph_schema import (
+    DependencyGraph,
+    DependencyGraphEdge,
+    DependencyGraphNode,
+    DependencyGraphSchemaError,
+    dependency_graph_from_dict,
+    dependency_graph_from_program_events_and_variable_states,
+    graph_edge_from_dict,
+    graph_node_from_dict,
+    sort_graph_edges,
+    sort_graph_nodes,
+    validate_dependency_graph,
+    validate_graph_edge,
+    validate_graph_node,
+)
 from traceleak.features import extract_feature_vector
 from traceleak.metrics import accuracy, delta_h, top_k_recall
 from traceleak.model_features import (
@@ -50,6 +65,10 @@ from traceleak.workflow import WorkflowResult, run_lightweight_experiment
 
 __all__ = [
     "AttributionScore",
+    "DependencyGraph",
+    "DependencyGraphEdge",
+    "DependencyGraphNode",
+    "DependencyGraphSchemaError",
     "ProgramEvent",
     "ProgramEventSchemaError",
     "TraceEvent",
@@ -66,8 +85,12 @@ __all__ = [
     "comparison_delta",
     "comparison_report_dict",
     "delta_h",
+    "dependency_graph_from_dict",
+    "dependency_graph_from_program_events_and_variable_states",
     "event_token",
     "extract_feature_vector",
+    "graph_edge_from_dict",
+    "graph_node_from_dict",
     "model_sequence_vocabulary",
     "patch_verification_report_dict",
     "program_event_from_dict",
@@ -76,6 +99,8 @@ __all__ = [
     "redacted_value_tokens",
     "run_lightweight_experiment",
     "sequence_token_counts",
+    "sort_graph_edges",
+    "sort_graph_nodes",
     "sort_program_events",
     "sort_variable_state_sequence",
     "source_token",
@@ -86,6 +111,9 @@ __all__ = [
     "trace_to_model_sequence",
     "validate_claim",
     "validate_config",
+    "validate_dependency_graph",
+    "validate_graph_edge",
+    "validate_graph_node",
     "validate_patch_verification",
     "validate_program_event",
     "validate_program_events",

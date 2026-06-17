@@ -1,6 +1,15 @@
 """TraceLeak: source-level leakage assessment primitives."""
 
 from traceleak.attribution import AttributionScore, ablation_drop
+from traceleak.attribution_export_schema import (
+    AttributionExportRecord,
+    AttributionExportSchemaError,
+    attribution_export_record,
+    attribution_export_record_from_dict,
+    sort_attribution_export_records,
+    validate_attribution_export_record,
+    validate_attribution_export_records,
+)
 from traceleak.claim_levels import claim_report_dict, claim_summary, validate_claim
 from traceleak.comparison import (
     classify_comparison,
@@ -72,6 +81,8 @@ from traceleak.views import to_view
 from traceleak.workflow import WorkflowResult, run_lightweight_experiment
 
 __all__ = [
+    "AttributionExportRecord",
+    "AttributionExportSchemaError",
     "AttributionScore",
     "DeepProgramDatasetError",
     "DeepProgramSample",
@@ -88,6 +99,8 @@ __all__ = [
     "WorkflowResult",
     "ablation_drop",
     "accuracy",
+    "attribution_export_record",
+    "attribution_export_record_from_dict",
     "claim_report_dict",
     "claim_summary",
     "classify_comparison",
@@ -112,6 +125,7 @@ __all__ = [
     "redacted_value_tokens",
     "run_lightweight_experiment",
     "sequence_token_counts",
+    "sort_attribution_export_records",
     "sort_graph_edges",
     "sort_graph_nodes",
     "sort_program_events",
@@ -122,6 +136,8 @@ __all__ = [
     "to_view",
     "top_k_recall",
     "trace_to_model_sequence",
+    "validate_attribution_export_record",
+    "validate_attribution_export_records",
     "validate_claim",
     "validate_config",
     "validate_deep_program_sample",

@@ -15,6 +15,7 @@ C_STATIC_EVENT_FORMAT = "traceleak.c_static_event.v1"
 _ASSIGNMENT_RE = re.compile(r"(?<![=!<>])=(?!=)")
 _IDENTIFIER_RE = re.compile(r"\b[A-Za-z_][A-Za-z0-9_]*\b")
 _FUNCTION_RE = re.compile(r"\b([A-Za-z_][A-Za-z0-9_]*)\s*\(")
+_BRANCH_RE = re.compile(r"^(if|for|while|switch)\s*\((.*)\)")
 
 C_RESERVED_WORDS: set[str] = {
     "break", "case", "char", "const", "continue", "default", "do", "else",
@@ -84,6 +85,8 @@ def _events_from_file(
             continue
         line_class = _line_class(normalized)
         call_targets = call_targets_from_line(normalized)
+        assignment_lhs, assignment_rhs_identifiers = _assignment_parts(normalized)
+        branch_condition_identifiers = _branch_condition_identifiers(normalized)
         event_index = start_index + len(events)
         events.append(
             {
@@ -97,12 +100,19 @@ def _events_from_file(
                 "variable_writes": writes,
                 "value_class": "metadata",
                 "dependency_tags": ["c_static", "line_summary", f"line_class:{line_class}"],
-                "control_context": {"line_class": line_class, "call_targets": call_targets},
+                "control_context": {
+                    "line_class": line_class,
+                    "call_targets": call_targets,
+                    "assignment_lhs": assignment_lhs,
+                    "assignment_rhs_identifiers": assignment_rhs_identifiers,
+                    "branch_condition_identifiers": branch_condition_identifiers,
+                },
                 "metadata": {
                     "format": C_STATIC_EVENT_FORMAT,
                     "line_digest": hashlib.sha256(normalized.encode("utf-8")).hexdigest()[:16],
                     "line_length": len(normalized),
                     "call_target_count": len(call_targets),
+                    "branch_condition_identifier_count": len(branch_condition_identifiers),
                 },
             }
         )
@@ -124,6 +134,22 @@ def _read_write_candidates(line: str) -> tuple[list[str], list[str]]:
     if line.startswith(("if", "for", "while", "switch")):
         return _unique_limited(identifiers), ["control_branch"]
     return _unique_limited(identifiers), ["line_observation"]
+
+
+def _assignment_parts(line: str) -> tuple[str | None, list[str]]:
+    if not _ASSIGNMENT_RE.search(line):
+        return None, []
+    left, right = line.split("=", 1)
+    left_ids = _identifiers(left)
+    lhs = left_ids[-1] if left_ids else None
+    return lhs, _unique_limited(_identifiers(right))
+
+
+def _branch_condition_identifiers(line: str) -> list[str]:
+    match = _BRANCH_RE.search(line)
+    if not match:
+        return []
+    return _unique_limited(_identifiers(match.group(2)))
 
 
 def _identifiers(line: str) -> list[str]:

@@ -85,6 +85,21 @@ def model_output_record(
     return record
 
 
+def model_output_record_from_dict(data: dict[str, Any]) -> ModelOutputRecord:
+    """Validate and convert a dictionary into a ModelOutputRecord."""
+
+    validate_model_output_record(data)
+    return ModelOutputRecord(
+        output_id=data["output_id"],
+        sample_id=data["sample_id"],
+        model_id=data["model_id"],
+        consumer_mode=data["consumer_mode"],
+        prediction=dict(data["prediction"]),
+        confidence=float(data["confidence"]),
+        metadata=dict(data["metadata"]),
+    )
+
+
 def validate_model_output_record(record: dict[str, Any]) -> None:
     """Validate one model output record."""
 

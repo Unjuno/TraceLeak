@@ -202,15 +202,13 @@ Deep Program Dataset Contract v1 does not yet define:
 
 Those belong to the next modeling layers.
 
-## Next implementation target
+## Attention / Attribution Export Format v1
 
-After this contract passes local validation, proceed to:
+Implementation module: `traceleak/attribution_export_schema.py`
 
-```text
-Attention / Attribution Export Format v1
-```
+Format identifier: `traceleak.attention_attribution_export.v1`
 
-Minimum next units:
+Required export fields:
 
 ```text
 sample_id
@@ -220,10 +218,63 @@ attribution_level
 entity_id
 entity_type
 score
+score_semantics
 rank
 method
 evidence
 metadata
 ```
 
-The export format must support token, event, variable, node, and edge attributions without confusing Transformer attention weights with causal explanations.
+Supported levels:
+
+```text
+token
+event
+variable
+graph_node
+graph_edge
+```
+
+The required `score_semantics` field separates attention patterns, local ablation effects, gradient sensitivity, model-weight proxies, and manual evidence scores. This prevents a downstream report from treating every numeric explanation score as the same kind of evidence.
+
+Supported method-to-semantics mapping:
+
+```text
+attention_weight -> attention_pattern
+ablation_drop -> local_ablation_effect
+gradient -> gradient_sensitivity
+integrated_gradients -> gradient_sensitivity
+feature_weight -> model_weight_proxy
+mlp_bridge -> model_weight_proxy
+sparse_softmax_weight_separation -> model_weight_proxy
+manual_annotation -> manual_evidence_score
+```
+
+Evidence must include:
+
+```text
+summary
+claim_scope
+```
+
+The export validator also applies public-safe recursive field-name rejection to evidence and metadata.
+
+## Next implementation target
+
+After this contract passes local validation, proceed to:
+
+```text
+Event / Variable / Edge Ablation Mask Schema v1
+```
+
+Minimum next units:
+
+```text
+sample_id
+mask_id
+mask_level
+entity_ids
+mask_action
+expected_input_views
+metadata
+```

@@ -1,6 +1,6 @@
 # TraceLeak NEXT TODO
 
-Current checkpoint: Program Event Schema v1 implemented; proceed to variable-state representation.
+Current checkpoint: Variable State Sequence Schema v1 implemented; proceed to dependency graph representation.
 
 ## Why this changed
 
@@ -11,6 +11,8 @@ TraceLeak's core objective is Deep Program Representation: learning from program
 The inventory in `docs/core-modeling-inventory.md` shows that the current NN/MLP path is a token-count baseline and smoke-test layer, not the final architecture.
 
 `traceleak/program_event_schema.py` now provides Program Event Schema v1 as the first schema-first normalization layer after legacy traces or legacy `model_sequence` steps.
+
+`traceleak/variable_state_sequence.py` now provides Variable State Sequence Schema v1, including public-safe variable state validation and coarse read/write derivation from ProgramEvent records.
 
 ## Anti-drift rule
 
@@ -40,35 +42,51 @@ pytest
 
 - [x] Inventory existing MLP, attention, attribution, ablation, and evidence-chain modules.
 - [x] Define Program Event Schema v1.
+- [x] Define Variable State Sequence Schema v1.
 
 ## Immediate core task
 
-- [ ] Define Variable State Sequence Schema v1.
+- [ ] Define Dependency Graph Schema v1.
 
 Minimum acceptable scope:
 
-- add `traceleak/variable_state_sequence.py`
-- add `tests/test_variable_state_sequence.py`
-- add `docs/variable-state-sequence-v1.md`
-- define normalized variable-state fields:
-  - `sequence_id`
-  - `time_step`
-  - `variable_id`
-  - `scope`
-  - `state_class`
-  - `value_observed`
-  - `value_bucket`
+- add `traceleak/dependency_graph_schema.py`
+- add `tests/test_dependency_graph_schema.py`
+- add `docs/dependency-graph-schema-v1.md`
+- define graph node fields:
+  - `node_id`
+  - `node_type`
+  - `label`
   - `source_event_id`
-  - `depends_on`
-  - `taint_class`
-  - `is_secret_derived`
+  - `time_step`
   - `metadata`
-- include a helper that can derive coarse state records from ProgramEvent records when reads/writes exist
-- keep raw secret values out of public-safe state records
+- define graph edge fields:
+  - `edge_id`
+  - `edge_type`
+  - `source_node_id`
+  - `target_node_id`
+  - `source_event_id`
+  - `time_step`
+  - `metadata`
+- support node types:
+  - `variable`
+  - `operation`
+  - `event`
+  - `branch`
+  - `memory_access`
+  - `observable_output`
+- support edge types:
+  - `reads`
+  - `writes`
+  - `depends_on`
+  - `controls`
+  - `derives`
+  - `observes`
+- include a helper that can derive a coarse dependency graph from ProgramEvent and VariableStateRecord records
+- keep raw secret values out of public-safe graph metadata
 
 ## Then
 
-- [ ] Define Dependency Graph Schema v1.
 - [ ] Define Transformer/GNN-ready Deep Program Dataset Contract.
 - [ ] Define attention/attribution output format for token, variable, event, and edge levels.
 - [ ] Extend ablation from token-count drops to event, variable, edge, and timestep masks.
@@ -79,5 +97,6 @@ Minimum acceptable scope:
 docs/core-roadmap-reset.md
 docs/core-modeling-inventory.md
 docs/program-event-schema-v1.md
+docs/variable-state-sequence-v1.md
 docs/next-session-handoff.md
 ```

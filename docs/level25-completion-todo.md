@@ -2,7 +2,7 @@
 
 Level 25 is path-index planning after Level 24.
 
-Current baseline: Level 24 is locally reported all pass. Level 25 remains review-only and path-only.
+Current baseline: Level 25 is locally reported all pass. Level 25 remains review-only and path-only.
 
 ## Level 25 goal
 
@@ -16,9 +16,9 @@ Create a path-only index for Level 24 output paths.
 - [x] The index remains review-only and path-only.
 - [x] A Markdown report exists.
 - [x] A writer CLI exists for Level 25 outputs.
-- [ ] Focused Level 25 tests pass.
-- [ ] `ruff check .` passes.
-- [ ] Full `pytest` passes.
+- [x] Focused Level 25 tests pass.
+- [x] `ruff check .` passes.
+- [x] Full `pytest` passes.
 
 ## P198: index
 
@@ -63,25 +63,13 @@ Create a path-only index for Level 24 output paths.
 
 ## P202: Level 25 validation checkpoint
 
-### Commands
+### Status
 
-```powershell
-cd C:\Users\junny\Desktop\traceLeak\TraceLeak
-git pull --ff-only
-pytest tests/test_level25_index.py
-pytest tests/test_level25_index_report.py
-pytest tests/test_write_level25_files_cli.py
-ruff check .
-pytest
-```
-
-### Completion criteria
-
-- [ ] Focused Level 25 tests pass.
-- [ ] `ruff check .` passes.
-- [ ] Full `pytest` passes.
-- [ ] Level 25 outputs stay under `reports/local/`.
+- [x] Focused Level 25 tests reported all pass locally.
+- [x] `ruff check .` reported pass locally.
+- [x] Full `pytest` reported pass locally.
+- [x] Level 25 outputs stay under `reports/local/`.
 
 ## Stop condition
 
-Stop before Level 26 unless Level 25 focused tests, `ruff check .`, and full `pytest` all pass locally.
+Level 25 is complete. Start Level 26 only from a review-only TODO and do not widen behavior directly.

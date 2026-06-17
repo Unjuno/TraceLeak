@@ -9,6 +9,14 @@ from traceleak.path_manifest_scanner import scan_path_manifest
 from traceleak.static_program_sample import build_static_program_deep_sample
 
 STATIC_SAMPLE_BATCH_FORMAT = "traceleak.static_sample_batch.v1"
+MODULE_PRIORITY_ORDER: tuple[str, ...] = (
+    "crypto/bn",
+    "crypto/evp",
+    "providers",
+    "ssl/statem",
+    "ssl",
+    "crypto",
+)
 
 
 def build_static_module_sample_batch(
@@ -24,7 +32,7 @@ def build_static_module_sample_batch(
     grouped_paths = _group_paths_by_module([record["path"] for record in manifest["path_records"]])
     samples: list[dict[str, Any]] = []
     sample_summaries: list[dict[str, Any]] = []
-    for module_name, paths in sorted(grouped_paths.items()):
+    for module_name, paths in sorted(grouped_paths.items(), key=lambda item: _module_sort_key(item[0])):
         selected_paths = paths[:max_paths_per_module]
         sample = build_static_program_deep_sample(
             root=root,
@@ -82,6 +90,15 @@ def _module_from_path(path: str) -> str:
     if parts[0] == "ssl" and len(parts) >= 2:
         return f"ssl/{parts[1]}"
     return parts[0]
+
+
+def _module_sort_key(module_name: str) -> tuple[int, str]:
+    if module_name in MODULE_PRIORITY_ORDER:
+        return MODULE_PRIORITY_ORDER.index(module_name), module_name
+    for index, prefix in enumerate(MODULE_PRIORITY_ORDER):
+        if module_name.startswith(prefix + "/"):
+            return index, module_name
+    return len(MODULE_PRIORITY_ORDER), module_name
 
 
 def _module_slug(module_name: str) -> str:

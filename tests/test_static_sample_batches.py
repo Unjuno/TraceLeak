@@ -31,6 +31,7 @@ def test_build_static_module_sample_batch_groups_by_module(tmp_path) -> None:
     assert batch["sample_count"] == 3
     assert len(batch["samples"]) == 3
     assert len(summaries) == 3
+    assert [summary["module"] for summary in summaries] == ["crypto/bn", "crypto/evp", "ssl/statem"]
     assert all(sample["program_events"] for sample in batch["samples"])
     assert all(summary["event_count"] > 0 for summary in summaries)
     assert batch["metadata"]["total_event_count"] == sum(summary["event_count"] for summary in summaries)

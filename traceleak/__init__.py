@@ -24,6 +24,16 @@ from traceleak.patch_verification import (
     validate_patch_verification,
     verification_delta,
 )
+from traceleak.program_event_schema import (
+    ProgramEvent,
+    ProgramEventSchemaError,
+    program_event_from_dict,
+    program_event_from_legacy_model_step,
+    program_events_from_legacy_model_sequence,
+    sort_program_events,
+    validate_program_event,
+    validate_program_events,
+)
 from traceleak.schema import TraceEvent, TraceRun, validate_run
 from traceleak.stability import stability_result, stability_summary
 from traceleak.views import to_view
@@ -31,6 +41,8 @@ from traceleak.workflow import WorkflowResult, run_lightweight_experiment
 
 __all__ = [
     "AttributionScore",
+    "ProgramEvent",
+    "ProgramEventSchemaError",
     "TraceEvent",
     "TraceRun",
     "WorkflowResult",
@@ -47,9 +59,13 @@ __all__ = [
     "extract_feature_vector",
     "model_sequence_vocabulary",
     "patch_verification_report_dict",
+    "program_event_from_dict",
+    "program_event_from_legacy_model_step",
+    "program_events_from_legacy_model_sequence",
     "redacted_value_tokens",
     "run_lightweight_experiment",
     "sequence_token_counts",
+    "sort_program_events",
     "source_token",
     "stability_result",
     "stability_summary",
@@ -59,6 +75,8 @@ __all__ = [
     "validate_claim",
     "validate_config",
     "validate_patch_verification",
+    "validate_program_event",
+    "validate_program_events",
     "validate_run",
     "verification_delta",
 ]

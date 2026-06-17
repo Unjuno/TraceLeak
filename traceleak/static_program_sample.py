@@ -8,6 +8,7 @@ from typing import Any
 from traceleak.c_static_events import c_paths_to_program_events
 from traceleak.deep_program_dataset import deep_program_sample_from_components
 from traceleak.dependency_graph_schema import dependency_graph_from_program_events_and_variable_states
+from traceleak.static_call_graph import augment_graph_with_static_calls
 from traceleak.variable_state_sequence import variable_state_records_from_program_events
 
 STATIC_PROGRAM_SAMPLE_FORMAT = "traceleak.static_program_sample.v1"
@@ -37,6 +38,7 @@ def build_static_program_deep_sample(
         states,
         graph_id=f"{sample_id}:static_graph",
     )
+    graph = augment_graph_with_static_calls(dependency_graph=graph, program_events=events)
     return deep_program_sample_from_components(
         sample_id=sample_id,
         program_events=events,
@@ -52,5 +54,6 @@ def build_static_program_deep_sample(
             "format": STATIC_PROGRAM_SAMPLE_FORMAT,
             "event_count": len(events),
             "state_count": len(states),
+            "static_call_graph_augmented": True,
         },
     )

@@ -1,4 +1,10 @@
-from traceleak.view_contract import ALLOWED_VIEW_LEVELS, VIEW_CONTRACT_FORMAT, view_contract
+from traceleak.view_contract import (
+    ALLOWED_VIEW_LEVELS,
+    VIEW_CONTRACT_FORMAT,
+    sort_view_contracts,
+    validate_view_contract,
+    view_contract,
+)
 
 
 def test_view_contract_format() -> None:
@@ -15,3 +21,8 @@ def test_view_contract_levels_are_available() -> None:
 
 def test_view_contract_builder_is_callable() -> None:
     assert callable(view_contract)
+
+
+def test_view_contract_validation_helpers_are_callable() -> None:
+    assert callable(validate_view_contract)
+    assert callable(sort_view_contracts)

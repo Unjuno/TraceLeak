@@ -7,6 +7,7 @@ import re
 from pathlib import Path
 from typing import Any
 
+from traceleak.c_call_events import call_targets_from_line
 from traceleak.program_event_schema import validate_program_events
 
 C_STATIC_EVENT_FORMAT = "traceleak.c_static_event.v1"
@@ -16,33 +17,10 @@ _IDENTIFIER_RE = re.compile(r"\b[A-Za-z_][A-Za-z0-9_]*\b")
 _FUNCTION_RE = re.compile(r"\b([A-Za-z_][A-Za-z0-9_]*)\s*\(")
 
 C_RESERVED_WORDS: set[str] = {
-    "break",
-    "case",
-    "char",
-    "const",
-    "continue",
-    "default",
-    "do",
-    "else",
-    "enum",
-    "extern",
-    "for",
-    "goto",
-    "if",
-    "int",
-    "long",
-    "return",
-    "short",
-    "sizeof",
-    "static",
-    "struct",
-    "switch",
-    "typedef",
-    "union",
-    "unsigned",
-    "void",
-    "volatile",
-    "while",
+    "break", "case", "char", "const", "continue", "default", "do", "else",
+    "enum", "extern", "for", "goto", "if", "int", "long", "return", "short",
+    "sizeof", "static", "struct", "switch", "typedef", "union", "unsigned",
+    "void", "volatile", "while",
 }
 
 
@@ -104,6 +82,8 @@ def _events_from_file(
         reads, writes = _read_write_candidates(normalized)
         if not reads and not writes:
             continue
+        line_class = _line_class(normalized)
+        call_targets = call_targets_from_line(normalized)
         event_index = start_index + len(events)
         events.append(
             {
@@ -116,12 +96,13 @@ def _events_from_file(
                 "variable_reads": reads,
                 "variable_writes": writes,
                 "value_class": "metadata",
-                "dependency_tags": ["c_static", "line_summary"],
-                "control_context": {"line_class": _line_class(normalized)},
+                "dependency_tags": ["c_static", "line_summary", f"line_class:{line_class}"],
+                "control_context": {"line_class": line_class, "call_targets": call_targets},
                 "metadata": {
                     "format": C_STATIC_EVENT_FORMAT,
                     "line_digest": hashlib.sha256(normalized.encode("utf-8")).hexdigest()[:16],
                     "line_length": len(normalized),
+                    "call_target_count": len(call_targets),
                 },
             }
         )
@@ -193,6 +174,8 @@ def _line_class(line: str) -> str:
         return "control"
     if line.startswith("return"):
         return "return"
+    if "(" in line and ")" in line:
+        return "call"
     return "other"
 
 

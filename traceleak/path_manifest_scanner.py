@@ -78,12 +78,10 @@ def scan_path_manifest(
     }
 
 
-def _record_from_path(relative_path: str) -> dict[str, str | int]:
+def _record_from_path(relative_path: str) -> dict[str, str]:
     return {
         "path": relative_path,
-        "module": _module_from_path(relative_path),
         "role": _role_from_path(relative_path),
-        "priority": _priority_from_path(relative_path),
     }
 
 
@@ -101,17 +99,6 @@ def _priority_from_path(path: str) -> int:
         if lower.startswith(prefix):
             return priority
     return len(PATH_PRIORITY_PREFIXES)
-
-
-def _module_from_path(path: str) -> str:
-    parts = [part for part in path.replace("\\", "/").split("/") if part]
-    if not parts:
-        return "unknown"
-    if parts[0] == "crypto" and len(parts) >= 2:
-        return f"crypto/{parts[1]}"
-    if parts[0] == "ssl" and len(parts) >= 2:
-        return f"ssl/{parts[1]}"
-    return parts[0]
 
 
 def _role_from_path(path: str) -> str:

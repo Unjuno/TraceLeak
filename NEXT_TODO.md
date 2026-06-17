@@ -1,6 +1,6 @@
 # TraceLeak NEXT TODO
 
-Current checkpoint: Level 25 implemented; local validation pending.
+Current checkpoint: Level 26 implemented; local validation pending.
 
 ## Validation baseline
 
@@ -11,25 +11,25 @@ ruff check .
 pytest
 ```
 
-## Focused validation for Level 25
+## Focused validation for Level 26
 
 ```powershell
-pytest tests/test_level25_index.py
-pytest tests/test_level25_index_report.py
-pytest tests/test_write_level25_files_cli.py
+pytest tests/test_level26_index.py
+pytest tests/test_level26_index_report.py
+pytest tests/test_write_level26_files_cli.py
 ```
 
 ## Completed recent blocks
 
-- [x] P197: Level 24 local validation reported all pass.
-- [x] P198: added Level 25 helper.
-- [x] P199: added Level 25 report.
-- [x] P200: added Level 25 writer CLI.
-- [x] P201: updated handoff and next TODO.
-- [ ] P202: run local validation.
+- [x] P202: Level 25 local validation reported all pass.
+- [x] P203: added Level 26 helper.
+- [x] P204: added Level 26 report.
+- [x] P205: added Level 26 writer CLI.
+- [x] P206: updated handoff and next TODO.
+- [ ] P207: run local validation.
 
-## Generate Level 25 files
+## Generate Level 26 files
 
 ```powershell
-traceleak-write-level25-files --out-dir reports/local/level25_index
+traceleak-write-level26-files --out-dir reports/local/level26_index
 ```

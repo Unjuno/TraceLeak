@@ -44,8 +44,12 @@ def test_build_static_program_deep_sample_from_c_file(tmp_path) -> None:
         relative_paths=["crypto/bn/bn_demo.c"],
         sample_id="static_sample_000001",
     )
+    graph = sample["dependency_graph"]
 
     assert sample["format"] == DEEP_PROGRAM_DATASET_FORMAT
     assert sample["program_events"]
     assert sample["variable_state_sequence"]
-    assert sample["dependency_graph"]["nodes"]
+    assert graph["nodes"]
+    assert graph["metadata"]["static_call_graph_augmented"] is True
+    assert any(node["label"] == "call_target:helper" for node in graph["nodes"])
+    assert any(edge["edge_type"] == "observes" for edge in graph["edges"])

@@ -1,3 +1,4 @@
+from traceleak.tensor_contract import TENSOR_CONTRACT_FORMAT
 from traceleak.view_contract import (
     ALLOWED_VIEW_ACTIONS,
     ALLOWED_VIEW_LEVELS,
@@ -36,3 +37,7 @@ def test_view_contract_builder_is_callable() -> None:
 def test_view_contract_validation_helpers_are_callable() -> None:
     assert callable(validate_view_contract)
     assert callable(sort_view_contracts)
+
+
+def test_tensor_contract_format_prefix() -> None:
+    assert TENSOR_CONTRACT_FORMAT.startswith("traceleak.")

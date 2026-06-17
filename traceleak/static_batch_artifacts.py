@@ -53,6 +53,19 @@ def write_static_batch_artifacts(
     return index
 
 
+def write_static_batch_split_artifact(*, split: dict[str, Any], output_dir: Path) -> dict[str, Any]:
+    """Write a static batch split JSON file."""
+
+    _validate_split_shape(split)
+    output_path = Path(output_dir)
+    output_path.mkdir(parents=True, exist_ok=True)
+    (output_path / "split.json").write_text(
+        json.dumps(split, indent=2, sort_keys=True) + "\n",
+        encoding="utf-8",
+    )
+    return split
+
+
 def static_batch_index_from_batch(batch: dict[str, Any]) -> dict[str, Any]:
     """Build an in-memory lightweight index for a static batch."""
 
@@ -93,6 +106,14 @@ def _validate_batch_shape(batch: dict[str, Any]) -> None:
             raise StaticBatchArtifactError(f"missing required batch field: {field_name}")
     if not isinstance(batch["samples"], list):
         raise StaticBatchArtifactError("batch samples must be a list")
+
+
+def _validate_split_shape(split: dict[str, Any]) -> None:
+    if not isinstance(split, dict):
+        raise StaticBatchArtifactError("split must be an object")
+    for field_name in ("format", "batch_id", "train_sample_ids", "eval_sample_ids"):
+        if field_name not in split:
+            raise StaticBatchArtifactError(f"missing required split field: {field_name}")
 
 
 def _safe_filename(value: Any) -> str:

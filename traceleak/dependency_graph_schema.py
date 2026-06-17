@@ -499,20 +499,18 @@ def _edge(
 
 def _add_node(nodes_by_id: dict[str, dict[str, Any]], node: dict[str, Any]) -> None:
     existing = nodes_by_id.get(str(node["node_id"]))
-    if existing is not None:
-        if existing["node_type"] != node["node_type"] or existing["label"] != node["label"]:
-            raise DependencyGraphSchemaError(f"conflicting node_id: {node['node_id']}")
-        return
-    nodes_by_id[str(node["node_id"])] = node
+    if existing is not None and (existing["node_type"] != node["node_type"] or existing["label"] != node["label"]):
+        raise DependencyGraphSchemaError(f"conflicting node_id: {node['node_id']}")
+    if existing is None:
+        nodes_by_id[str(node["node_id"])] = node
 
 
 def _add_edge(edges_by_id: dict[str, dict[str, Any]], edge: dict[str, Any]) -> None:
     existing = edges_by_id.get(str(edge["edge_id"]))
-    if existing is not None:
-        if existing != edge:
-            raise DependencyGraphSchemaError(f"conflicting edge_id: {edge['edge_id']}")
-        return
-    edges_by_id[str(edge["edge_id"])] = edge
+    if existing is not None and existing != edge:
+        raise DependencyGraphSchemaError(f"conflicting edge_id: {edge['edge_id']}")
+    if existing is None:
+        edges_by_id[str(edge["edge_id"])] = edge
 
 
 def _operation_node_type(event: dict[str, Any]) -> str:

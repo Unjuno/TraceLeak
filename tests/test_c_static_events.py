@@ -17,13 +17,18 @@ def test_c_paths_to_program_events_extracts_line_events(tmp_path) -> None:
     )
 
     events = c_paths_to_program_events(root=tmp_path, relative_paths=["crypto/bn/bn_demo.c"])
+    assignment_events = [event for event in events if event["operation"] == "assign"]
+    branch_events = [event for event in events if event["operation"] == "branch"]
 
     assert events
     assert all(event["source_location"]["file"] == "crypto/bn/bn_demo.c" for event in events)
-    assert any(event["operation"] == "assign" for event in events)
+    assert assignment_events
     assert any(event["variable_writes"] for event in events)
     assert any("helper" in event["control_context"]["call_targets"] for event in events)
     assert any(event["metadata"]["call_target_count"] > 0 for event in events)
+    assert any(event["control_context"]["assignment_lhs"] == "c" for event in assignment_events)
+    assert any("a" in event["control_context"]["assignment_rhs_identifiers"] for event in assignment_events)
+    assert any("c" in event["control_context"]["branch_condition_identifiers"] for event in branch_events)
 
 
 def test_build_static_program_deep_sample_from_c_file(tmp_path) -> None:

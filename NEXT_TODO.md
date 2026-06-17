@@ -1,6 +1,6 @@
 # TraceLeak NEXT TODO
 
-Current checkpoint: Dependency Graph Schema v1 implemented; proceed to Deep Program Dataset Contract v1.
+Current checkpoint: Deep Program Dataset Contract v1 implemented; proceed to Attention / Attribution Export Format v1.
 
 ## Why this changed
 
@@ -15,6 +15,8 @@ The inventory in `docs/core-modeling-inventory.md` shows that the current NN/MLP
 `traceleak/variable_state_sequence.py` now provides Variable State Sequence Schema v1, including public-safe variable state validation and coarse read/write derivation from ProgramEvent records.
 
 `traceleak/dependency_graph_schema.py` now provides Dependency Graph Schema v1, including public-safe node/edge validation and coarse graph derivation from ProgramEvent plus VariableStateRecord records.
+
+`traceleak/deep_program_dataset.py` now provides Deep Program Dataset Contract v1, including sequence/graph/hybrid consumer masks and lab-only label separation.
 
 ## Anti-drift rule
 
@@ -46,36 +48,44 @@ pytest
 - [x] Define Program Event Schema v1.
 - [x] Define Variable State Sequence Schema v1.
 - [x] Define Dependency Graph Schema v1.
+- [x] Define Transformer/GNN-ready Deep Program Dataset Contract v1.
 
 ## Immediate core task
 
-- [ ] Define Transformer/GNN-ready Deep Program Dataset Contract v1.
+- [ ] Define Attention / Attribution Export Format v1.
 
 Minimum acceptable scope:
 
-- add `traceleak/deep_program_dataset.py`
-- add `tests/test_deep_program_dataset.py`
-- add `docs/deep-program-dataset-contract-v1.md`
-- define dataset sample fields:
+- add `traceleak/attribution_export_schema.py`
+- add `tests/test_attribution_export_schema.py`
+- add `docs/attention-attribution-export-format-v1.md`
+- define attribution/export fields:
   - `sample_id`
-  - `format`
-  - `program_events`
-  - `variable_state_sequence`
-  - `dependency_graph`
-  - `labels`
-  - `masks`
-  - `feature_names`
+  - `model_id`
+  - `model_family`
+  - `attribution_level`
+  - `entity_id`
+  - `entity_type`
+  - `score`
+  - `rank`
+  - `method`
+  - `evidence`
   - `metadata`
-- support sequence-only, graph-only, and hybrid consumers
-- include helper that assembles one sample from ProgramEvent, VariableStateRecord, and DependencyGraph records
-- include safe labels policy: lab-only labels allowed, no raw secret labels as public model input
-- keep raw secret values out of public-safe dataset metadata
+- support levels:
+  - `token`
+  - `event`
+  - `variable`
+  - `graph_node`
+  - `graph_edge`
+- distinguish attention weights from causal attribution
+- include public-safe evidence and metadata validation
+- keep raw secret values out of public-safe attribution metadata
 
 ## Then
 
-- [ ] Define attention/attribution output format for token, variable, event, and edge levels.
 - [ ] Extend ablation from token-count drops to event, variable, edge, and timestep masks.
 - [ ] Add sequence/graph/hybrid model baseline entry points after the dataset contract exists.
+- [ ] Add tensorization contract for sequence and graph consumers.
 
 ## References
 
@@ -85,5 +95,6 @@ docs/core-modeling-inventory.md
 docs/program-event-schema-v1.md
 docs/variable-state-sequence-v1.md
 docs/dependency-graph-schema-v1.md
+docs/deep-program-dataset-contract-v1.md
 docs/next-session-handoff.md
 ```

@@ -14,6 +14,7 @@ ALLOWED_OUTPUT_CONSUMERS: tuple[str, ...] = (
 )
 
 REQUIRED_MODEL_OUTPUT_FIELDS: tuple[str, ...] = (
+    "output_id",
     "sample_id",
     "model_id",
     "consumer_mode",
@@ -31,6 +32,7 @@ class ModelOutputContractError(ValueError):
 class ModelOutputRecord:
     """Schema-level model output record."""
 
+    output_id: str
     sample_id: str
     model_id: str
     consumer_mode: str
@@ -42,6 +44,7 @@ class ModelOutputRecord:
         """Return a dictionary representation."""
 
         return {
+            "output_id": self.output_id,
             "sample_id": self.sample_id,
             "format": MODEL_OUTPUT_FORMAT,
             "model_id": self.model_id,
@@ -59,11 +62,13 @@ def model_output_record(
     consumer_mode: str,
     prediction: dict[str, Any],
     confidence: float,
+    output_id: str | None = None,
     metadata: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     """Build one model output record."""
 
     record = {
+        "output_id": output_id or f"{model_id}:{consumer_mode}",
         "sample_id": sample_id,
         "format": MODEL_OUTPUT_FORMAT,
         "model_id": model_id,
@@ -88,6 +93,8 @@ def validate_model_output_record(record: dict[str, Any]) -> None:
     for field_name in REQUIRED_MODEL_OUTPUT_FIELDS:
         if field_name not in record:
             raise ModelOutputContractError(f"missing required model output field: {field_name}")
+    if not isinstance(record["output_id"], str) or not record["output_id"]:
+        raise ModelOutputContractError("output_id must be a non-empty string")
     if record.get("format") != MODEL_OUTPUT_FORMAT:
         raise ModelOutputContractError("invalid model output format")
     if record["consumer_mode"] not in ALLOWED_OUTPUT_CONSUMERS:

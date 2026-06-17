@@ -1,3 +1,4 @@
+from scripts.build_path_deep_sample import build_from_manifest
 from traceleak.deep_program_dataset import DEEP_PROGRAM_DATASET_FORMAT
 from traceleak.openssl_path_deep_sample import build_openssl_path_deep_program_sample
 
@@ -16,3 +17,7 @@ def test_build_openssl_path_deep_program_sample() -> None:
     assert sample["masks"]["use_program_events"] is True
     assert sample["masks"]["use_variable_state_sequence"] is True
     assert sample["masks"]["use_dependency_graph"] is True
+
+
+def test_build_path_deep_sample_cli_builder_is_callable() -> None:
+    assert callable(build_from_manifest)

@@ -8,6 +8,14 @@ from traceleak.comparison import (
     comparison_report_dict,
 )
 from traceleak.config import validate_config
+from traceleak.deep_program_dataset import (
+    DeepProgramDatasetError,
+    DeepProgramSample,
+    deep_program_sample_from_components,
+    deep_program_sample_from_dict,
+    masks_for_consumer_modes,
+    validate_deep_program_sample,
+)
 from traceleak.dependency_graph_schema import (
     DependencyGraph,
     DependencyGraphEdge,
@@ -65,6 +73,8 @@ from traceleak.workflow import WorkflowResult, run_lightweight_experiment
 
 __all__ = [
     "AttributionScore",
+    "DeepProgramDatasetError",
+    "DeepProgramSample",
     "DependencyGraph",
     "DependencyGraphEdge",
     "DependencyGraphNode",
@@ -84,6 +94,8 @@ __all__ = [
     "classify_delta",
     "comparison_delta",
     "comparison_report_dict",
+    "deep_program_sample_from_components",
+    "deep_program_sample_from_dict",
     "delta_h",
     "dependency_graph_from_dict",
     "dependency_graph_from_program_events_and_variable_states",
@@ -91,6 +103,7 @@ __all__ = [
     "extract_feature_vector",
     "graph_edge_from_dict",
     "graph_node_from_dict",
+    "masks_for_consumer_modes",
     "model_sequence_vocabulary",
     "patch_verification_report_dict",
     "program_event_from_dict",
@@ -111,6 +124,7 @@ __all__ = [
     "trace_to_model_sequence",
     "validate_claim",
     "validate_config",
+    "validate_deep_program_sample",
     "validate_dependency_graph",
     "validate_graph_edge",
     "validate_graph_node",

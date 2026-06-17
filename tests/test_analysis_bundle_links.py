@@ -61,3 +61,13 @@ def test_analysis_bundle_from_records_rejects_attribution_sample_mismatch() -> N
             attribution_records=[sample_attribution(sample_id="sample_000002")],
             view_contracts=[sample_view()],
         )
+
+
+def test_analysis_bundle_from_records_rejects_view_sample_mismatch() -> None:
+    with pytest.raises(AnalysisBundleLinkError, match="sample_id does not match"):
+        analysis_bundle_from_records(
+            bundle_id="bundle_000001",
+            model_output=sample_model_output(),
+            attribution_records=[sample_attribution()],
+            view_contracts=[sample_view(sample_id="sample_000002")],
+        )

@@ -36,6 +36,15 @@ from traceleak.program_event_schema import (
 )
 from traceleak.schema import TraceEvent, TraceRun, validate_run
 from traceleak.stability import stability_result, stability_summary
+from traceleak.variable_state_sequence import (
+    VariableStateRecord,
+    VariableStateSequenceError,
+    sort_variable_state_sequence,
+    validate_variable_state_record,
+    validate_variable_state_sequence,
+    variable_state_from_dict,
+    variable_state_records_from_program_events,
+)
 from traceleak.views import to_view
 from traceleak.workflow import WorkflowResult, run_lightweight_experiment
 
@@ -45,6 +54,8 @@ __all__ = [
     "ProgramEventSchemaError",
     "TraceEvent",
     "TraceRun",
+    "VariableStateRecord",
+    "VariableStateSequenceError",
     "WorkflowResult",
     "ablation_drop",
     "accuracy",
@@ -66,6 +77,7 @@ __all__ = [
     "run_lightweight_experiment",
     "sequence_token_counts",
     "sort_program_events",
+    "sort_variable_state_sequence",
     "source_token",
     "stability_result",
     "stability_summary",
@@ -78,5 +90,9 @@ __all__ = [
     "validate_program_event",
     "validate_program_events",
     "validate_run",
+    "validate_variable_state_record",
+    "validate_variable_state_sequence",
+    "variable_state_from_dict",
+    "variable_state_records_from_program_events",
     "verification_delta",
 ]

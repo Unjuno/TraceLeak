@@ -258,16 +258,16 @@ def _validate_masks(masks: Any) -> None:
 
 def _validate_mask_consistency(masks: dict[str, Any]) -> None:
     modes = set(masks["consumer_modes"])
+    if "hybrid" in modes and not all(
+        masks[field_name] for field_name in REQUIRED_MASK_FIELDS[1:]
+    ):
+        raise DeepProgramDatasetError("hybrid consumers require event, state, and graph inputs")
     if "sequence" in modes and not masks["use_program_events"]:
         raise DeepProgramDatasetError("sequence consumers require program events")
     if "sequence" in modes and not masks["use_variable_state_sequence"]:
         raise DeepProgramDatasetError("sequence consumers require variable state sequence")
     if "graph" in modes and not masks["use_dependency_graph"]:
         raise DeepProgramDatasetError("graph consumers require dependency graph")
-    if "hybrid" in modes and not all(
-        masks[field_name] for field_name in REQUIRED_MASK_FIELDS[1:]
-    ):
-        raise DeepProgramDatasetError("hybrid consumers require event, state, and graph inputs")
 
 
 def _validate_feature_names(feature_names: Any) -> None:

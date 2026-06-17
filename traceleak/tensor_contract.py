@@ -7,6 +7,12 @@ from typing import Any
 
 TENSOR_CONTRACT_FORMAT = "traceleak.tensor_contract.v1"
 
+ALLOWED_TENSOR_CONSUMER_MODES: set[str] = {
+    "graph",
+    "hybrid",
+    "sequence",
+}
+
 SEQUENCE_TENSOR_FIELDS: tuple[str, ...] = (
     "event_token_ids",
     "event_type_ids",
@@ -47,3 +53,16 @@ class TensorContract:
             "tensor_fields": {key: list(value) for key, value in self.tensor_fields.items()},
             "metadata": dict(self.metadata),
         }
+
+
+def tensor_fields_for_consumer_mode(consumer_mode: str) -> dict[str, list[str]]:
+    """Return tensor field groups for a consumer mode."""
+
+    if consumer_mode not in ALLOWED_TENSOR_CONSUMER_MODES:
+        raise TensorContractError(f"invalid consumer_mode: {consumer_mode!r}")
+    fields: dict[str, list[str]] = {}
+    if consumer_mode in {"sequence", "hybrid"}:
+        fields["sequence"] = list(SEQUENCE_TENSOR_FIELDS)
+    if consumer_mode in {"graph", "hybrid"}:
+        fields["graph"] = list(GRAPH_TENSOR_FIELDS)
+    return fields

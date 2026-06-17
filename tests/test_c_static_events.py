@@ -7,8 +7,9 @@ def test_c_paths_to_program_events_extracts_line_events(tmp_path) -> None:
     (tmp_path / "crypto" / "bn").mkdir(parents=True)
     target = tmp_path / "crypto" / "bn" / "bn_demo.c"
     target.write_text(
+        "int helper(int value) { return value; }\n"
         "int demo(int a, int b) {\n"
-        "    int c = a + b;\n"
+        "    int c = helper(a + b);\n"
         "    if (c) { return c; }\n"
         "    return b;\n"
         "}\n",
@@ -21,14 +22,17 @@ def test_c_paths_to_program_events_extracts_line_events(tmp_path) -> None:
     assert all(event["source_location"]["file"] == "crypto/bn/bn_demo.c" for event in events)
     assert any(event["operation"] == "assign" for event in events)
     assert any(event["variable_writes"] for event in events)
+    assert any("helper" in event["control_context"]["call_targets"] for event in events)
+    assert any(event["metadata"]["call_target_count"] > 0 for event in events)
 
 
 def test_build_static_program_deep_sample_from_c_file(tmp_path) -> None:
     (tmp_path / "crypto" / "bn").mkdir(parents=True)
     target = tmp_path / "crypto" / "bn" / "bn_demo.c"
     target.write_text(
+        "int helper(int value) { return value; }\n"
         "int demo(int a, int b) {\n"
-        "    int c = a + b;\n"
+        "    int c = helper(a + b);\n"
         "    if (c) { return c; }\n"
         "    return b;\n"
         "}\n",

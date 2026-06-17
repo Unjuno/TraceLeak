@@ -1,6 +1,27 @@
 # TraceLeak NEXT TODO
 
-Current checkpoint: Level 26 implemented; local validation pending.
+Current checkpoint: core roadmap reset; Level index chain is stopped.
+
+## Why this changed
+
+The Level 20-26 index/checkpoint chain drifted away from the project objective. Those files are safe scaffolding, but they do not advance deep-learning-based program analysis.
+
+TraceLeak's core objective is Deep Program Representation: learning from program events, variable state transitions, data/control dependencies, and evidence chains.
+
+## Anti-drift rule
+
+Do not create another Level N index-only checkpoint unless explicitly requested as maintenance.
+
+A next task must directly advance at least one of:
+
+- program event schema
+- variable state sequence schema
+- dependency graph schema
+- deep model dataset builder
+- sequence/graph model baseline
+- attention/attribution export
+- ablation/evidence chain
+- OpenSSL metadata-to-model-sequence integration
 
 ## Validation baseline
 
@@ -11,25 +32,18 @@ ruff check .
 pytest
 ```
 
-## Focused validation for Level 26
+## Immediate core tasks
 
-```powershell
-pytest tests/test_level26_index.py
-pytest tests/test_level26_index_report.py
-pytest tests/test_write_level26_files_cli.py
-```
+- [ ] Inventory existing MLP, attention, attribution, ablation, and evidence-chain modules.
+- [ ] Define Program Event Schema v1.
+- [ ] Define Variable State Sequence Schema v1.
+- [ ] Define Dependency Graph Schema v1.
+- [ ] Define Transformer-ready dataset contract.
+- [ ] Define attention/attribution output format for token, variable, event, and edge levels.
+- [ ] Replace Level-index continuation with a core deep-learning roadmap.
 
-## Completed recent blocks
+## Reference
 
-- [x] P202: Level 25 local validation reported all pass.
-- [x] P203: added Level 26 helper.
-- [x] P204: added Level 26 report.
-- [x] P205: added Level 26 writer CLI.
-- [x] P206: updated handoff and next TODO.
-- [ ] P207: run local validation.
-
-## Generate Level 26 files
-
-```powershell
-traceleak-write-level26-files --out-dir reports/local/level26_index
+```text
+docs/core-roadmap-reset.md
 ```

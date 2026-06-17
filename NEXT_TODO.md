@@ -1,6 +1,6 @@
 # TraceLeak NEXT TODO
 
-Current checkpoint: Variable State Sequence Schema v1 implemented; proceed to dependency graph representation.
+Current checkpoint: Dependency Graph Schema v1 implemented; proceed to Deep Program Dataset Contract v1.
 
 ## Why this changed
 
@@ -13,6 +13,8 @@ The inventory in `docs/core-modeling-inventory.md` shows that the current NN/MLP
 `traceleak/program_event_schema.py` now provides Program Event Schema v1 as the first schema-first normalization layer after legacy traces or legacy `model_sequence` steps.
 
 `traceleak/variable_state_sequence.py` now provides Variable State Sequence Schema v1, including public-safe variable state validation and coarse read/write derivation from ProgramEvent records.
+
+`traceleak/dependency_graph_schema.py` now provides Dependency Graph Schema v1, including public-safe node/edge validation and coarse graph derivation from ProgramEvent plus VariableStateRecord records.
 
 ## Anti-drift rule
 
@@ -43,53 +45,37 @@ pytest
 - [x] Inventory existing MLP, attention, attribution, ablation, and evidence-chain modules.
 - [x] Define Program Event Schema v1.
 - [x] Define Variable State Sequence Schema v1.
+- [x] Define Dependency Graph Schema v1.
 
 ## Immediate core task
 
-- [ ] Define Dependency Graph Schema v1.
+- [ ] Define Transformer/GNN-ready Deep Program Dataset Contract v1.
 
 Minimum acceptable scope:
 
-- add `traceleak/dependency_graph_schema.py`
-- add `tests/test_dependency_graph_schema.py`
-- add `docs/dependency-graph-schema-v1.md`
-- define graph node fields:
-  - `node_id`
-  - `node_type`
-  - `label`
-  - `source_event_id`
-  - `time_step`
+- add `traceleak/deep_program_dataset.py`
+- add `tests/test_deep_program_dataset.py`
+- add `docs/deep-program-dataset-contract-v1.md`
+- define dataset sample fields:
+  - `sample_id`
+  - `format`
+  - `program_events`
+  - `variable_state_sequence`
+  - `dependency_graph`
+  - `labels`
+  - `masks`
+  - `feature_names`
   - `metadata`
-- define graph edge fields:
-  - `edge_id`
-  - `edge_type`
-  - `source_node_id`
-  - `target_node_id`
-  - `source_event_id`
-  - `time_step`
-  - `metadata`
-- support node types:
-  - `variable`
-  - `operation`
-  - `event`
-  - `branch`
-  - `memory_access`
-  - `observable_output`
-- support edge types:
-  - `reads`
-  - `writes`
-  - `depends_on`
-  - `controls`
-  - `derives`
-  - `observes`
-- include a helper that can derive a coarse dependency graph from ProgramEvent and VariableStateRecord records
-- keep raw secret values out of public-safe graph metadata
+- support sequence-only, graph-only, and hybrid consumers
+- include helper that assembles one sample from ProgramEvent, VariableStateRecord, and DependencyGraph records
+- include safe labels policy: lab-only labels allowed, no raw secret labels as public model input
+- keep raw secret values out of public-safe dataset metadata
 
 ## Then
 
-- [ ] Define Transformer/GNN-ready Deep Program Dataset Contract.
 - [ ] Define attention/attribution output format for token, variable, event, and edge levels.
 - [ ] Extend ablation from token-count drops to event, variable, edge, and timestep masks.
+- [ ] Add sequence/graph/hybrid model baseline entry points after the dataset contract exists.
 
 ## References
 
@@ -98,5 +84,6 @@ docs/core-roadmap-reset.md
 docs/core-modeling-inventory.md
 docs/program-event-schema-v1.md
 docs/variable-state-sequence-v1.md
+docs/dependency-graph-schema-v1.md
 docs/next-session-handoff.md
 ```

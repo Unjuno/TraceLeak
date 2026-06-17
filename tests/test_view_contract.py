@@ -1,6 +1,7 @@
 from traceleak.view_contract import (
     ALLOWED_VIEW_ACTIONS,
     ALLOWED_VIEW_LEVELS,
+    REQUIRED_VIEW_CONTRACT_FIELDS,
     VIEW_CONTRACT_FORMAT,
     sort_view_contracts,
     validate_view_contract,
@@ -22,6 +23,10 @@ def test_view_contract_levels_are_available() -> None:
 
 def test_view_contract_actions_are_available() -> None:
     assert len(ALLOWED_VIEW_ACTIONS) >= 1
+
+
+def test_view_contract_required_fields_are_available() -> None:
+    assert len(REQUIRED_VIEW_CONTRACT_FIELDS) == 7
 
 
 def test_view_contract_builder_is_callable() -> None:

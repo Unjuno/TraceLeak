@@ -23,17 +23,18 @@ def build_static_module_sample_batch(
     manifest = scan_path_manifest(root=root, max_paths=4096)
     grouped_paths = _group_paths_by_module([record["path"] for record in manifest["path_records"]])
     samples: list[dict[str, Any]] = []
+    sample_summaries: list[dict[str, Any]] = []
     for module_name, paths in sorted(grouped_paths.items()):
         selected_paths = paths[:max_paths_per_module]
-        samples.append(
-            build_static_program_deep_sample(
-                root=root,
-                relative_paths=selected_paths,
-                sample_id=f"{batch_id}:{_module_slug(module_name)}",
-                label=f"module:{module_name}",
-                max_lines_per_file=max_lines_per_file,
-            )
+        sample = build_static_program_deep_sample(
+            root=root,
+            relative_paths=selected_paths,
+            sample_id=f"{batch_id}:{_module_slug(module_name)}",
+            label=f"module:{module_name}",
+            max_lines_per_file=max_lines_per_file,
         )
+        samples.append(sample)
+        sample_summaries.append(_sample_summary(module_name, selected_paths, sample))
     return {
         "format": STATIC_SAMPLE_BATCH_FORMAT,
         "batch_id": batch_id,
@@ -44,7 +45,23 @@ def build_static_module_sample_batch(
             "content_read_enabled": True,
             "module_count": len(grouped_paths),
             "max_paths_per_module": max_paths_per_module,
+            "sample_summaries": sample_summaries,
+            "total_event_count": sum(summary["event_count"] for summary in sample_summaries),
+            "total_graph_edge_count": sum(summary["graph_edge_count"] for summary in sample_summaries),
         },
+    }
+
+
+def _sample_summary(module_name: str, paths: list[str], sample: dict[str, Any]) -> dict[str, Any]:
+    graph = sample["dependency_graph"]
+    return {
+        "sample_id": sample["sample_id"],
+        "module": module_name,
+        "path_count": len(paths),
+        "event_count": len(sample["program_events"]),
+        "variable_state_count": len(sample["variable_state_sequence"]),
+        "graph_node_count": len(graph["nodes"]),
+        "graph_edge_count": len(graph["edges"]),
     }
 
 

@@ -32,7 +32,7 @@ def analysis_bundle_from_records(
     _require_same_sample_id(sample_id, attribution_records, "attribution_records")
     _require_same_sample_id(sample_id, view_contracts, "view_contracts")
 
-    model_output_id = _model_output_id(model_output)
+    model_output_id = str(model_output["output_id"])
     attribution_ids = [_attribution_id(record) for record in attribution_records]
     view_contract_ids = [str(record["contract_id"]) for record in view_contracts]
 
@@ -54,13 +54,6 @@ def _require_same_sample_id(sample_id: str, records: list[dict[str, Any]], label
     for index, record in enumerate(records):
         if str(record.get("sample_id")) != sample_id:
             raise AnalysisBundleLinkError(f"{label}[{index}] sample_id does not match model output sample_id")
-
-
-def _model_output_id(model_output: dict[str, Any]) -> str:
-    metadata = model_output.get("metadata", {})
-    if isinstance(metadata, dict) and isinstance(metadata.get("output_id"), str) and metadata["output_id"]:
-        return metadata["output_id"]
-    return f"{model_output['model_id']}:{model_output['consumer_mode']}"
 
 
 def _attribution_id(record: dict[str, Any]) -> str:

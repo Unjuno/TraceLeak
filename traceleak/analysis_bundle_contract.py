@@ -74,6 +74,20 @@ def analysis_bundle_record(
     return record
 
 
+def analysis_bundle_record_from_dict(data: dict[str, Any]) -> AnalysisBundleRecord:
+    """Validate and convert a dictionary into an AnalysisBundleRecord."""
+
+    validate_analysis_bundle_record(data)
+    return AnalysisBundleRecord(
+        bundle_id=data["bundle_id"],
+        sample_id=data["sample_id"],
+        model_output_id=data["model_output_id"],
+        attribution_ids=list(data["attribution_ids"]),
+        view_contract_ids=list(data["view_contract_ids"]),
+        metadata=dict(data["metadata"]),
+    )
+
+
 def validate_analysis_bundle_record(record: dict[str, Any]) -> None:
     """Validate one analysis bundle record."""
 

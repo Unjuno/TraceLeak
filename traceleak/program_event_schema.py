@@ -306,9 +306,14 @@ def _validate_source_location(value: Any) -> None:
         if key in location and location[key] is not None and not isinstance(location[key], str):
             raise ProgramEventSchemaError(f"source_location.{key} must be a string or null")
     for key in ("line", "column"):
-        if key in location and location[key] is not None:
-            if not isinstance(location[key], int) or location[key] <= 0:
-                raise ProgramEventSchemaError(f"source_location.{key} must be a positive integer or null")
+        if (
+            key in location
+            and location[key] is not None
+            and (not isinstance(location[key], int) or location[key] <= 0)
+        ):
+            raise ProgramEventSchemaError(
+                f"source_location.{key} must be a positive integer or null"
+            )
 
 
 def _validate_string_list(value: Any, name: str) -> None:

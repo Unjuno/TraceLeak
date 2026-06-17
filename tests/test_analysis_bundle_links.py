@@ -6,14 +6,14 @@ from traceleak.model_output_contract import model_output_record
 from traceleak.view_contract import view_contract
 
 
-def sample_model_output() -> dict:
+def sample_model_output(*, metadata: dict | None = None) -> dict:
     return model_output_record(
         sample_id="sample_000001",
         model_id="model_000001",
         consumer_mode="sequence",
         prediction={"class": "metadata_even"},
         confidence=0.75,
-        metadata={"output_id": "output_000001"},
+        metadata={"output_id": "output_000001"} if metadata is None else metadata,
     )
 
 
@@ -51,6 +51,16 @@ def test_analysis_bundle_from_records_links_component_ids() -> None:
     assert bundle["sample_id"] == "sample_000001"
     assert bundle["model_output_id"] == "output_000001"
     assert bundle["view_contract_ids"] == ["view_000001"]
+
+
+def test_analysis_bundle_from_records_uses_model_output_fallback_id() -> None:
+    bundle = analysis_bundle_from_records(
+        bundle_id="bundle_000001",
+        model_output=sample_model_output(metadata={}),
+        attribution_records=[sample_attribution()],
+        view_contracts=[sample_view()],
+    )
+    assert bundle["model_output_id"] == "model_000001:sequence"
 
 
 def test_analysis_bundle_from_records_rejects_attribution_sample_mismatch() -> None:

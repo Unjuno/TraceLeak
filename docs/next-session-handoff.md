@@ -1,6 +1,6 @@
 # Next session handoff
 
-Current checkpoint: Level 26 implemented; local validation pending.
+Current checkpoint: core roadmap reset.
 
 ## Local validation
 
@@ -11,23 +11,18 @@ ruff check .
 pytest
 ```
 
-## Focused checks
+## Direction reset
 
-```powershell
-pytest tests/test_level26_index.py
-pytest tests/test_level26_index_report.py
-pytest tests/test_write_level26_files_cli.py
-```
+Do not continue the automatic Level index sequence unless explicitly requested.
+
+The next work should inspect the existing modeling and report modules, then define the next core data schemas.
 
 ## Latest changes
 
-- Level 25 local validation was reported all pass.
-- Added Level 26 helper.
-- Added Level 26 report.
-- Added Level 26 writer CLI.
-- Registered Level 26 writer entry point.
-- Updated `NEXT_TODO.md`.
+- Added `docs/core-roadmap-reset.md`.
+- Updated `NEXT_TODO.md` with the reset checkpoint.
+- Stopped the automatic Level index continuation pattern.
 
 ## Next work
 
-Run focused Level 26 tests, `ruff check .`, and full `pytest` locally.
+Inventory existing modeling and report modules. Then define the next core schemas for event records, state sequences, and dependency records.

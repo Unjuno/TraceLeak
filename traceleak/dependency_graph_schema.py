@@ -224,10 +224,14 @@ def validate_dependency_graph(graph: dict[str, Any], *, public_safe: bool = True
 
     if not isinstance(graph, dict):
         raise DependencyGraphSchemaError("dependency graph must be an object")
-    for field_name in ("graph_id", "nodes", "edges", "metadata"):
+    for field_name in ("graph_id", "format", "nodes", "edges", "metadata"):
         if field_name not in graph:
             raise DependencyGraphSchemaError(f"missing required dependency graph field: {field_name}")
     _require_non_empty_string(graph["graph_id"], "graph_id")
+    if graph["format"] != DEPENDENCY_GRAPH_SCHEMA_FORMAT:
+        raise DependencyGraphSchemaError(
+            f"invalid dependency graph format: {graph['format']!r}; expected: {DEPENDENCY_GRAPH_SCHEMA_FORMAT}"
+        )
     if not isinstance(graph["nodes"], list) or not graph["nodes"]:
         raise DependencyGraphSchemaError("dependency graph nodes must be a non-empty list")
     if not isinstance(graph["edges"], list):
@@ -499,7 +503,9 @@ def _edge(
 
 def _add_node(nodes_by_id: dict[str, dict[str, Any]], node: dict[str, Any]) -> None:
     existing = nodes_by_id.get(str(node["node_id"]))
-    if existing is not None and (existing["node_type"] != node["node_type"] or existing["label"] != node["label"]):
+    if existing is not None and (
+        existing["node_type"] != node["node_type"] or existing["label"] != node["label"]
+    ):
         raise DependencyGraphSchemaError(f"conflicting node_id: {node['node_id']}")
     if existing is None:
         nodes_by_id[str(node["node_id"])] = node

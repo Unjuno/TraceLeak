@@ -1,6 +1,6 @@
 # TraceLeak NEXT TODO
 
-Current checkpoint: Deep Program Dataset Contract v1 implemented; proceed to Attention / Attribution Export Format v1.
+Current checkpoint: Attention / Attribution Export Format v1 implemented; proceed to Event / Variable / Edge Ablation Mask Schema v1.
 
 ## Why this changed
 
@@ -17,6 +17,8 @@ The inventory in `docs/core-modeling-inventory.md` shows that the current NN/MLP
 `traceleak/dependency_graph_schema.py` now provides Dependency Graph Schema v1, including public-safe node/edge validation and coarse graph derivation from ProgramEvent plus VariableStateRecord records.
 
 `traceleak/deep_program_dataset.py` now provides Deep Program Dataset Contract v1, including sequence/graph/hybrid consumer masks and lab-only label separation.
+
+`traceleak/attribution_export_schema.py` now provides Attention / Attribution Export Format v1, including token/event/variable/node/edge export records and score semantics separation.
 
 ## Anti-drift rule
 
@@ -49,43 +51,45 @@ pytest
 - [x] Define Variable State Sequence Schema v1.
 - [x] Define Dependency Graph Schema v1.
 - [x] Define Transformer/GNN-ready Deep Program Dataset Contract v1.
+- [x] Define Attention / Attribution Export Format v1.
 
 ## Immediate core task
 
-- [ ] Define Attention / Attribution Export Format v1.
+- [ ] Define Event / Variable / Edge Ablation Mask Schema v1.
 
 Minimum acceptable scope:
 
-- add `traceleak/attribution_export_schema.py`
-- add `tests/test_attribution_export_schema.py`
-- add `docs/attention-attribution-export-format-v1.md`
-- define attribution/export fields:
+- add `traceleak/ablation_mask_schema.py`
+- add or extend tests for ablation mask schema
+- add or extend docs for ablation mask schema
+- define mask fields:
   - `sample_id`
-  - `model_id`
-  - `model_family`
-  - `attribution_level`
-  - `entity_id`
-  - `entity_type`
-  - `score`
-  - `rank`
-  - `method`
-  - `evidence`
+  - `mask_id`
+  - `mask_level`
+  - `entity_ids`
+  - `mask_action`
+  - `expected_input_views`
   - `metadata`
-- support levels:
+- support mask levels:
   - `token`
   - `event`
   - `variable`
   - `graph_node`
   - `graph_edge`
-- distinguish attention weights from causal attribution
-- include public-safe evidence and metadata validation
-- keep raw secret values out of public-safe attribution metadata
+  - `time_step`
+- support actions:
+  - `drop`
+  - `zero`
+  - `replace_with_bucket`
+  - `keep_only`
+- connect mask levels to Deep Program Dataset consumer masks
+- keep public-safe metadata validation
 
 ## Then
 
-- [ ] Extend ablation from token-count drops to event, variable, edge, and timestep masks.
 - [ ] Add sequence/graph/hybrid model baseline entry points after the dataset contract exists.
 - [ ] Add tensorization contract for sequence and graph consumers.
+- [ ] Add evidence-chain export tying dataset sample, model result, attribution export, and ablation masks.
 
 ## References
 
